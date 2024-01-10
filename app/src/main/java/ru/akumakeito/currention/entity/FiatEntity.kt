@@ -1,0 +1,48 @@
+package ru.akumakeito.currention.entity
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import ru.akumakeito.currention.dto.FiatCurrency
+import ru.akumakeito.currention.dto.FiatResponse
+
+@Entity
+data class FiatEntity(
+    @PrimaryKey
+    val id : Int,
+    val name : String,
+    @ColumnInfo(name = "short_code")
+    val shortCode: String? = null,
+    val code : String,
+    val symbol : String
+) {
+    fun toDto() = FiatCurrency(
+        id,
+        name,
+        shortCode,
+        code,
+        symbol
+    )
+
+    companion object {
+
+    fun fromResponse(fiatResponse: FiatResponse) = FiatEntity(
+        fiatResponse.id,
+        fiatResponse.name,
+        fiatResponse.shortCode,
+        fiatResponse.code,
+        fiatResponse.symbol
+    )
+        fun fromDto(fiatCurrency: FiatCurrency) = FiatEntity(
+            fiatCurrency.id,
+            fiatCurrency.name,
+            fiatCurrency.shortCode,
+            fiatCurrency.code,
+            fiatCurrency.symbol
+        )
+    }
+}
+
+fun List<FiatEntity>.toDto() : List<FiatCurrency> = map(FiatEntity::toDto)
+//fun List<FiatCurrency>.toEntity() : List<FiatEntity> = map(FiatEntity::fromDto)
+fun List<FiatResponse>.toEntity() : List<FiatEntity> = map(FiatEntity::fromResponse)
