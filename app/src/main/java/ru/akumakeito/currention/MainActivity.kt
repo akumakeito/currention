@@ -1,5 +1,6 @@
 package ru.akumakeito.currention
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -82,12 +83,15 @@ fun CurrencyCard(
     currency: FiatCurrency
 ) {
 
-    val imageModifier = Modifier.
-        size(40.dp)
+    val imageModifier = Modifier.size(40.dp)
     Card() {
         Row {
             Log.d("flag", currency.flag.toString())
-            Image(modifier = imageModifier, painter = painterResource(id = currency.flag), contentDescription = currency.name)
+            Image(
+                modifier = imageModifier,
+                painter = painterResource(id = currency.flag),
+                contentDescription = currency.name
+            )
 
             Text(
                 text = currency.shortCode,
@@ -101,7 +105,14 @@ fun CurrencyCard(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 @Composable
 fun CurrencyListPreview() {
     CurrentionTheme {

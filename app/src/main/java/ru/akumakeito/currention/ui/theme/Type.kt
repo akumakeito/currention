@@ -2,33 +2,59 @@ package ru.akumakeito.currention.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import ru.akumakeito.currention.R
 
-// Set of Material typography styles to start with
 val Typography = Typography(
+    headlineLarge = TextStyle(
+        fontSize = 32.sp,
+        lineHeight = 40.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_400)),
+        fontWeight = FontWeight(400)
+    ),
+
+    headlineMedium = TextStyle(
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_400)),
+        fontWeight = FontWeight(400)
+    ),
+
+    headlineSmall = TextStyle(
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_400)),
+        fontWeight = FontWeight(400),
+    ),
+
+    labelLarge = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_500)),
+        fontWeight = FontWeight(500)
+    ),
+
+    labelMedium = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_500)),
+        fontWeight = FontWeight(500)
+    ),
+
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        fontFamily = FontFamily(Font(R.font.roboto_400)),
+        fontWeight = FontWeight(400)
     ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
+
+    bodySmall = TextStyle(
+        fontSize = 12.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontFamily = FontFamily(Font(R.font.roboto_400)),
+        fontWeight = FontWeight(400)
     )
-    */
 )
