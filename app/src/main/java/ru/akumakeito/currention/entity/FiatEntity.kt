@@ -3,6 +3,7 @@ package ru.akumakeito.currention.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.akumakeito.currention.R
 import ru.akumakeito.currention.dto.FiatCurrency
 import ru.akumakeito.currention.dto.FiatResponse
 
@@ -12,16 +13,18 @@ data class FiatEntity(
     val id : Int,
     val name : String,
     @ColumnInfo(name = "short_code")
-    val shortCode: String? = null,
+    val shortCode: String,
     val code : String,
-    val symbol : String
+    val symbol : String,
+    var flag : Int = R.drawable.flag_currention
 ) {
     fun toDto() = FiatCurrency(
         id,
         name,
         shortCode,
         code,
-        symbol
+        symbol,
+        flag
     )
 
     companion object {

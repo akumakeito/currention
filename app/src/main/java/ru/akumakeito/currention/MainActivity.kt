@@ -1,12 +1,15 @@
 package ru.akumakeito.currention
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -16,8 +19,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.dto.FiatCurrency
@@ -53,6 +58,10 @@ fun CurrencyListScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
         Button(onClick = { viewModel.getFiatCurrencies() }) {
             Text(text = "Get Currencies")
         }
+
+        Button(onClick = { viewModel.clearFiatCurrencies() }) {
+            Text(text = "Clear Currencies")
+        }
         CurrencyList(currencies = viewModel.fiatCurrencies.value)
     }
 
@@ -72,10 +81,16 @@ fun CurrencyList(currencies: List<FiatCurrency>) {
 fun CurrencyCard(
     currency: FiatCurrency
 ) {
+
+    val imageModifier = Modifier.
+        size(40.dp)
     Card() {
         Row {
+            Log.d("flag", currency.flag.toString())
+            Image(modifier = imageModifier, painter = painterResource(id = currency.flag), contentDescription = currency.name)
+
             Text(
-                text = currency.code,
+                text = currency.shortCode,
                 textAlign = TextAlign.Start
             )
             Text(

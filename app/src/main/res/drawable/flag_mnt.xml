@@ -1,0 +1,40 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+  <group>
+    <clip-path
+        android:pathData="M0,0h512v512h-512z"/>
+    <path
+        android:pathData="M256,512C287.31,512 317.31,506.37 345.04,496.08L356.17,256L345.04,15.92C317.31,5.63 287.31,0 256,0C224.69,0 194.69,5.63 166.96,15.92L155.83,256L166.96,496.08C194.69,506.37 224.69,512 256,512Z"
+        android:fillColor="#0052B4"/>
+    <path
+        android:pathData="M0,256C0,366.07 69.47,459.91 166.96,496.08V15.92C69.47,52.09 0,145.93 0,256Z"
+        android:fillColor="#A2001D"/>
+    <path
+        android:pathData="M345.04,15.92V496.08C442.53,459.91 512,366.07 512,256C512,145.93 442.53,52.09 345.04,15.92Z"
+        android:fillColor="#A2001D"/>
+    <path
+        android:pathData="M122.43,256H144.7V345.04H122.43V256Z"
+        android:fillColor="#FFDA44"/>
+    <path
+        android:pathData="M33.39,256H55.65V345.04H33.39V256Z"
+        android:fillColor="#FFDA44"/>
+    <path
+        android:pathData="M89.04,311.65C101.34,311.65 111.3,301.68 111.3,289.39C111.3,277.1 101.34,267.13 89.04,267.13C76.75,267.13 66.78,277.1 66.78,289.39C66.78,301.68 76.75,311.65 89.04,311.65Z"
+        android:fillColor="#FFDA44"/>
+    <path
+        android:pathData="M89.04,222.61C95.19,222.61 100.17,217.63 100.17,211.48C100.17,205.33 95.19,200.35 89.04,200.35C82.9,200.35 77.91,205.33 77.91,211.48C77.91,217.63 82.9,222.61 89.04,222.61Z"
+        android:fillColor="#FFDA44"/>
+    <path
+        android:pathData="M66.78,322.78H111.31V345.04H66.78V322.78Z"
+        android:fillColor="#FFDA44"/>
+    <path
+        android:pathData="M66.78,233.74H111.31V256H66.78V233.74Z"
+        android:fillColor="#FFDA44"/>
+    <path
+        android:pathData="M89.04,133.57L96.93,157.82H122.43L101.8,172.82L109.68,197.08L89.04,182.09L68.41,197.08L76.29,172.82L55.65,157.82H81.16L89.04,133.57Z"
+        android:fillColor="#FFDA44"/>
+  </group>
+</vector>

@@ -1,0 +1,646 @@
+[
+  {
+    "short_code": "AED",
+    "flag": "flag_aed"
+  },
+  {
+    "short_code": "AFN",
+    "flag": "flag_afn"
+  },
+  {
+    "short_code": "ALL",
+    "flag": "flag_all"
+  },
+  {
+    "short_code": "AMD",
+    "flag": "flag_amd"
+  },
+  {
+    "short_code": "ANG",
+    "flag": "flag_ang"
+  },
+  {
+    "short_code": "AOA",
+    "flag": "flag_aoa"
+  },
+  {
+    "short_code": "ARS",
+    "flag": "flag_ars"
+  },
+  {
+    "short_code": "AUD",
+    "flag": "flag_aud"
+  },
+  {
+    "short_code": "AWG",
+    "flag": "flag_awg"
+  },
+  {
+    "short_code": "AZN",
+    "flag": "flag_azn"
+  },
+  {
+    "short_code": "BAM",
+    "flag": "flag_bam"
+  },
+  {
+    "short_code": "BBD",
+    "flag": "flag_bbd"
+  },
+  {
+    "short_code": "BDT",
+    "flag": "flag_bdt"
+  },
+  {
+    "short_code": "BGN",
+    "flag": "flag_bgn"
+  },
+  {
+    "short_code": "BHD",
+    "flag": "flag_bhd"
+  },
+  {
+    "short_code": "BIF",
+    "flag": "flag_bif"
+  },
+  {
+    "short_code": "BMD",
+    "flag": "flag_bmd"
+  },
+  {
+    "short_code": "BND",
+    "flag": "flag_bnd"
+  },
+  {
+    "short_code": "BOB",
+    "flag": "flag_bob"
+  },
+  {
+    "short_code": "BOV",
+    "flag": "flag_bov"
+  },
+  {
+    "short_code": "BRL",
+    "flag": "flag_brl"
+  },
+  {
+    "short_code": "BSD",
+    "flag": "flag_bsd"
+  },
+  {
+    "short_code": "BTN",
+    "flag": "flag_btn"
+  },
+  {
+    "short_code": "BWP",
+    "flag": "flag_bwp"
+  },
+  {
+    "short_code": "BYN",
+    "flag": "flag_byn"
+  },
+  {
+    "short_code": "BZD",
+    "flag": "flag_bzd"
+  },
+  {
+    "short_code": "CAD",
+    "flag": "flag_cad"
+  },
+  {
+    "short_code": "CDF",
+    "flag": "flag_cdf"
+  },
+  {
+    "short_code": "CHF",
+    "flag": "flag_chf"
+  },
+  {
+    "short_code": "CLF",
+    "flag": "flag_clf"
+  },
+  {
+    "short_code": "CLP",
+    "flag": "flag_clp"
+  },
+  {
+    "short_code": "CNY",
+    "flag": "flag_cny"
+  },
+  {
+    "short_code": "COP",
+    "flag": "flag_cop"
+  },
+  {
+    "short_code": "CRC",
+    "flag": "flag_crc"
+  },
+  {
+    "short_code": "CUC",
+    "flag": "flag_cuc"
+  },
+  {
+    "short_code": "CUP",
+    "flag": "flag_cup"
+  },
+  {
+    "short_code": "CVE",
+    "flag": "flag_cve"
+  },
+  {
+    "short_code": "CZK",
+    "flag": "flag_czk"
+  },
+  {
+    "short_code": "DJF",
+    "flag": "flag_djf"
+  },
+  {
+    "short_code": "DKK",
+    "flag": "flag_dkk"
+  },
+  {
+    "short_code": "DOP",
+    "flag": "flag_dop"
+  },
+  {
+    "short_code": "DZD",
+    "flag": "flag_dzd"
+  },
+  {
+    "short_code": "EGP",
+    "flag": "flag_egp"
+  },
+  {
+    "short_code": "ERN",
+    "flag": "flag_ern"
+  },
+  {
+    "short_code": "ETB",
+    "flag": "flag_etb"
+  },
+  {
+    "short_code": "EUR",
+    "flag": "flag_eur"
+  },
+  {
+    "short_code": "FJD",
+    "flag": "flag_fjd"
+  },
+  {
+    "short_code": "FKP",
+    "flag": "flag_fkp"
+  },
+  {
+    "short_code": "GBP",
+    "flag": "flag_gbp"
+  },
+  {
+    "short_code": "GEL",
+    "flag": "flag_gel"
+  },
+  {
+    "short_code": "GHS",
+    "flag": "flag_ghs"
+  },
+  {
+    "short_code": "GIP",
+    "flag": "flag_gip"
+  },
+  {
+    "short_code": "GMD",
+    "flag": "flag_gmd"
+  },
+  {
+    "short_code": "GNF",
+    "flag": "flag_gnf"
+  },
+  {
+    "short_code": "GTQ",
+    "flag": "flag_gtq"
+  },
+  {
+    "short_code": "GYD",
+    "flag": "flag_gyd"
+  },
+  {
+    "short_code": "HKD",
+    "flag": "flag_hkd"
+  },
+  {
+    "short_code": "HNL",
+    "flag": "flag_hnl"
+  },
+  {
+    "short_code": "HRK",
+    "flag": "flag_hrk"
+  },
+  {
+    "short_code": "HTG",
+    "flag": "flag_htg"
+  },
+  {
+    "short_code": "HUF",
+    "flag": "flag_huf"
+  },
+  {
+    "short_code": "IDR",
+    "flag": "flag_idr"
+  },
+  {
+    "short_code": "ILS",
+    "flag": "flag_ils"
+  },
+  {
+    "short_code": "INR",
+    "flag": "flag_inr"
+  },
+  {
+    "short_code": "IQD",
+    "flag": "flag_iqd"
+  },
+  {
+    "short_code": "IRR",
+    "flag": "flag_irr"
+  },
+  {
+    "short_code": "ISK",
+    "flag": "flag_isk"
+  },
+  {
+    "short_code": "JMD",
+    "flag": "flag_jmd"
+  },
+  {
+    "short_code": "JOD",
+    "flag": "flag_jod"
+  },
+  {
+    "short_code": "JPY",
+    "flag": "flag_jpy"
+  },
+  {
+    "short_code": "KES",
+    "flag": "flag_kes"
+  },
+  {
+    "short_code": "KGS",
+    "flag": "flag_kgs"
+  },
+  {
+    "short_code": "KHR",
+    "flag": "flag_khr"
+  },
+  {
+    "short_code": "KMF",
+    "flag": "flag_kmf"
+  },
+  {
+    "short_code": "KPW",
+    "flag": "flag_kpw"
+  },
+  {
+    "short_code": "KRW",
+    "flag": "flag_krw"
+  },
+  {
+    "short_code": "KWD",
+    "flag": "flag_kwd"
+  },
+  {
+    "short_code": "KYD",
+    "flag": "flag_kyd"
+  },
+  {
+    "short_code": "KZT",
+    "flag": "flag_kzt"
+  },
+  {
+    "short_code": "LAK",
+    "flag": "flag_lak"
+  },
+  {
+    "short_code": "LBP",
+    "flag": "flag_lbp"
+  },
+  {
+    "short_code": "LKR",
+    "flag": "flag_lkr"
+  },
+  {
+    "short_code": "LRD",
+    "flag": "flag_lrd"
+  },
+  {
+    "short_code": "LSL",
+    "flag": "flag_lsl"
+  },
+  {
+    "short_code": "LTL",
+    "flag": "flag_ltl"
+  },
+  {
+    "short_code": "LVL",
+    "flag": "flag_lvl"
+  },
+  {
+    "short_code": "LYD",
+    "flag": "flag_lyd"
+  },
+  {
+    "short_code": "MAD",
+    "flag": "flag_mad"
+  },
+  {
+    "short_code": "MDL",
+    "flag": "flag_mdl"
+  },
+  {
+    "short_code": "MGA",
+    "flag": "flag_mga"
+  },
+  {
+    "short_code": "MKD",
+    "flag": "flag_mkd"
+  },
+  {
+    "short_code": "MMK",
+    "flag": "flag_mmk"
+  },
+  {
+    "short_code": "MNT",
+    "flag": "flag_mnt"
+  },
+  {
+    "short_code": "MOP",
+    "flag": "flag_mop"
+  },
+  {
+    "short_code": "MRO",
+    "flag": "flag_mro"
+  },
+  {
+    "short_code": "MUR",
+    "flag": "flag_mur"
+  },
+  {
+    "short_code": "MVR",
+    "flag": "flag_mvr"
+  },
+  {
+    "short_code": "MWK",
+    "flag": "flag_mwk"
+  },
+  {
+    "short_code": "MXN",
+    "flag": "flag_mxn"
+  },
+  {
+    "short_code": "MYR",
+    "flag": "flag_myr"
+  },
+  {
+    "short_code": "MZN",
+    "flag": "flag_mzn"
+  },
+  {
+    "short_code": "NAD",
+    "flag": "flag_nad"
+  },
+  {
+    "short_code": "NGN",
+    "flag": "flag_ngn"
+  },
+  {
+    "short_code": "NIO",
+    "flag": "flag_nio"
+  },
+  {
+    "short_code": "NOK",
+    "flag": "flag_nok"
+  },
+  {
+    "short_code": "NPR",
+    "flag": "flag_npr"
+  },
+  {
+    "short_code": "NZD",
+    "flag": "flag_nzd"
+  },
+  {
+    "short_code": "OMR",
+    "flag": "flag_omr"
+  },
+  {
+    "short_code": "PAB",
+    "flag": "flag_pab"
+  },
+  {
+    "short_code": "PEN",
+    "flag": "flag_pen"
+  },
+  {
+    "short_code": "PGK",
+    "flag": "flag_pgk"
+  },
+  {
+    "short_code": "PHP",
+    "flag": "flag_php"
+  },
+  {
+    "short_code": "PKR",
+    "flag": "flag_pkr"
+  },
+  {
+    "short_code": "PLN",
+    "flag": "flag_pln"
+  },
+  {
+    "short_code": "PYG",
+    "flag": "flag_pyg"
+  },
+  {
+    "short_code": "QAR",
+    "flag": "flag_qar"
+  },
+  {
+    "short_code": "RON",
+    "flag": "flag_ron"
+  },
+  {
+    "short_code": "RSD",
+    "flag": "flag_rsd"
+  },
+  {
+    "short_code": "RUB",
+    "flag": "flag_rub"
+  },
+  {
+    "short_code": "RWF",
+    "flag": "flag_rwf"
+  },
+  {
+    "short_code": "SAR",
+    "flag": "flag_sar"
+  },
+  {
+    "short_code": "SBD",
+    "flag": "flag_sbd"
+  },
+  {
+    "short_code": "SCR",
+    "flag": "flag_scr"
+  },
+  {
+    "short_code": "SDG",
+    "flag": "flag_sdg"
+  },
+  {
+    "short_code": "SEK",
+    "flag": "flag_sek"
+  },
+  {
+    "short_code": "SGD",
+    "flag": "flag_sgd"
+  },
+  {
+    "short_code": "SHP",
+    "flag": "flag_shp"
+  },
+  {
+    "short_code": "SLL",
+    "flag": "flag_sll"
+  },
+  {
+    "short_code": "SOS",
+    "flag": "flag_sos"
+  },
+  {
+    "short_code": "SRD",
+    "flag": "flag_srd"
+  },
+  {
+    "short_code": "SSP",
+    "flag": "flag_ssp"
+  },
+  {
+    "short_code": "STD",
+    "flag": "flag_std"
+  },
+  {
+    "short_code": "SVC",
+    "flag": "flag_svc"
+  },
+  {
+    "short_code": "SYP",
+    "flag": "flag_syp"
+  },
+  {
+    "short_code": "SZL",
+    "flag": "flag_szl"
+  },
+  {
+    "short_code": "THB",
+    "flag": "flag_thb"
+  },
+  {
+    "short_code": "TJS",
+    "flag": "flag_tjs"
+  },
+  {
+    "short_code": "TMT",
+    "flag": "flag_tmt"
+  },
+  {
+    "short_code": "TND",
+    "flag": "flag_tnd"
+  },
+  {
+    "short_code": "TOP",
+    "flag": "flag_top"
+  },
+  {
+    "short_code": "TRY",
+    "flag": "flag_try"
+  },
+  {
+    "short_code": "TTD",
+    "flag": "flag_ttd"
+  },
+  {
+    "short_code": "TWD",
+    "flag": "flag_twd"
+  },
+  {
+    "short_code": "TZS",
+    "flag": "flag_tzs"
+  },
+  {
+    "short_code": "UAH",
+    "flag": "flag_uah"
+  },
+  {
+    "short_code": "UGX",
+    "flag": "flag_ugx"
+  },
+  {
+    "short_code": "USD",
+    "flag": "flag_usd"
+  },
+  {
+    "short_code": "UYU",
+    "flag": "flag_uyu"
+  },
+  {
+    "short_code": "UZS",
+    "flag": "flag_uzs"
+  },
+  {
+    "short_code": "VEF",
+    "flag": "flag_ves"
+  },
+  {
+    "short_code": "VND",
+    "flag": "flag_vnd"
+  },
+  {
+    "short_code": "VUV",
+    "flag": "flag_vuv"
+  },
+  {
+    "short_code": "WST",
+    "flag": "flag_wst"
+  },
+  {
+    "short_code": "XAF",
+    "flag": "flag_xaf"
+  },
+  {
+    "short_code": "XCD",
+    "flag": "flag_xcd"
+  },
+  {
+    "short_code": "XOF",
+    "flag": "flag_xof"
+  },
+  {
+    "short_code": "XPF",
+    "flag": "flag_xpf"
+  },
+  {
+    "short_code": "YER",
+    "flag": "flag_yer"
+  },
+  {
+    "short_code": "ZAR",
+    "flag": "flag_zar"
+  },
+  {
+    "short_code": "ZMW",
+    "flag": "flag_zmw"
+  },
+  {
+    "short_code": "ZWL",
+    "flag": "flag_zwl"
+  }
+]

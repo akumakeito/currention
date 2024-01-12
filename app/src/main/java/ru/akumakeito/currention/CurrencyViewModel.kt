@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.dto.CurrencyType
 import ru.akumakeito.currention.dto.FiatCurrency
@@ -19,7 +20,11 @@ class CurrencyViewModel @Inject constructor(
     val fiatCurrencies = _fiatCurrencies
 
 
-    fun getFiatCurrencies() = viewModelScope.launch {
+    fun getFiatCurrencies() = viewModelScope.launch(Dispatchers.IO) {
         _fiatCurrencies.value = repository.getFiatCurrencyList()
+    }
+
+    fun clearFiatCurrencies() = viewModelScope.launch {
+        repository.deleteAllFiat()
     }
 }

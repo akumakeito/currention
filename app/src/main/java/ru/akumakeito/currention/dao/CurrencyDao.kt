@@ -1,6 +1,7 @@
 package ru.akumakeito.currention.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import ru.akumakeito.currention.entity.FiatEntity
@@ -16,4 +17,10 @@ interface CurrencyDao {
 
     @Insert
     suspend fun insertAllFiat(fiatList : List<FiatEntity>)
+
+    @Query("DELETE FROM FiatEntity")
+    suspend fun deleteAllFiat()
+
+    @Query("UPDATE FiatEntity SET flag = :flag WHERE short_code = :shortCode")
+    suspend fun updateFlagByShortCode(shortCode : String, flag : Int)
 }
