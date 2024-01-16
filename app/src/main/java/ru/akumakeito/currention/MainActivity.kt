@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.dto.FiatCurrency
+import ru.akumakeito.currention.ui.ChooseFavoriteCurrencyScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 @AndroidEntryPoint
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            CurrencyListScreen()
+            ChooseFavoriteCurrencyScreen()
         }
     }
 }
@@ -72,14 +73,14 @@ fun CurrencyListScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
 fun CurrencyList(currencies: List<FiatCurrency>) {
     LazyColumn {
         items(currencies) { item ->
-            CurrencyCard(item)
+            CurrencyCardTest(item)
         }
     }
 
 }
 
 @Composable
-fun CurrencyCard(
+fun CurrencyCardTest(
     currency: FiatCurrency
 ) {
 

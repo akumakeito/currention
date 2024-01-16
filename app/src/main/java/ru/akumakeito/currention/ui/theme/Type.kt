@@ -33,14 +33,14 @@ val Typography = Typography(
     labelLarge = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_500)),
-        fontWeight = FontWeight(500)
+        fontFamily = FontFamily(Font(R.font.roboto_400)),
+        fontWeight = FontWeight(400)
     ),
 
     labelMedium = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_500)),
+        fontFamily = FontFamily(Font(R.font.roboto_medium)),
         fontWeight = FontWeight(500)
     ),
 
