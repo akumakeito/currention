@@ -6,8 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.akumakeito.currention.dto.CurrencyType
-import ru.akumakeito.currention.dto.FiatCurrency
+import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.repository.CurrencyRepository
 import javax.inject.Inject
 
@@ -26,5 +25,9 @@ class CurrencyViewModel @Inject constructor(
 
     fun clearFiatCurrencies() = viewModelScope.launch {
         repository.deleteAllFiat()
+    }
+
+    fun getPopularCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+        repository.getPopularCurrencyList()
     }
 }

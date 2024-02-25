@@ -1,8 +1,7 @@
 package ru.akumakeito.currention.util
 
 import com.google.gson.Gson
-import ru.akumakeito.currention.dto.FiatCurrency
-import ru.akumakeito.currention.dto.FlagJsonItem
+import ru.akumakeito.currention.domain.FlagJsonItem
 import javax.inject.Inject
 import javax.inject.Singleton
 

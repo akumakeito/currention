@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.dto
+package ru.akumakeito.currention.domain
 
 data class FiatServerResponse(
     val meta : Meta,

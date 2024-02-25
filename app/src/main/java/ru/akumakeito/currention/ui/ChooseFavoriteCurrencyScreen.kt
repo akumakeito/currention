@@ -3,15 +3,11 @@ package ru.akumakeito.currention.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,37 +15,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.room.util.TableInfo
 import ru.akumakeito.currention.R
-import ru.akumakeito.currention.dto.FiatCurrency
+import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 val exp = FiatCurrency(
@@ -61,14 +47,11 @@ val exp = FiatCurrency(
     R.drawable.flag_usd
 )
 
-@Preview(
-    device = "id:pixel_6",
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_UNDEFINED, name = "pixel6"
-)
+@Preview
 @Composable
 fun ChooseFavoriteCurrencyScreen() {
     CurrentionTheme {
-        val columnScrollState = rememberScrollState()
+        val lazyListState = rememberLazyListState()
 
         Column(
             modifier = Modifier
@@ -89,28 +72,43 @@ fun ChooseFavoriteCurrencyScreen() {
             SpacerHeight(height = 24)
             /*TODO add segmented button*/
 
-
-            CurrencyLazyColumn(columnScrollState = columnScrollState)
-
-            SpacerHeight(height = 24)
-
-            Button(
-                onClick = { /*TODO*/ },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-
+                    .weight(1f)
             ) {
-                Text(text = stringResource(R.string.next),
-                    fontWeight = FontWeight.Bold
-                )
-            }
 
-            SpacerHeight(height = 24)
+
+                CurrencyListWithTitle(
+                    lazyListState = lazyListState,
+                    titleStringRes = R.string.popular,
+                    currencyList = listOf(exp),
+                    onCheckboxItemClickListener = {
+
+                    }
+                )
+
+                SpacerHeight(height = 24)
+
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                ) {
+                    Text(
+                        text = stringResource(R.string.next),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                SpacerHeight(height = 24)
+            }
         }
+
     }
 
-}
 
+}
 
 @Composable
 fun SpacerHeight(height: Int) {
@@ -123,58 +121,48 @@ fun SpacerWidth(width: Int) {
 }
 
 @Composable
-fun ColumnScope.CurrencyLazyColumn(
-    columnScrollState: ScrollState,
+fun ColumnScope.CurrencyListWithTitle(
+    lazyListState: LazyListState,
+    titleStringRes: Int,
+    currencyList: List<FiatCurrency>,
+    modifier: Modifier = Modifier,
+    onCheckboxItemClickListener: (FiatCurrency) -> Unit
 ) {
-    Column(
+
+    Text(
+        text = stringResource(titleStringRes),
         modifier = Modifier
-            .verticalScroll(columnScrollState)
-            .weight(1f)
+            .fillMaxWidth(),
+        style = MaterialTheme.typography.headlineMedium,
+        color = MaterialTheme.colorScheme.onBackground
+    )
+
+
+    SpacerHeight(height = 24)
+
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.height(100.dp)
     ) {
-        Text(
-            text = stringResource(R.string.popular),
-            modifier = Modifier
-                .fillMaxWidth(),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        items(currencyList) { item ->
 
-        SpacerHeight(height = 24)
+            CurrencyCard(
+                currency = item,
+                onCheckboxClickListener = {
+                    onCheckboxItemClickListener(item)
+                }
+            )
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            repeat(7) {
-                CurrencyCard(currency = exp)
-            }
-        }
-
-        SpacerHeight(height = 48)
-
-        Text(
-            text = stringResource(R.string.all_currencies),
-            modifier = Modifier
-                .fillMaxWidth(),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        SpacerHeight(height = 24)
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.height(500.dp)
-        ) {
-            items(20) {
-                CurrencyCard(currency = exp)
-            }
         }
     }
 }
 
 
 @Composable
-fun CurrencyCard(currency: FiatCurrency) {
+fun CurrencyCard(
+    currency: FiatCurrency,
+    onCheckboxClickListener: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -199,7 +187,7 @@ fun CurrencyCard(currency: FiatCurrency) {
 
             SpacerWidth(width = 16)
 
-            Checkbox(checked = true, onCheckedChange = {})
+            Checkbox(checked = true, onCheckedChange = { onCheckboxClickListener })
         }
     }
 }

@@ -2,8 +2,8 @@ package ru.akumakeito.currention.api
 
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.akumakeito.currention.dto.FiatResponse
-import ru.akumakeito.currention.dto.FiatServerResponse
+import ru.akumakeito.currention.domain.FiatResponse
+import ru.akumakeito.currention.domain.FiatServerResponse
 
 
 interface ApiService {

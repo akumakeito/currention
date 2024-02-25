@@ -2,12 +2,11 @@ package ru.akumakeito.currention.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.api.ApiService
 import ru.akumakeito.currention.dao.CurrencyDao
-import ru.akumakeito.currention.dto.CurrencyType
-import ru.akumakeito.currention.dto.FiatCurrency
+import ru.akumakeito.currention.domain.CurrencyType
+import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.entity.toDto
 import ru.akumakeito.currention.entity.toEntity
 import ru.akumakeito.currention.util.FlagDeserializer
@@ -19,6 +18,8 @@ class CurrencyRepositoryImpl @Inject constructor(
     private val flagDeserializer: FlagDeserializer,
     @ApplicationContext private val context: Context
 ) : CurrencyRepository {
+
+
     override suspend fun updateFlagFromJson() {
         val res = context.resources
         val inputStream = res.openRawResource(R.raw.flags)
@@ -57,4 +58,16 @@ override suspend fun getFiatCurrencyList(): List<FiatCurrency> {
 override suspend fun deleteAllFiat() {
     dao.deleteAllFiat()
 }
+
+    override suspend fun chooseFavoriteCurrency(fiatCurrency: FiatCurrency) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun markPopularCurrency() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getPopularCurrencyList(): List<FiatCurrency> {
+        TODO("Not yet implemented")
+    }
 }

@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.akumakeito.currention.R
-import ru.akumakeito.currention.dto.FiatCurrency
-import ru.akumakeito.currention.dto.FiatResponse
+import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.FiatResponse
 
 @Entity
 data class FiatEntity(
@@ -16,7 +16,9 @@ data class FiatEntity(
     val shortCode: String,
     val code : String,
     val symbol : String,
-    var flag : Int = R.drawable.flag_currention
+    var flag : Int = R.drawable.flag_currention,
+    var isPopular : Boolean = false,
+    var isFavorite : Boolean = false
 ) {
     fun toDto() = FiatCurrency(
         id,
@@ -24,7 +26,9 @@ data class FiatEntity(
         shortCode,
         code,
         symbol,
-        flag
+        flag,
+        isPopular,
+        isFavorite
     )
 
     companion object {
@@ -34,7 +38,7 @@ data class FiatEntity(
         fiatResponse.name,
         fiatResponse.shortCode,
         fiatResponse.code,
-        fiatResponse.symbol
+        fiatResponse.symbol,
     )
         fun fromDto(fiatCurrency: FiatCurrency) = FiatEntity(
             fiatCurrency.id,

@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.dto
+package ru.akumakeito.currention.domain
 
 import ru.akumakeito.currention.R
 
@@ -8,5 +8,7 @@ data class FiatCurrency (
     val shortCode: String,
     val code : String,
     val symbol : String,
-    var flag : Int = 0
+    var flag : Int = 0,
+    var isPopular : Boolean = false,
+    var isFavorite : Boolean = false
 )

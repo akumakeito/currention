@@ -1,11 +1,10 @@
 package ru.akumakeito.currention.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.akumakeito.currention.entity.FiatEntity
-import ru.akumakeito.currention.dto.FiatCurrency
 
 @Dao
 interface CurrencyDao {
@@ -17,6 +16,9 @@ interface CurrencyDao {
 
     @Insert
     suspend fun insertAllFiat(fiatList : List<FiatEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFiat(fiat : FiatEntity)
 
     @Query("DELETE FROM FiatEntity")
     suspend fun deleteAllFiat()
