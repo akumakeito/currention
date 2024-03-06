@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import ru.akumakeito.currention.entity.FiatEntity
 
 @Dao
@@ -12,7 +13,7 @@ interface CurrencyDao {
     suspend fun isEmpty() : Boolean
 
     @Query("SELECT * FROM FiatEntity" )
-    suspend fun getAllFiat() : List<FiatEntity>
+    fun getAllFiat() : Flow<List<FiatEntity>>
 
     @Insert
     suspend fun insertAllFiat(fiatList : List<FiatEntity>)

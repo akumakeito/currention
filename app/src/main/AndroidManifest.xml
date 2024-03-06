@@ -15,11 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Currention"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.Choose"
-            android:exported="false"
-            android:label="@string/title_activity_choose"
-            android:theme="@style/Theme.Currention" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

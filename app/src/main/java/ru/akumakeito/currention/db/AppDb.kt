@@ -7,7 +7,7 @@ import ru.akumakeito.currention.dao.CurrencyDao
 import ru.akumakeito.currention.entity.FiatEntity
 
 
-@Database(entities = [FiatEntity::class], version = 4, exportSchema = false)
+@Database(entities = [FiatEntity::class], version = 5, exportSchema = false)
 abstract class AppDb : RoomDatabase() {
 
     abstract fun provideCurrencyDao() : CurrencyDao

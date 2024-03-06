@@ -15,12 +15,16 @@ class CurrencyViewModel @Inject constructor(
     private val repository: CurrencyRepository
 ) : ViewModel() {
 
-    private val _fiatCurrencies = mutableStateOf<List<FiatCurrency>>(emptyList())
+    init {
+        getFiatCurrencies()
+    }
+
+    private val _fiatCurrencies = repository.fiatCurrencies
     val fiatCurrencies = _fiatCurrencies
 
 
     fun getFiatCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-        _fiatCurrencies.value = repository.getFiatCurrencyList()
+        repository.getFiatCurrencyList()
     }
 
     fun clearFiatCurrencies() = viewModelScope.launch {

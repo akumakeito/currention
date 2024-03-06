@@ -10,7 +10,7 @@ interface CurrencyRepository {
     suspend fun updateFlagFromJson(jsonString: String)
     suspend fun getLatest()
 
-    suspend fun getFiatCurrencyList() : List<FiatCurrency>
+    suspend fun getFiatCurrencyList()
     suspend fun deleteAllFiat()
 
     suspend fun chooseFavoriteCurrency(fiatCurrency: FiatCurrency)

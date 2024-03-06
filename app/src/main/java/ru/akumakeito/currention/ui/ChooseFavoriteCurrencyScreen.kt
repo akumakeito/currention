@@ -27,6 +27,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,6 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
@@ -49,7 +53,9 @@ val exp = FiatCurrency(
 
 @Preview
 @Composable
-fun ChooseFavoriteCurrencyScreen() {
+fun ChooseFavoriteCurrencyScreen(currencyViewModel : CurrencyViewModel = hiltViewModel()) {
+
+
     CurrentionTheme {
         val lazyListState = rememberLazyListState()
 
@@ -81,7 +87,7 @@ fun ChooseFavoriteCurrencyScreen() {
                 CurrencyListWithTitle(
                     lazyListState = lazyListState,
                     titleStringRes = R.string.popular,
-                    currencyList = listOf(exp),
+                    currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
                     onCheckboxItemClickListener = {
 
                     }

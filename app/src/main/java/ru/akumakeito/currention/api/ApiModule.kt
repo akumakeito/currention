@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 
 const val BASE_URL = "https://api.currencybeacon.com/v1/"
-const val API_KEY = BuildConfig.authApiKey
+val API_KEY = BuildConfig.AUTH_API_KEY
 const val AUTH_HEADER = "api_key"
 
 

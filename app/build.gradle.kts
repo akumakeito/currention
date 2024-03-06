@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+import java.util.Properties
 
 plugins {
     kotlin("kapt")
@@ -18,8 +19,17 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val keystoreFile = project.rootProject.file("secrets.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val authApiKey = properties.getProperty("AUTH_API_KEY")
+
+        buildConfigField(
+            type = "String",
+            name = "AUTH_API_KEY",
+            value = authApiKey
+        )
         vectorDrawables {
             useSupportLibrary = true
         }

@@ -1,7 +1,12 @@
 package ru.akumakeito.currention.repository
 
+import android.annotation.SuppressLint
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.api.ApiService
 import ru.akumakeito.currention.dao.CurrencyDao
@@ -16,9 +21,13 @@ class CurrencyRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val dao: CurrencyDao,
     private val flagDeserializer: FlagDeserializer,
-    @ApplicationContext private val context: Context
-) : CurrencyRepository {
+    @ApplicationContext private val context: Context,
 
+    ) : CurrencyRepository {
+
+    override val fiatCurrencies: Flow<List<FiatCurrency>> = dao.getAllFiat().map {
+        it.toDto()
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun updateFlagFromJson() {
         val res = context.resources
@@ -27,37 +36,36 @@ class CurrencyRepositoryImpl @Inject constructor(
         updateFlagFromJson(jsonString)
     }
 
+    @SuppressLint("DiscouragedApi")
     override suspend fun updateFlagFromJson(jsonString: String) {
         val flagList = flagDeserializer.deserialize(jsonString)
         val res = context.resources
         flagList.forEach { flagJson ->
             val flagId = res.getIdentifier(flagJson.flag, "drawable", context.packageName)
 
-        dao.updateFlagByShortCode(flagJson.shortCode, flagId)
-    }
-}
-
-override suspend fun getLatest() {
-
-}
-
-override suspend fun getFiatCurrencyList(): List<FiatCurrency> {
-    if (dao.isEmpty()) {
-        try {
-            val result = apiService.getCurrencyList(CurrencyType.FIAT.name.lowercase())
-            dao.insertAllFiat(result.response.toEntity())
-            updateFlagFromJson()
-        } catch (e: Exception) {
-            e.printStackTrace()
+            dao.updateFlagByShortCode(flagJson.shortCode, flagId)
         }
     }
 
-    return dao.getAllFiat().toDto()
-}
+    override suspend fun getLatest() {
 
-override suspend fun deleteAllFiat() {
-    dao.deleteAllFiat()
-}
+    }
+
+    override suspend fun getFiatCurrencyList() {
+        if (dao.isEmpty()) {
+            try {
+                val result = apiService.getCurrencyList(CurrencyType.FIAT.name.lowercase())
+                dao.insertAllFiat(result.response.toEntity())
+                updateFlagFromJson()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    override suspend fun deleteAllFiat() {
+        dao.deleteAllFiat()
+    }
 
     override suspend fun chooseFavoriteCurrency(fiatCurrency: FiatCurrency) {
         TODO("Not yet implemented")
