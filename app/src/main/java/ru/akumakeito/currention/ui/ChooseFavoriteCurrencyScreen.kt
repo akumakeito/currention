@@ -30,8 +30,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,6 +62,7 @@ val exp = FiatCurrency(
 @Composable
 fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltViewModel()) {
 
+    var componentHeight by remember { mutableStateOf(0.dp) }
 
     CurrentionTheme {
         val lazyListState = rememberLazyListState()
@@ -65,7 +71,6 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltView
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
-                .verticalScroll(rememberScrollState())
         ) {
 
             SpacerHeight(height = 24)
@@ -81,25 +86,28 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltView
             SpacerHeight(height = 24)
             /*TODO add segmented button*/
 
-            HeaderMedium(header = R.string.popular)
-            SpacerHeight(height = 12)
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                HeaderMedium(header = R.string.popular)
+                SpacerHeight(height = 12)
+
+                CurrencyList(
+                    currencyList = currencyViewModel.popularFiatCurrencies.collectAsState(initial = emptyList()).value,
+                    onCheckboxItemClickListener = {
+                    }
+                )
 
 
-            CurrencyList(
-                currencyList = currencyViewModel.popularFiatCurrencies.collectAsState(initial = emptyList()).value,
-                onCheckboxItemClickListener = {
-                }
-            )
+                SpacerHeight(height = 24)
+                HeaderMedium(header = R.string.all_currencies)
+                SpacerHeight(height = 12)
 
+                CurrencyList(
+                    currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
+                    onCheckboxItemClickListener = {
+                    })
 
-            SpacerHeight(height = 24)
-            HeaderMedium(header = R.string.all_currencies)
-            SpacerHeight(height = 12)
+            }
 
-            CurrencyList(
-                currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
-                onCheckboxItemClickListener = {
-                })
 
             Button(
                 onClick = { /*TODO*/ },
@@ -142,11 +150,12 @@ fun HeaderMedium(header: Int) {
 @Composable
 fun CurrencyList(
     currencyList: List<FiatCurrency>,
-    onCheckboxItemClickListener: (FiatCurrency) -> Unit
+    onCheckboxItemClickListener: (FiatCurrency) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.wrapContentHeight()
+        modifier = modifier
     ) {
         items(currencyList) { item ->
             CurrencyCard(
@@ -164,11 +173,15 @@ fun CurrencyList(
 @Composable
 fun CurrencyCard(
     currency: FiatCurrency,
-    onCheckboxClickListener: () -> Unit
+    onCheckboxClickListener: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .onGloballyPositioned { coords ->
+
+            },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
     ) {
         Row(
