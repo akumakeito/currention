@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.ui.ChooseFavoriteCurrencyScreen
-import ru.akumakeito.currention.ui.CurrencyList
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 @AndroidEntryPoint
@@ -48,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            ChooseFavoriteCurrencyScreen()
+            ChooseFavoriteCurrencyScreen(onCheckboxItemClickListener = {})
         }
     }
 }

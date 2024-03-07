@@ -6,6 +6,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +28,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
@@ -58,11 +63,22 @@ val exp = FiatCurrency(
     R.drawable.flag_usd
 )
 
-@Preview
-@Composable
-fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltViewModel()) {
 
-    var componentHeight by remember { mutableStateOf(0.dp) }
+@Composable
+fun ChooseFavoriteCurrencyScreen(
+    currencyViewModel: CurrencyViewModel = hiltViewModel(),
+    onCheckboxItemClickListener: (FiatCurrency) -> Unit,
+) {
+
+    val fiatCurrencyList = currencyViewModel.fiatCurrencies.collectAsStateWithLifecycle(
+        initialValue = emptyList()
+    )
+
+    val popularFiatCurrencyList =
+        currencyViewModel.popularFiatCurrencies.collectAsStateWithLifecycle(
+            initialValue = emptyList()
+        )
+
 
     CurrentionTheme {
         val lazyListState = rememberLazyListState()
@@ -86,27 +102,42 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltView
             SpacerHeight(height = 24)
             /*TODO add segmented button*/
 
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                HeaderMedium(header = R.string.popular)
-                SpacerHeight(height = 12)
+            LazyColumn(contentPadding = PaddingValues(vertical = 16.dp), modifier = Modifier.weight(1f)) {
 
-                CurrencyList(
-                    currencyList = currencyViewModel.popularFiatCurrencies.collectAsState(initial = emptyList()).value,
-                    onCheckboxItemClickListener = {
-                    }
-                )
+                item {
+                    HeaderMedium(header = R.string.popular)
+                    SpacerHeight(height = 16)
+                }
 
+                items(items = popularFiatCurrencyList.value) { item ->
+                    CurrencyCard(
+                        currency = item,
+                        onCheckboxClickListener = {
+                            onCheckboxItemClickListener(item)
+                        }
+                    )
 
-                SpacerHeight(height = 24)
-                HeaderMedium(header = R.string.all_currencies)
-                SpacerHeight(height = 12)
+                }
 
-                CurrencyList(
-                    currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
-                    onCheckboxItemClickListener = {
-                    })
+                item {
+                    SpacerHeight(height = 24)
+                    HeaderMedium(header = R.string.all_currencies)
+                    SpacerHeight(height = 16)
+                }
+
+                items(items = fiatCurrencyList.value) { item ->
+                    CurrencyCard(
+                        currency = item,
+                        onCheckboxClickListener = {
+                            onCheckboxItemClickListener(item)
+                        }
+                    )
+
+                }
 
             }
+
+
 
 
             Button(
@@ -147,41 +178,18 @@ fun HeaderMedium(header: Int) {
     )
 }
 
-@Composable
-fun CurrencyList(
-    currencyList: List<FiatCurrency>,
-    onCheckboxItemClickListener: (FiatCurrency) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
-    ) {
-        items(currencyList) { item ->
-            CurrencyCard(
-                currency = item,
-                onCheckboxClickListener = {
-                    onCheckboxItemClickListener(item)
-                }
-            )
-
-        }
-    }
-}
 
 
 @Composable
 fun CurrencyCard(
+    modifier: Modifier = Modifier,
     currency: FiatCurrency,
     onCheckboxClickListener: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .onGloballyPositioned { coords ->
-
-            },
+            .padding(vertical = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
     ) {
         Row(
@@ -203,7 +211,7 @@ fun CurrencyCard(
 
             SpacerWidth(width = 16)
 
-            Checkbox(checked = true, onCheckedChange = { onCheckboxClickListener })
+            Checkbox(checked = false, onCheckedChange = { onCheckboxClickListener })
         }
     }
 }
