@@ -65,6 +65,7 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltView
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState())
         ) {
 
             SpacerHeight(height = 24)
@@ -81,6 +82,7 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltView
             /*TODO add segmented button*/
 
             HeaderMedium(header = R.string.popular)
+            SpacerHeight(height = 12)
 
 
             CurrencyList(
@@ -92,6 +94,7 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltView
 
             SpacerHeight(height = 24)
             HeaderMedium(header = R.string.all_currencies)
+            SpacerHeight(height = 12)
 
             CurrencyList(
                 currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
