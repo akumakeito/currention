@@ -12,8 +12,10 @@ import ru.akumakeito.currention.api.ApiService
 import ru.akumakeito.currention.dao.CurrencyDao
 import ru.akumakeito.currention.domain.CurrencyType
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.entity.FiatEntity
 import ru.akumakeito.currention.entity.toDto
 import ru.akumakeito.currention.entity.toEntity
+import ru.akumakeito.currention.util.Constants.Companion.popularCurrencyShortCodeList
 import ru.akumakeito.currention.util.FlagDeserializer
 import javax.inject.Inject
 
@@ -57,6 +59,7 @@ class CurrencyRepositoryImpl @Inject constructor(
                 val result = apiService.getCurrencyList(CurrencyType.FIAT.name.lowercase())
                 dao.insertAllFiat(result.response.toEntity())
                 updateFlagFromJson()
+                setPopularCurrencyList(popularCurrencyShortCodeList)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -73,6 +76,12 @@ class CurrencyRepositoryImpl @Inject constructor(
 
     override suspend fun markPopularCurrency() {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>) {
+        popularCurrencyShortCodeList.map {
+            dao.updateCurrencyPopularityByShortCode(it)
+        }
     }
 
     override suspend fun getPopularCurrencyList(): List<FiatCurrency> {

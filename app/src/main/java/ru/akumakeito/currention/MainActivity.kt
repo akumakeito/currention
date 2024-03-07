@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.ui.ChooseFavoriteCurrencyScreen
+import ru.akumakeito.currention.ui.CurrencyList
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 @AndroidEntryPoint
@@ -64,13 +65,13 @@ fun CurrencyListScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
         Button(onClick = { viewModel.clearFiatCurrencies() }) {
             Text(text = "Clear Currencies")
         }
-        CurrencyList(currencies = viewModel.fiatCurrencies.collectAsState(initial = emptyList()).value)
+        CurrencyListMain(currencies = viewModel.popularFiatCurrencies.collectAsState(initial = emptyList()).value)
     }
 
 }
 
 @Composable
-fun CurrencyList(currencies: List<FiatCurrency>) {
+fun CurrencyListMain(currencies: List<FiatCurrency>) {
     LazyColumn {
         items(currencies) { item ->
             CurrencyCardTest(item)
@@ -119,7 +120,7 @@ fun CurrencyListPreview() {
     CurrentionTheme {
         CurrencyListScreen()
 
-        CurrencyList(
+        CurrencyListMain(
             listOf(
                 FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
                 FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),

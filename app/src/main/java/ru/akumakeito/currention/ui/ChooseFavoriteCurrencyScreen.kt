@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -53,7 +55,7 @@ val exp = FiatCurrency(
 
 @Preview
 @Composable
-fun ChooseFavoriteCurrencyScreen(currencyViewModel : CurrencyViewModel = hiltViewModel()) {
+fun ChooseFavoriteCurrencyScreen(currencyViewModel: CurrencyViewModel = hiltViewModel()) {
 
 
     CurrentionTheme {
@@ -70,7 +72,7 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel : CurrencyViewModel = hiltVie
             Text(
                 text = stringResource(R.string.choose_currencies),
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .wrapContentHeight(),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -78,43 +80,40 @@ fun ChooseFavoriteCurrencyScreen(currencyViewModel : CurrencyViewModel = hiltVie
             SpacerHeight(height = 24)
             /*TODO add segmented button*/
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-            ) {
+            HeaderMedium(header = R.string.popular)
 
 
-                CurrencyListWithTitle(
-                    lazyListState = lazyListState,
-                    titleStringRes = R.string.popular,
-                    currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
-                    onCheckboxItemClickListener = {
-
-                    }
-                )
-
-                SpacerHeight(height = 24)
-
-                Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .fillMaxWidth()
-
-                ) {
-                    Text(
-                        text = stringResource(R.string.next),
-                        fontWeight = FontWeight.Bold
-                    )
+            CurrencyList(
+                currencyList = currencyViewModel.popularFiatCurrencies.collectAsState(initial = emptyList()).value,
+                onCheckboxItemClickListener = {
                 }
+            )
 
-                SpacerHeight(height = 24)
+
+            SpacerHeight(height = 24)
+            HeaderMedium(header = R.string.all_currencies)
+
+            CurrencyList(
+                currencyList = currencyViewModel.fiatCurrencies.collectAsState(initial = emptyList()).value,
+                onCheckboxItemClickListener = {
+                })
+
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+
+            ) {
+                Text(
+                    text = stringResource(R.string.next),
+                    fontWeight = FontWeight.Bold
+                )
             }
+            SpacerHeight(height = 24)
         }
-
     }
-
-
 }
+
 
 @Composable
 fun SpacerHeight(height: Int) {
@@ -127,31 +126,26 @@ fun SpacerWidth(width: Int) {
 }
 
 @Composable
-fun ColumnScope.CurrencyListWithTitle(
-    lazyListState: LazyListState,
-    titleStringRes: Int,
-    currencyList: List<FiatCurrency>,
-    modifier: Modifier = Modifier,
-    onCheckboxItemClickListener: (FiatCurrency) -> Unit
-) {
-
+fun HeaderMedium(header: Int) {
     Text(
-        text = stringResource(titleStringRes),
+        text = stringResource(header),
         modifier = Modifier
             .fillMaxWidth(),
         style = MaterialTheme.typography.headlineMedium,
         color = MaterialTheme.colorScheme.onBackground
     )
+}
 
-
-    SpacerHeight(height = 24)
-
+@Composable
+fun CurrencyList(
+    currencyList: List<FiatCurrency>,
+    onCheckboxItemClickListener: (FiatCurrency) -> Unit
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.height(100.dp)
+        modifier = Modifier.wrapContentHeight()
     ) {
         items(currencyList) { item ->
-
             CurrencyCard(
                 currency = item,
                 onCheckboxClickListener = {

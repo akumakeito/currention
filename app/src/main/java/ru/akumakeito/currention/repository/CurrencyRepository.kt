@@ -2,6 +2,7 @@ package ru.akumakeito.currention.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.entity.FiatEntity
 
 interface CurrencyRepository {
 
@@ -16,6 +17,8 @@ interface CurrencyRepository {
     suspend fun chooseFavoriteCurrency(fiatCurrency: FiatCurrency)
 
     suspend fun markPopularCurrency()
+
+    suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>)
 
     suspend fun getPopularCurrencyList() : List<FiatCurrency>
 }
