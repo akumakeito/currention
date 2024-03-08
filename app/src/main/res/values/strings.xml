@@ -1,14 +1,13 @@
 <resources>
     <string name="app_name">Currention</string>
-    <string name="title_activity_choose">Choose</string>
+    <string name="title_activity_choose">Выбрать</string>
     <string name="choose_currencies">Выбери валюты, которые будешь конвертировать чаще всего и курс которых хочешь отслеживать</string>
     <string name="popular">Популярные</string>
-    <string name="currency_name_flag">Флаг %1$s</string>
     <string name="all_currencies">Все валюты</string>
     <string name="next">Далее</string>
     <string name="fiat_currencies">Мировые валюты</string>
     <string name="crypto_currencies">Криптовалюты</string>
     <string name="enter_currency">Введите валюту</string>
-
+    <string name="currency_name_flag">Флаг %1$s</string>
 
 </resources>

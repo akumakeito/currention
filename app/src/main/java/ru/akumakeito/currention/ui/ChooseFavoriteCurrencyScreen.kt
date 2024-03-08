@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.InteractionSource
@@ -51,12 +52,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
@@ -76,8 +79,8 @@ val exp = FiatCurrency(
 @Composable
 fun ChooseFavoriteCurrencyScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel(),
-) {
 
+) {
     val fiatCurrencyList by currencyViewModel.fiatCurrencies.collectAsState(emptyList())
     val searchingState by currencyViewModel.searchingState.collectAsState()
 
@@ -98,7 +101,7 @@ fun ChooseFavoriteCurrencyScreen(
                     .wrapContentHeight(),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.SemiBold
             )
 
             SpacerHeight(height = 16)
@@ -149,7 +152,8 @@ fun ChooseFavoriteCurrencyScreen(
                             onCheckboxClickListener = {
                                 Log.d("checkbox", "onCheckboxClickListener $item")
                                 currencyViewModel.updateFavoriteCurrency(item)
-                            }
+                            },
+
                         )
 
                     }
@@ -203,7 +207,6 @@ fun CurrencyCard(
     currency: FiatCurrency,
     onCheckboxClickListener: () -> Unit,
 ) {
-
     var checkState by rememberSaveable {
         mutableStateOf(currency.isFavorite)
     }

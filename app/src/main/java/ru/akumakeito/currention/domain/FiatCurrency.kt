@@ -1,19 +1,25 @@
 package ru.akumakeito.currention.domain
 
+import android.annotation.SuppressLint
+import android.content.Context
+import androidx.compose.ui.text.toLowerCase
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ru.akumakeito.currention.R
 
-data class FiatCurrency (
-    val id : Int,
-    val name : String,
+data class FiatCurrency(
+    val id: Int,
+    var name: String,
     val shortCode: String,
-    val code : String,
-    val symbol : String,
-    var flag : Int = 0,
-    var isPopular : Boolean = false,
-    var isFavorite : Boolean = false
+    val code: String,
+    val symbol: String,
+    var flag: Int = 0,
+    var isPopular: Boolean = false,
+    var isFavorite: Boolean = false
 ) {
-    fun doesMatchSearchQuery(query: String) :Boolean {
-        val machingCombinations = listOf(
+
+    fun doesMatchSearchQuery(query: String): Boolean {
+
+            val machingCombinations = listOf(
             "$name",
             "$name $shortCode",
             "$name$shortCode",
@@ -24,4 +30,18 @@ data class FiatCurrency (
 
         return machingCombinations.any { it.contains(query, ignoreCase = true) }
     }
+
+//    @SuppressLint("DiscouragedApi")
+//    fun getStringResource( context: Context): String? {
+//        val resourceId =
+//            context.resources.getIdentifier("cur${this.shortCode.lowercase()}", "string", context.packageName)
+//        return if (resourceId != 0) {
+//            context.getString(resourceId)
+//        } else {
+//            null
+//        }
+//
+//    }
+
+
 }

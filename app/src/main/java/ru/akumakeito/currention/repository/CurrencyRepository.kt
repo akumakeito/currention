@@ -16,6 +16,8 @@ interface CurrencyRepository {
 
     suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency)
 
+    suspend fun updateCurrencyName(fiatCurrency: FiatCurrency)
+
 
     suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>)
 
