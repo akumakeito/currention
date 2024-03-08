@@ -6,5 +6,9 @@
     <string name="currency_name_flag">Флаг %1$s</string>
     <string name="all_currencies">Все валюты</string>
     <string name="next">Далее</string>
+    <string name="fiat_currencies">Мировые валюты</string>
+    <string name="crypto_currencies">Криптовалюты</string>
+    <string name="enter_currency">Введите валюту</string>
+
 
 </resources>

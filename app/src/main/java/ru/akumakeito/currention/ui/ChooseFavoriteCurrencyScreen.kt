@@ -3,7 +3,9 @@ package ru.akumakeito.currention.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,14 +26,26 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DockedSearchBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +57,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +81,7 @@ val exp = FiatCurrency(
 )
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseFavoriteCurrencyScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel(),
@@ -100,42 +118,92 @@ fun ChooseFavoriteCurrencyScreen(
             )
 
             SpacerHeight(height = 24)
-            /*TODO add segmented button*/
+            SegmentedButtonSingleSelect()
+            SpacerHeight(height = 24)
 
-            LazyColumn(contentPadding = PaddingValues(vertical = 16.dp), modifier = Modifier.weight(1f)) {
-
-                item {
-                    HeaderMedium(header = R.string.popular)
-                    SpacerHeight(height = 16)
-                }
-
-                items(items = popularFiatCurrencyList.value) { item ->
-                    CurrencyCard(
-                        currency = item,
-                        onCheckboxClickListener = {
-                            onCheckboxItemClickListener(item)
-                        }
-                    )
-
-                }
-
-                item {
-                    SpacerHeight(height = 24)
-                    HeaderMedium(header = R.string.all_currencies)
-                    SpacerHeight(height = 16)
-                }
-
-                items(items = fiatCurrencyList.value) { item ->
-                    CurrencyCard(
-                        currency = item,
-                        onCheckboxClickListener = {
-                            onCheckboxItemClickListener(item)
-                        }
-                    )
-
-                }
-
+            var text by rememberSaveable {
+                mutableStateOf("")
             }
+            var active by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            Box(
+                Modifier
+                    .weight(1f)
+                    .semantics { isTraversalGroup = true }) {
+
+                DockedSearchBar(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 8.dp)
+                        .semantics { traversalIndex = -1f },
+                    query = text,
+                    onQueryChange = { text = it },
+                    onSearch = { active = false },
+                    active = active,
+                    onActiveChange = { active = it },
+                    placeholder = { Text(stringResource(R.string.enter_currency)) },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                ) {
+                    repeat(4) { idx ->
+                        val resultText = "Suggestion $idx"
+                        ListItem(
+                            headlineContent = { Text(resultText) },
+                            supportingContent = { Text("Additional info") },
+                            leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
+                            modifier = Modifier
+                                .clickable {
+                                    text = resultText
+                                    active = false
+                                }
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = 16.dp),
+                ) {
+
+                    item {
+                        HeaderMedium(header = R.string.popular)
+                        SpacerHeight(height = 16)
+                    }
+
+                    items(items = popularFiatCurrencyList.value) { item ->
+                        CurrencyCard(
+                            currency = item,
+                            onCheckboxClickListener = {
+                                onCheckboxItemClickListener(item)
+                            }
+                        )
+
+                    }
+
+                    item {
+                        SpacerHeight(height = 24)
+                        HeaderMedium(header = R.string.all_currencies)
+                        SpacerHeight(height = 16)
+
+
+                    }
+
+                    items(items = fiatCurrencyList.value) { item ->
+                        CurrencyCard(
+                            currency = item,
+                            onCheckboxClickListener = {
+                                onCheckboxItemClickListener(item)
+                            }
+                        )
+
+                    }
+
+                }
+            }
+
+
 
 
 
@@ -179,7 +247,6 @@ fun HeaderMedium(header: Int) {
 }
 
 
-
 @Composable
 fun CurrencyCard(
     modifier: Modifier = Modifier,
@@ -215,3 +282,30 @@ fun CurrencyCard(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SegmentedButtonSingleSelect(modifier: Modifier = Modifier) {
+    var selectedIndex by remember { mutableStateOf(0) }
+    val options = listOf(R.string.fiat_currencies, R.string.crypto_currencies)
+    SingleChoiceSegmentedButtonRow(modifier = modifier
+        .fillMaxWidth()
+    ) {
+        options.forEachIndexed { index, label ->
+            SegmentedButton(
+                selected = index == selectedIndex,
+                onClick = { selectedIndex = index },
+                shape = SegmentedButtonDefaults.itemShape(
+                    index = index,
+                    count = options.size
+                ),
+
+            ) {
+                Text(text = stringResource(label), style = MaterialTheme.typography.labelLarge)
+            }
+        }
+
+    }
+}
+
+
