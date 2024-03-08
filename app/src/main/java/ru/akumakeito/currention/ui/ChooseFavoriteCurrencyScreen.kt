@@ -113,13 +113,15 @@ fun ChooseFavoriteCurrencyScreen(
                 text = stringResource(R.string.choose_currencies),
                 modifier = Modifier
                     .wrapContentHeight(),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.ExtraBold
             )
 
-            SpacerHeight(height = 24)
+            SpacerHeight(height = 16)
             SegmentedButtonSingleSelect()
-            SpacerHeight(height = 24)
+            SpacerHeight(height = 16)
+
 
             var text by rememberSaveable {
                 mutableStateOf("")
@@ -131,76 +133,79 @@ fun ChooseFavoriteCurrencyScreen(
             Box(
                 Modifier
                     .weight(1f)
+                    .fillMaxWidth()
                     .semantics { isTraversalGroup = true }) {
 
-                DockedSearchBar(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 8.dp)
-                        .semantics { traversalIndex = -1f },
-                    query = text,
-                    onQueryChange = { text = it },
-                    onSearch = { active = false },
-                    active = active,
-                    onActiveChange = { active = it },
-                    placeholder = { Text(stringResource(R.string.enter_currency)) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                ) {
-                    repeat(4) { idx ->
-                        val resultText = "Suggestion $idx"
-                        ListItem(
-                            headlineContent = { Text(resultText) },
-                            supportingContent = { Text("Additional info") },
-                            leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
-                            modifier = Modifier
-                                .clickable {
-                                    text = resultText
-                                    active = false
+                Column {
+                    DockedSearchBar(
+                        modifier = Modifier
+//                            .padding(vertical = 8.dp)
+                            .semantics { traversalIndex = -1f },
+                        query = text,
+                        onQueryChange = { text = it },
+                        onSearch = { active = false },
+                        active = active,
+                        onActiveChange = { active = it },
+                        placeholder = { Text(stringResource(R.string.enter_currency)) },
+                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                    ) {
+                        LazyColumn(
+                            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
+                        ) {
+
+                            items(items = popularFiatCurrencyList.value) { item ->
+                                CurrencyCard(
+                                    currency = item,
+                                    onCheckboxClickListener = {
+                                        onCheckboxItemClickListener(item)
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    LazyColumn(
+                        contentPadding = PaddingValues(vertical = 16.dp),
+                    ) {
+
+                        item {
+                            HeaderMedium(header = R.string.popular)
+                            SpacerHeight(height = 16)
+                        }
+
+
+                        items(items = popularFiatCurrencyList.value) { item ->
+                            CurrencyCard(
+                                currency = item,
+                                onCheckboxClickListener = {
+                                    onCheckboxItemClickListener(item)
                                 }
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 4.dp)
-                        )
+                            )
+
+                        }
+
+                        item {
+                            SpacerHeight(height = 24)
+                            HeaderMedium(header = R.string.all_currencies)
+                            SpacerHeight(height = 16)
+
+
+                        }
+
+                        items(items = fiatCurrencyList.value) { item ->
+                            CurrencyCard(
+                                currency = item,
+                                onCheckboxClickListener = {
+                                    onCheckboxItemClickListener(item)
+                                }
+                            )
+
+                        }
+
                     }
                 }
 
-                LazyColumn(
-                    contentPadding = PaddingValues(vertical = 16.dp),
-                ) {
 
-                    item {
-                        HeaderMedium(header = R.string.popular)
-                        SpacerHeight(height = 16)
-                    }
-
-                    items(items = popularFiatCurrencyList.value) { item ->
-                        CurrencyCard(
-                            currency = item,
-                            onCheckboxClickListener = {
-                                onCheckboxItemClickListener(item)
-                            }
-                        )
-
-                    }
-
-                    item {
-                        SpacerHeight(height = 24)
-                        HeaderMedium(header = R.string.all_currencies)
-                        SpacerHeight(height = 16)
-
-
-                    }
-
-                    items(items = fiatCurrencyList.value) { item ->
-                        CurrencyCard(
-                            currency = item,
-                            onCheckboxClickListener = {
-                                onCheckboxItemClickListener(item)
-                            }
-                        )
-
-                    }
-
-                }
             }
 
 
@@ -288,8 +293,9 @@ fun CurrencyCard(
 fun SegmentedButtonSingleSelect(modifier: Modifier = Modifier) {
     var selectedIndex by remember { mutableStateOf(0) }
     val options = listOf(R.string.fiat_currencies, R.string.crypto_currencies)
-    SingleChoiceSegmentedButtonRow(modifier = modifier
-        .fillMaxWidth()
+    SingleChoiceSegmentedButtonRow(
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         options.forEachIndexed { index, label ->
             SegmentedButton(
@@ -300,8 +306,12 @@ fun SegmentedButtonSingleSelect(modifier: Modifier = Modifier) {
                     count = options.size
                 ),
 
-            ) {
-                Text(text = stringResource(label), style = MaterialTheme.typography.labelLarge)
+                ) {
+                Text(
+                    text = stringResource(label),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
 
