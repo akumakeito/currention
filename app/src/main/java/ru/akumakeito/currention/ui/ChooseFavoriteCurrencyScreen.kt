@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
@@ -28,11 +29,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -99,7 +102,9 @@ fun ChooseFavoriteCurrencyScreen(
 
 
 
-            Column {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
 
                 OutlinedTextField(
                     value = searchingState.searchText,
@@ -108,6 +113,11 @@ fun ChooseFavoriteCurrencyScreen(
                     placeholder = { Text(stringResource(R.string.enter_currency)) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search")},
                     trailingIcon = {Icon(Icons.Default.Clear, contentDescription = "Clear")},
+                    shape = RoundedCornerShape(50),
+                    colors = OutlinedTextFieldDefaults.colors().copy(
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
                 )
 
                 SpacerHeight(height = 16)
