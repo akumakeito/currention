@@ -72,6 +72,7 @@ class CurrencyViewModel @Inject constructor(
             }
 
         }
+    }
 
         fun clearFiatCurrencies() = viewModelScope.launch {
             repository.deleteAllFiat()
@@ -81,4 +82,3 @@ class CurrencyViewModel @Inject constructor(
             repository.getPopularCurrencyList()
         }
     }
-}
