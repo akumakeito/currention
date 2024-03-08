@@ -1,6 +1,7 @@
 package ru.akumakeito.currention.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,15 +28,18 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -111,13 +116,27 @@ fun ChooseFavoriteCurrencyScreen(
                     onValueChange = currencyViewModel::onSearchTextChange,
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text(stringResource(R.string.enter_currency)) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search")},
-                    trailingIcon = {Icon(Icons.Default.Clear, contentDescription = "Clear")},
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                    trailingIcon = {
+                        IconButton(onClick = { currencyViewModel.onSearchTextChange("") }) {
+                            Icon(Icons.Default.Clear, contentDescription = "Clear")
+                        }
+                    },
                     shape = RoundedCornerShape(50),
-                    colors = OutlinedTextFieldDefaults.colors().copy(
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
                         focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
+                        unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        focusedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
+                        focusedLeadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        focusedTrailingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ),
                 )
 
                 SpacerHeight(height = 16)
