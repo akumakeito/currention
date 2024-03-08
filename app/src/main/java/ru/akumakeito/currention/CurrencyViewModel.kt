@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.model.SearchState
@@ -25,7 +27,21 @@ class CurrencyViewModel @Inject constructor(
     val _searchingState = MutableStateFlow(SearchState())
     val searchingState = _searchingState
 
-    private val _fiatCurrencies = repository.fiatCurrencies
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val _fiatCurrencies = _searchingState.flatMapLatest { searchState ->
+        if (searchState.searchText.isBlank()) {
+            repository.fiatCurrencies
+        } else {
+            repository.fiatCurrencies.map {
+                it.filter { fiatCurrency ->
+                    fiatCurrency.name.lowercase().contains(
+                        searchState.searchText.lowercase()
+                    ) || fiatCurrency.shortCode.contains(searchState.searchText.uppercase())
+                }
+            }
+        }
+    }
+
     val fiatCurrencies = _fiatCurrencies
 
     private val _popularFiatCurrencies = repository.fiatCurrencies.map {
@@ -36,6 +52,24 @@ class CurrencyViewModel @Inject constructor(
 
     fun getFiatCurrencies() = viewModelScope.launch(Dispatchers.IO) {
         repository.getFiatCurrencyList()
+    }
+
+    fun onSearchTextChange(text : String) {
+        _searchingState.update {
+            it.copy(searchText = text)
+        }
+    }
+
+    fun onToggleSearch() {
+        _searchingState.update { searchState ->
+            searchState.copy(isSearching = !searchState.isSearching)
+
+            if( !searchState.isSearching ) {
+                searchState.copy(searchText = "")
+            } else {
+                searchState
+            }
+
     }
 
     fun clearFiatCurrencies() = viewModelScope.launch {
