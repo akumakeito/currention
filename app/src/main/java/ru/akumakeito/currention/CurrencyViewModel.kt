@@ -24,6 +24,7 @@ class CurrencyViewModel @Inject constructor(
     init {
         getFiatCurrencies()
     }
+
     val _searchingState = MutableStateFlow(SearchState())
     val searchingState = _searchingState
 
@@ -54,7 +55,7 @@ class CurrencyViewModel @Inject constructor(
         repository.getFiatCurrencyList()
     }
 
-    fun onSearchTextChange(text : String) {
+    fun onSearchTextChange(text: String) {
         _searchingState.update {
             it.copy(searchText = text)
         }
@@ -64,19 +65,20 @@ class CurrencyViewModel @Inject constructor(
         _searchingState.update { searchState ->
             searchState.copy(isSearching = !searchState.isSearching)
 
-            if( !searchState.isSearching ) {
+            if (!searchState.isSearching) {
                 searchState.copy(searchText = "")
             } else {
                 searchState
             }
 
-    }
+        }
 
-    fun clearFiatCurrencies() = viewModelScope.launch {
-        repository.deleteAllFiat()
-    }
+        fun clearFiatCurrencies() = viewModelScope.launch {
+            repository.deleteAllFiat()
+        }
 
-    fun getPopularCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getPopularCurrencyList()
+        fun getPopularCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+            repository.getPopularCurrencyList()
+        }
     }
 }
