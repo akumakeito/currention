@@ -1,5 +1,6 @@
 package ru.akumakeito.currention
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,12 +55,6 @@ class CurrencyViewModel @Inject constructor(
     }
 
 
-    private val _popularFiatCurrencies = repository.fiatCurrencies.map {
-        it.filter { fiatCurrency -> fiatCurrency.isPopular }
-    }
-    val popularFiatCurrencies = _popularFiatCurrencies
-
-
     fun getFiatCurrencies() = viewModelScope.launch(Dispatchers.IO) {
         repository.getFiatCurrencyList()
     }
@@ -70,24 +65,13 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    fun onToggleSearch() {
-        _searchingState.update { searchState ->
-            searchState.copy(isSearching = !searchState.isSearching)
-
-            if (!searchState.isSearching) {
-                searchState.copy(searchText = "")
-            } else {
-                searchState
-            }
-
+    fun updateFavoriteCurrency(currency: FiatCurrency) {
+        Log.d("checkbox", "vm $currency")
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateFavoriteCurrency(currency)
         }
     }
 
-    fun clearFiatCurrencies() = viewModelScope.launch {
-        repository.deleteAllFiat()
-    }
 
-    fun getPopularCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getPopularCurrencyList()
-    }
+
 }

@@ -14,9 +14,8 @@ interface CurrencyRepository {
     suspend fun getFiatCurrencyList()
     suspend fun deleteAllFiat()
 
-    suspend fun chooseFavoriteCurrency(fiatCurrency: FiatCurrency)
+    suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency)
 
-    suspend fun markPopularCurrency()
 
     suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>)
 

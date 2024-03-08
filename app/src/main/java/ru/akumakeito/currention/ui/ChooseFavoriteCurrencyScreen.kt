@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.layout.Box
@@ -74,7 +75,6 @@ val exp = FiatCurrency(
 @Composable
 fun ChooseFavoriteCurrencyScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel(),
-    onCheckboxItemClickListener: (FiatCurrency) -> Unit,
 ) {
 
     val fiatCurrencyList by currencyViewModel.fiatCurrencies.collectAsState(emptyList())
@@ -97,15 +97,12 @@ fun ChooseFavoriteCurrencyScreen(
                     .wrapContentHeight(),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.Bold
             )
 
             SpacerHeight(height = 16)
             SegmentedButtonSingleSelect()
             SpacerHeight(height = 16)
-
-
-
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -149,42 +146,13 @@ fun ChooseFavoriteCurrencyScreen(
                         CurrencyCard(
                             currency = item,
                             onCheckboxClickListener = {
-                                onCheckboxItemClickListener(item)
+                                Log.d("checkbox", "onCheckboxClickListener $item")
+                                currencyViewModel.updateFavoriteCurrency(item)
                             }
                         )
 
                     }
                 }
-
-
-//                    SearchBar(
-//                        modifier = Modifier
-////                       .padding(vertical = 8.dp)
-//                            .semantics { traversalIndex = -1f },
-//                        query = searchingState.searchText,
-//                        onQueryChange = { currencyViewModel.onSearchTextChange(it) },
-//                        onSearch = { currencyViewModel.onSearchTextChange(it) },
-//                        active = searchingState.isSearching,
-//                        onActiveChange = { currencyViewModel::onToggleSearch },
-//                        placeholder = { Text(stringResource(R.string.enter_currency)) },
-//                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-//                    ) {
-//                        LazyColumn(
-//                            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
-//                        ) {
-//
-//                            items(items = fiatCurrencyList.value) { item ->
-//                                CurrencyCard(
-//                                    currency = item,
-//                                    onCheckboxClickListener = {
-//                                        onCheckboxItemClickListener(item)
-//                                    }
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-
 
             }
 
@@ -259,7 +227,7 @@ fun CurrencyCard(
 
             SpacerWidth(width = 16)
 
-            Checkbox(checked = false, onCheckedChange = { onCheckboxClickListener })
+            Checkbox(checked = false, onCheckedChange = { onCheckboxClickListener() })
         }
     }
 }

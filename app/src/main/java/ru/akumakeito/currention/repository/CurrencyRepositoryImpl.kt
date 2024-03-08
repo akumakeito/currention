@@ -2,6 +2,7 @@ package ru.akumakeito.currention.repository
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -70,12 +71,9 @@ class CurrencyRepositoryImpl @Inject constructor(
         dao.deleteAllFiat()
     }
 
-    override suspend fun chooseFavoriteCurrency(fiatCurrency: FiatCurrency) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun markPopularCurrency() {
-        TODO("Not yet implemented")
+    override suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency) {
+        Log.d("checkbox", "repo $fiatCurrency")
+        dao.updateFavoriteCurrency(fiatCurrency.id)
     }
 
     override suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>) {

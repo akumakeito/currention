@@ -47,27 +47,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            ChooseFavoriteCurrencyScreen(onCheckboxItemClickListener = {})
+            ChooseFavoriteCurrencyScreen()
         }
     }
 }
 
 
-@Composable
-fun CurrencyListScreen(viewModel: CurrencyViewModel = hiltViewModel()) {
-
-    Column {
-        Button(onClick = { viewModel.getFiatCurrencies() }) {
-            Text(text = "Get Currencies")
-        }
-
-        Button(onClick = { viewModel.clearFiatCurrencies() }) {
-            Text(text = "Clear Currencies")
-        }
-        CurrencyListMain(currencies = viewModel.popularFiatCurrencies.collectAsState(initial = emptyList()).value)
-    }
-
-}
 
 @Composable
 fun CurrencyListMain(currencies: List<FiatCurrency>) {
@@ -117,7 +102,6 @@ fun CurrencyCardTest(
 @Composable
 fun CurrencyListPreview() {
     CurrentionTheme {
-        CurrencyListScreen()
 
         CurrencyListMain(
             listOf(
