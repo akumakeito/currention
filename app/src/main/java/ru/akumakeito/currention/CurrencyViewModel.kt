@@ -25,7 +25,7 @@ class CurrencyViewModel @Inject constructor(
         getFiatCurrencies()
     }
 
-    val _searchingState = MutableStateFlow(SearchState())
+    private val _searchingState = MutableStateFlow(SearchState())
     val searchingState = _searchingState
 
     @OptIn(ExperimentalCoroutinesApi::class)

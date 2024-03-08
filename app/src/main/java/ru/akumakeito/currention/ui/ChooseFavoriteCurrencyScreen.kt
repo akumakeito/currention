@@ -123,12 +123,7 @@ fun ChooseFavoriteCurrencyScreen(
             SpacerHeight(height = 16)
 
 
-            var text by rememberSaveable {
-                mutableStateOf("")
-            }
-            var active by rememberSaveable {
-                mutableStateOf(false)
-            }
+            val searchingState by currencyViewModel.searchingState.collectAsState()
 
             Box(
                 Modifier
@@ -141,11 +136,11 @@ fun ChooseFavoriteCurrencyScreen(
                         modifier = Modifier
 //                            .padding(vertical = 8.dp)
                             .semantics { traversalIndex = -1f },
-                        query = text,
-                        onQueryChange = { text = it },
-                        onSearch = { active = false },
-                        active = active,
-                        onActiveChange = { active = it },
+                        query = searchingState.searchText,
+                        onQueryChange = { currencyViewModel.onSearchTextChange(it) },
+                        onSearch = { currencyViewModel.onSearchTextChange(it) },
+                        active = searchingState.isSearching,
+                        onActiveChange = { currencyViewModel::onToggleSearch },
                         placeholder = { Text(stringResource(R.string.enter_currency)) },
                         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                     ) {
