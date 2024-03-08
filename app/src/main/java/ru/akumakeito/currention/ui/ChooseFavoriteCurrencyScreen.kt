@@ -1,17 +1,11 @@
 package ru.akumakeito.currention.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,52 +14,39 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DockedSearchBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
@@ -88,15 +69,8 @@ fun ChooseFavoriteCurrencyScreen(
     onCheckboxItemClickListener: (FiatCurrency) -> Unit,
 ) {
 
-    val fiatCurrencyList = currencyViewModel.fiatCurrencies.collectAsStateWithLifecycle(
-        initialValue = emptyList()
-    )
-
-    val popularFiatCurrencyList =
-        currencyViewModel.popularFiatCurrencies.collectAsStateWithLifecycle(
-            initialValue = emptyList()
-        )
-
+    val fiatCurrencyList by currencyViewModel.fiatCurrencies.collectAsState(emptyList())
+    val searchingState by currencyViewModel.searchingState.collectAsState()
 
     CurrentionTheme {
         val lazyListState = rememberLazyListState()
@@ -123,89 +97,67 @@ fun ChooseFavoriteCurrencyScreen(
             SpacerHeight(height = 16)
 
 
-            val searchingState by currencyViewModel.searchingState.collectAsState()
 
-            Box(
-                Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .semantics { isTraversalGroup = true }) {
 
-                Column {
-                    DockedSearchBar(
-                        modifier = Modifier
-//                            .padding(vertical = 8.dp)
-                            .semantics { traversalIndex = -1f },
-                        query = searchingState.searchText,
-                        onQueryChange = { currencyViewModel.onSearchTextChange(it) },
-                        onSearch = { currencyViewModel.onSearchTextChange(it) },
-                        active = searchingState.isSearching,
-                        onActiveChange = { currencyViewModel::onToggleSearch },
-                        placeholder = { Text(stringResource(R.string.enter_currency)) },
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                    ) {
-                        LazyColumn(
-                            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
-                        ) {
+            Column {
 
-                            items(items = popularFiatCurrencyList.value) { item ->
-                                CurrencyCard(
-                                    currency = item,
-                                    onCheckboxClickListener = {
-                                        onCheckboxItemClickListener(item)
-                                    }
-                                )
+                OutlinedTextField(
+                    value = searchingState.searchText,
+                    onValueChange = currencyViewModel::onSearchTextChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text(stringResource(R.string.enter_currency)) },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search")},
+                    trailingIcon = {Icon(Icons.Default.Clear, contentDescription = "Clear")},
+                )
+
+                SpacerHeight(height = 16)
+
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
+                ) {
+
+                    items(items = fiatCurrencyList) { item ->
+                        CurrencyCard(
+                            currency = item,
+                            onCheckboxClickListener = {
+                                onCheckboxItemClickListener(item)
                             }
-                        }
-                    }
-
-                    LazyColumn(
-                        contentPadding = PaddingValues(vertical = 16.dp),
-                    ) {
-
-                        item {
-                            HeaderMedium(header = R.string.popular)
-                            SpacerHeight(height = 16)
-                        }
-
-
-                        items(items = popularFiatCurrencyList.value) { item ->
-                            CurrencyCard(
-                                currency = item,
-                                onCheckboxClickListener = {
-                                    onCheckboxItemClickListener(item)
-                                }
-                            )
-
-                        }
-
-                        item {
-                            SpacerHeight(height = 24)
-                            HeaderMedium(header = R.string.all_currencies)
-                            SpacerHeight(height = 16)
-
-
-                        }
-
-                        items(items = fiatCurrencyList.value) { item ->
-                            CurrencyCard(
-                                currency = item,
-                                onCheckboxClickListener = {
-                                    onCheckboxItemClickListener(item)
-                                }
-                            )
-
-                        }
+                        )
 
                     }
                 }
 
 
+//                    SearchBar(
+//                        modifier = Modifier
+////                       .padding(vertical = 8.dp)
+//                            .semantics { traversalIndex = -1f },
+//                        query = searchingState.searchText,
+//                        onQueryChange = { currencyViewModel.onSearchTextChange(it) },
+//                        onSearch = { currencyViewModel.onSearchTextChange(it) },
+//                        active = searchingState.isSearching,
+//                        onActiveChange = { currencyViewModel::onToggleSearch },
+//                        placeholder = { Text(stringResource(R.string.enter_currency)) },
+//                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+//                    ) {
+//                        LazyColumn(
+//                            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
+//                        ) {
+//
+//                            items(items = fiatCurrencyList.value) { item ->
+//                                CurrencyCard(
+//                                    currency = item,
+//                                    onCheckboxClickListener = {
+//                                        onCheckboxItemClickListener(item)
+//                                    }
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+
+
             }
-
-
-
-
 
 
             Button(

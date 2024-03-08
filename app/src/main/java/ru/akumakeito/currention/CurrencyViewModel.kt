@@ -7,8 +7,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
@@ -26,24 +34,25 @@ class CurrencyViewModel @Inject constructor(
     }
 
     private val _searchingState = MutableStateFlow(SearchState())
-    val searchingState = _searchingState
+    val searchingState = _searchingState.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val _fiatCurrencies = _searchingState.flatMapLatest { searchState ->
-        if (searchState.searchText.isBlank()) {
-            repository.fiatCurrencies
+    private val _fiatCurrencies = repository.fiatCurrencies
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val fiatCurrencies = _searchingState.flatMapLatest { state ->
+
+        if (state.searchText.isBlank()) {
+            _fiatCurrencies.map {
+                it.sortedByDescending { it.isPopular }
+            }
         } else {
-            repository.fiatCurrencies.map {
-                it.filter { fiatCurrency ->
-                    fiatCurrency.name.lowercase().contains(
-                        searchState.searchText.lowercase()
-                    ) || fiatCurrency.shortCode.contains(searchState.searchText.uppercase())
-                }
+            _fiatCurrencies.map {
+                it.filter { it.doesMatchSearchQuery(state.searchText) }
             }
         }
     }
 
-    val fiatCurrencies = _fiatCurrencies
 
     private val _popularFiatCurrencies = repository.fiatCurrencies.map {
         it.filter { fiatCurrency -> fiatCurrency.isPopular }
@@ -74,11 +83,11 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-        fun clearFiatCurrencies() = viewModelScope.launch {
-            repository.deleteAllFiat()
-        }
-
-        fun getPopularCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-            repository.getPopularCurrencyList()
-        }
+    fun clearFiatCurrencies() = viewModelScope.launch {
+        repository.deleteAllFiat()
     }
+
+    fun getPopularCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+        repository.getPopularCurrencyList()
+    }
+}
