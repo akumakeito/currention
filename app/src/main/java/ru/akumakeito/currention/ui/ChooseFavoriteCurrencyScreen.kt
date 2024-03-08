@@ -143,7 +143,7 @@ fun ChooseFavoriteCurrencyScreen(
                     contentPadding = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
                 ) {
 
-                    items(items = fiatCurrencyList) { item ->
+                    items(items = fiatCurrencyList, key = { it.id }) { item ->
                         CurrencyCard(
                             currency = item,
                             onCheckboxClickListener = {
@@ -205,7 +205,7 @@ fun CurrencyCard(
 ) {
 
     var checkState by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(currency.isFavorite)
     }
     Card(
         modifier = modifier

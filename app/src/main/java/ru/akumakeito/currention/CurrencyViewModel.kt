@@ -37,19 +37,18 @@ class CurrencyViewModel @Inject constructor(
     private val _searchingState = MutableStateFlow(SearchState())
     val searchingState = _searchingState.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val _fiatCurrencies = repository.fiatCurrencies
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val fiatCurrencies = _searchingState.flatMapLatest { state ->
+        _fiatCurrencies.map { currencies ->
 
-        if (state.searchText.isBlank()) {
-            _fiatCurrencies.map {
-                it.sortedByDescending { it.isPopular }
-            }
-        } else {
-            _fiatCurrencies.map {
-                it.filter { it.doesMatchSearchQuery(state.searchText) }
+            if (state.searchText.isBlank()) {
+                currencies.sortedByDescending {it.isPopular  }.sortedByDescending { it.isFavorite }
+
+            } else {
+                currencies.filter { it.doesMatchSearchQuery(state.searchText) }
             }
         }
     }
@@ -71,7 +70,6 @@ class CurrencyViewModel @Inject constructor(
             repository.updateFavoriteCurrency(currency)
         }
     }
-
 
 
 }
