@@ -61,11 +61,11 @@ class CurrencyRepositoryImpl @Inject constructor(
                 dao.insertAllFiat(result.response.toEntity())
                 updateFlagFromJson()
                 setPopularCurrencyList(popularCurrencyShortCodeList)
-//                fiatCurrencies.map { list ->
-//                    list.map {
-//                        updateCurrencyName(it)
-//                    }
-//                }
+                fiatCurrencies.map { list ->
+                    list.map {
+                        updateCurrencyName(it)
+                    }
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -83,13 +83,13 @@ class CurrencyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateCurrencyName(fiatCurrency: FiatCurrency) {
-//        val resId = context.resources.getIdentifier(
-//            "cur${fiatCurrency.shortCode.lowercase()}",
-//            "string",
-//            context.packageName
-//        )
-//        val nameRus = context.getString(resId)
-//        dao.updateCurrencyName(fiatCurrency.shortCode, nameRus)
+        val resId = context.resources.getIdentifier(
+            "cur${fiatCurrency.shortCode.lowercase()}",
+            "string",
+            context.packageName
+        )
+        val nameRus = context.getString(resId)
+        dao.updateCurrencyName(fiatCurrency.shortCode, nameRus)
 
     }
 
