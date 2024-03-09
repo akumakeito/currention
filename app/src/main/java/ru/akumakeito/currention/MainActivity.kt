@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            CurrencyExchangeRatesScreen()
+            ChooseFavoriteCurrencyScreen()
         }
     }
 }

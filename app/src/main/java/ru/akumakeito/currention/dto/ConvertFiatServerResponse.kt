@@ -9,5 +9,4 @@ data class ConvertFiatServerResponse(
     val to : String,
     val amount : Int,
     val value : Double
-
 )

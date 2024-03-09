@@ -2,12 +2,12 @@ package ru.akumakeito.currention.domain
 
 data class PairCurrency(
     val id : Int,
-    val fromShortCode : String,
-    val toShortCode : String,
+    val fromCurrency : FiatCurrency,
+    val toCurrency : FiatCurrency,
     val toCurrencyLastRate : Double,
     val toCurrencyNewRate : Double,
-    var differenceInPercentage : Double
+    val rateCurrency : Float
 ) {
-    fun getDifferenceInPercentage() : Double = (toCurrencyNewRate - toCurrencyLastRate) / toCurrencyLastRate * 100
+    fun getRateInPerc() : Double = (toCurrencyNewRate - toCurrencyLastRate) / toCurrencyLastRate * 100
 
 }

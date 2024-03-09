@@ -40,13 +40,6 @@ data class FiatEntity(
         fiatResponse.code,
         fiatResponse.symbol,
     )
-        fun fromDto(fiatCurrency: FiatCurrency) = FiatEntity(
-            fiatCurrency.id,
-            fiatCurrency.name,
-            fiatCurrency.shortCode,
-            fiatCurrency.code,
-            fiatCurrency.symbol
-        )
     }
 }
 
