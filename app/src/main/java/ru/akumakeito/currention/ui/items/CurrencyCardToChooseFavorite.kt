@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.items
 
+import SpacerWidth
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.ui.screens.SpacerWidth
 
 @Composable
 fun CurrencyCardToChooseFavorite(
