@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.domain
+package ru.akumakeito.currention.dto
 
 import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName

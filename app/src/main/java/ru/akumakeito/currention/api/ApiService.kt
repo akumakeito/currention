@@ -2,8 +2,9 @@ package ru.akumakeito.currention.api
 
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.akumakeito.currention.domain.FiatResponse
-import ru.akumakeito.currention.domain.FiatServerResponse
+import ru.akumakeito.currention.dto.ConvertFiatServerResponse
+import ru.akumakeito.currention.dto.FiatResponse
+import ru.akumakeito.currention.dto.FiatServerResponse
 
 
 interface ApiService {
@@ -12,5 +13,8 @@ interface ApiService {
 
     @GET("latest")
     suspend fun getLatest() : List<FiatResponse>
+
+    @GET("convert")
+    suspend fun getPairRates(@Query("from")currencyFromShortCode : String, @Query("to")currencyToShortCode : String, @Query("amount") amount : Int) : ConvertFiatServerResponse
 
 }

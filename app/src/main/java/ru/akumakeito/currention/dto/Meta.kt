@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.domain
+package ru.akumakeito.currention.dto
 
 data class Meta(
     val code : Int,

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.ui.screens.ChooseFavoriteCurrencyScreen
+import ru.akumakeito.currention.ui.screens.CurrencyExchangeRatesScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 @AndroidEntryPoint
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            ChooseFavoriteCurrencyScreen()
+            CurrencyExchangeRatesScreen()
         }
     }
 }

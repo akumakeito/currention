@@ -64,6 +64,12 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
+    fun getPairRates(currencyFromShortCode : FiatCurrency, currencyToShortCode : FiatCurrency, amount : Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getPairRates(currencyFromShortCode, currencyToShortCode, amount)
+        }
+    }
+
     fun updateFavoriteCurrency(currency: FiatCurrency) {
         Log.d("checkbox", "vm $currency")
         viewModelScope.launch(Dispatchers.IO) {

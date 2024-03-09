@@ -93,6 +93,14 @@ class CurrencyRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getPairRates(
+        currencyFromShortCode: FiatCurrency,
+        currencyToShortCode: FiatCurrency,
+        amount: Int
+    ) {
+        apiService.getPairRates(currencyFromShortCode.shortCode, currencyToShortCode.shortCode, amount)
+    }
+
     override suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>) {
         popularCurrencyShortCodeList.map {
             dao.updateCurrencyPopularityByShortCode(it)

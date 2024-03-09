@@ -209,16 +209,10 @@ fun ChooseFavoriteCurrencyScreen(
                                         Log.d("checkbox", "onCheckboxClickListener $item")
                                         currencyViewModel.updateFavoriteCurrency(item)
                                     },
-
                                     )
-
                             }
                         }
-
-
                     }
-
-
                 }
             }
         }

@@ -18,6 +18,8 @@ interface CurrencyRepository {
 
     suspend fun updateCurrencyName(fiatCurrency: FiatCurrency)
 
+    suspend fun getPairRates(currencyFromShortCode : FiatCurrency, currencyToShortCode : FiatCurrency, amount : Int)
+
 
     suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>)
 
