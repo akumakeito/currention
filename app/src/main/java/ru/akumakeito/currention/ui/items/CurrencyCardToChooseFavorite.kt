@@ -44,15 +44,8 @@ fun CurrencyCardToChooseFavorite(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                modifier = Modifier.size(40.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.surfaceVariant, CircleShape),
-                painter = painterResource(id = currency.flag),
-                contentDescription = stringResource(R.string.currency_name_flag, currency.name)
-            )
-
+            CurrencyFlag(flagId = currency.flag)
             SpacerWidth(width = 16)
-
             Text(
                 text = "${currency.name} (${currency.shortCode})",
                 modifier = Modifier.weight(1f),

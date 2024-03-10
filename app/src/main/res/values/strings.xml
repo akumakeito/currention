@@ -170,6 +170,8 @@
     <string name="curzar">Ранд</string>
     <string name="curzmw">Замбийская квача</string>
     <string name="curzwl">Зимбабвийский доллар</string>
+    <string name="equals">equals</string>
+    <string name="flag">flag</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.akumakeito.currention.domain.FiatCurrency
@@ -10,7 +11,9 @@ import ru.akumakeito.currention.dto.ConvertFiatResponse
 data class PairCurrencyEntity(
     @PrimaryKey(autoGenerate = true)
     val id : Int,
+    @Embedded
     val fromCurrency : FiatCurrency,
+    @Embedded
     val toCurrency : FiatCurrency,
     val toCurrencyLastRate : Double,
     val toCurrencyNewRate : Double,
