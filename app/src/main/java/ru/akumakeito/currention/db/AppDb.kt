@@ -9,7 +9,7 @@ import ru.akumakeito.currention.entity.FiatEntity
 import ru.akumakeito.currention.entity.PairCurrencyEntity
 
 
-@Database(entities = [FiatEntity::class, PairCurrencyEntity::class], version = 6, exportSchema = false)
+@Database(entities = [FiatEntity::class, PairCurrencyEntity::class], version = 7, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDb : RoomDatabase() {
 

@@ -1,6 +1,11 @@
 package ru.akumakeito.currention.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
@@ -13,12 +18,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
+import ru.akumakeito.currention.ui.items.example
 
 val usd = FiatCurrency(
     1,
@@ -44,43 +54,26 @@ fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
     currencyViewModel: CurrencyViewModel = hiltViewModel()
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.currency_rates),
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_update_rates),
-                            contentDescription = stringResource(
-                                R.string.update_rates
-                            )
-                        )
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /*TODO*/ },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
 
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(R.string.add_new_pair)
-                )
+        val pairList = listOf(
+            example,
+            example, example
+
+        )
+
+        Box(Modifier.padding(paddingValues)) {
+            LazyColumn(
+            ) {
+                items(pairList) { item ->
+                    CurrencyPairInExchangeRate(
+                        pairCurrency = item,
+                        isEditing = false,
+                        onDeletePairClickListener = {},
+                        onCurrencyDropDownClickListener = {})
+                }
 
             }
         }
 
-    ) {
 
     }
-}

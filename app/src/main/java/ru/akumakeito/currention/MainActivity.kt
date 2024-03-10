@@ -27,6 +27,7 @@ import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.ui.items.example
 import ru.akumakeito.currention.ui.screens.ChooseFavoriteCurrencyScreen
 import ru.akumakeito.currention.ui.screens.CurrencyExchangeRatesScreen
+import ru.akumakeito.currention.ui.screens.MainScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 @AndroidEntryPoint
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CurrencyPairInExchangeRate(pairCurrency = example, isEditing = false, onDeletePairClickListener = {}, onCurrencyDropDownClickListener = {})
+                    MainScreen()
 
 
                 }
