@@ -10,7 +10,7 @@ import ru.akumakeito.currention.entity.PairCurrencyEntity
 
 
 @Database(entities = [FiatEntity::class, PairCurrencyEntity::class], version = 6, exportSchema = false)
-@TypeConverters(TypeConverters::class)
+@TypeConverters(Converters::class)
 abstract class AppDb : RoomDatabase() {
 
     abstract fun provideCurrencyDao() : CurrencyDao

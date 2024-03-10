@@ -9,16 +9,16 @@ import ru.akumakeito.currention.domain.PairCurrency
 import javax.inject.Inject
 
 @ProvidedTypeConverter
-class TypeConverters @Inject constructor(val gson : Gson) {
+class Converters @Inject constructor(val gson : Gson) {
 
     @TypeConverter
-    fun fromPairToJson(pair: PairCurrency) : String {
+    fun fromPairToJson(pair: FiatCurrency) : String {
         val type = object : TypeToken<FiatCurrency>() {}.type
         return gson.toJson(pair, type)
     }
 
     @TypeConverter
-    fun fromJsonToPair(json: String) : PairCurrency {
+    fun fromJsonToPair(json: String) : FiatCurrency {
         val type = object : TypeToken<FiatCurrency>() {}.type
         return gson.fromJson(json, type)
     }

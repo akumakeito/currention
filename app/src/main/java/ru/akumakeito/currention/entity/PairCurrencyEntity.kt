@@ -11,9 +11,9 @@ import ru.akumakeito.currention.dto.ConvertFiatResponse
 data class PairCurrencyEntity(
     @PrimaryKey(autoGenerate = true)
     val id : Int,
-    @Embedded
+    @Embedded(prefix = "from_")
     val fromCurrency : FiatCurrency,
-    @Embedded
+    @Embedded(prefix = "to_")
     val toCurrency : FiatCurrency,
     val toCurrencyLastRate : Double,
     val toCurrencyNewRate : Double,

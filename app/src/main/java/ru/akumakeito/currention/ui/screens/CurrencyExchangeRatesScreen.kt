@@ -22,8 +22,8 @@ val rub = FiatCurrency(
     "Российский рубль",
     "RUB",
     "643",
-    "$",
-    R.drawable.flag_usd
+    "P",
+    R.drawable.flag_rub
 )
 
 @Composable

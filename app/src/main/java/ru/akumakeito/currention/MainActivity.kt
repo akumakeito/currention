@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
+import ru.akumakeito.currention.ui.items.example
 import ru.akumakeito.currention.ui.screens.ChooseFavoriteCurrencyScreen
 import ru.akumakeito.currention.ui.screens.CurrencyExchangeRatesScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
@@ -39,12 +41,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    CurrencyPairInExchangeRate(pairCurrency = example, isEditing = false, onDeletePairClickListener = {}, onCurrencyDropDownClickListener = {})
 
 
                 }
             }
 
-            ChooseFavoriteCurrencyScreen()
         }
     }
 }

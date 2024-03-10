@@ -2,6 +2,7 @@ package ru.akumakeito.currention.ui.items
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,5 +18,6 @@ fun CurrencyFlag(flagId : Int) {
         painter = painterResource(id = flagId),
         contentDescription = stringResource(R.string.flag),
         modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.surfaceVariant, CircleShape)
+            .size(40.dp)
     )
 }
