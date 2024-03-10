@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.akumakeito.currention.R
@@ -31,22 +33,20 @@ import ru.akumakeito.currention.navigation.NavigationItem
 import ru.akumakeito.currention.navigation.NavigationState
 import ru.akumakeito.currention.navigation.Screen
 import ru.akumakeito.currention.navigation.rememberNavigationState
+import ru.akumakeito.currention.ui.items.CustomTopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navigationState = rememberNavigationState()
-    val title = rememberSaveable {
-        mutableListOf("")
-    }
-
-
+    val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+    val currentScreenRoute = navBackStackEntry?.destination?.route
 
 
     Scaffold(
         floatingActionButton = {
-            if (navigationState.navHostController.currentDestination?.route == Screen.CurrencyRatesScreen.route) {
+            if ( currentScreenRoute == Screen.CurrencyRatesScreen.route) {
                 FloatingActionButton(
                     onClick = { /*TODO*/ },
                     containerColor = MaterialTheme.colorScheme.primary
@@ -61,18 +61,19 @@ fun MainScreen() {
             }
 
         },
+
         topBar = {
             TopAppBar(
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                 title = {
                     Text(
-                        text = navigationState.navHostController.currentDestination?.displayName ?: "",
+                        text = stringResource(id = Screen.getScreenByRoute(currentScreenRoute ?: "").titleResId),
                         style = MaterialTheme.typography.headlineLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 actions = {
-                    if (navigationState.navHostController.currentDestination?.route == Screen.CurrencyRatesScreen.route) {
+                    if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_update_rates),
@@ -86,9 +87,10 @@ fun MainScreen() {
                 }
             )
         },
+
         bottomBar = {
             NavigationBar {
-                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+
 
                 val navItems = listOf(
                     NavigationItem.CurrencyRates,

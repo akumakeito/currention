@@ -27,7 +27,9 @@ import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.navigation.Screen
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
+import ru.akumakeito.currention.ui.items.CustomTopAppBar
 import ru.akumakeito.currention.ui.items.example
 
 val usd = FiatCurrency(
@@ -55,13 +57,34 @@ fun CurrencyExchangeRatesScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel()
 ) {
 
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(currentScreen = Screen.CurrencyRatesScreen, isUpdatable = true)
+        },
+//        floatingActionButton = {
+//
+//            FloatingActionButton(
+//                onClick = { /*TODO*/ },
+//                containerColor = MaterialTheme.colorScheme.primary
+//            ) {
+//
+//                Icon(
+//                    imageVector = Icons.Rounded.Add,
+//                    contentDescription = stringResource(R.string.add_new_pair)
+//                )
+//
+//
+//            }
+//
+//        },
+    ) {
         val pairList = listOf(
             example,
             example, example
 
         )
 
-        Box(Modifier.padding(paddingValues)) {
+        Box(Modifier.padding(it)) {
             LazyColumn(
             ) {
                 items(pairList) { item ->
@@ -77,3 +100,6 @@ fun CurrencyExchangeRatesScreen(
 
 
     }
+}
+
+
