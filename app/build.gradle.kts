@@ -106,6 +106,10 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
+    val navVersion = "2.7.7"
+
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

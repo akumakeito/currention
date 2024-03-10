@@ -172,6 +172,11 @@
     <string name="curzwl">Зимбабвийский доллар</string>
     <string name="equals">equals</string>
     <string name="flag">flag</string>
+    <string name="currency_rates">Курсы валют</string>
+    <string name="update_rates">update rates</string>
+    <string name="add_new_pair">add new pair</string>
+    <string name="converter">Конвертер валют</string>
+    <string name="settings">Параметры</string>
 
 
 </resources>
