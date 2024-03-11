@@ -57,49 +57,30 @@ fun CurrencyExchangeRatesScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel()
 ) {
 
-    Scaffold(
-        topBar = {
-            CustomTopAppBar(currentScreen = Screen.CurrencyRatesScreen, isUpdatable = true)
-        },
-//        floatingActionButton = {
-//
-//            FloatingActionButton(
-//                onClick = { /*TODO*/ },
-//                containerColor = MaterialTheme.colorScheme.primary
-//            ) {
-//
-//                Icon(
-//                    imageVector = Icons.Rounded.Add,
-//                    contentDescription = stringResource(R.string.add_new_pair)
-//                )
-//
-//
-//            }
-//
-//        },
-    ) {
-        val pairList = listOf(
-            example,
-            example, example
 
-        )
+    val pairList = listOf(
+        example,
+        example,
+        example
 
-        Box(Modifier.padding(it)) {
-            LazyColumn(
-            ) {
-                items(pairList) { item ->
-                    CurrencyPairInExchangeRate(
-                        pairCurrency = item,
-                        isEditing = false,
-                        onDeletePairClickListener = {},
-                        onCurrencyDropDownClickListener = {})
-                }
+    )
 
+    Box(Modifier.padding(paddingValues)) {
+        LazyColumn(
+        ) {
+            items(pairList) { item ->
+                CurrencyPairInExchangeRate(
+                    pairCurrency = item,
+                    isEditing = false,
+                    onDeletePairClickListener = {},
+                    onCurrencyDropDownClickListener = {})
             }
+
         }
-
-
     }
+
+
 }
+
 
 

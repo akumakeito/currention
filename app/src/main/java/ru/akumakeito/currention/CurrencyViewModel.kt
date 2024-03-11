@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.PairCurrency
 import ru.akumakeito.currention.model.SearchState
 import ru.akumakeito.currention.repository.CurrencyRepository
 import javax.inject.Inject
@@ -51,6 +52,10 @@ class CurrencyViewModel @Inject constructor(
                 currencies.filter { it.doesMatchSearchQuery(state.searchText) }
             }
         }
+    }
+
+    fun addNewCurrencyPair(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
+        repository.addNewCurrencyPair(pairCurrency)
     }
 
 

@@ -7,7 +7,7 @@ import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
 import ru.akumakeito.currention.dto.ConvertFiatResponse
 
-@Entity
+@Entity(tableName = "pair_currency")
 data class PairCurrencyEntity(
     @PrimaryKey(autoGenerate = true)
     val id : Int,

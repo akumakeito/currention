@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.akumakeito.currention.dao.CurrencyDao
+import ru.akumakeito.currention.dao.CurrencyPairDao
 import javax.inject.Singleton
 
 @Module
@@ -31,4 +32,10 @@ object DbModule {
     fun provideCurrencyDao(
         appDb: AppDb
     ): CurrencyDao = appDb.provideCurrencyDao()
+
+    @Provides
+    @Singleton
+    fun provideCurrencyPairDao(
+        appDb: AppDb
+    ) : CurrencyPairDao = appDb.provideCurrencyPairDao()
 }

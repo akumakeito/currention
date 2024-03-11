@@ -11,9 +11,11 @@ import kotlinx.coroutines.flow.map
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.api.ApiService
 import ru.akumakeito.currention.dao.CurrencyDao
+import ru.akumakeito.currention.dao.CurrencyPairDao
 import ru.akumakeito.currention.domain.CurrencyType
 import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.entity.FiatEntity
+import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.entity.PairCurrencyEntity
 import ru.akumakeito.currention.entity.toDto
 import ru.akumakeito.currention.entity.toEntity
 import ru.akumakeito.currention.util.Constants.Companion.popularCurrencyShortCodeList
@@ -22,15 +24,19 @@ import javax.inject.Inject
 
 class CurrencyRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val dao: CurrencyDao,
+    private val currencyDao: CurrencyDao,
+    private val pairCurrencyDao: CurrencyPairDao,
     private val flagDeserializer: FlagDeserializer,
     @ApplicationContext private val context: Context,
 
     ) : CurrencyRepository {
 
-    override val fiatCurrencies: Flow<List<FiatCurrency>> = dao.getAllFiat().map {
+    override val fiatCurrencies: Flow<List<FiatCurrency>> = currencyDao.getAllFiat().map {
         it.toDto()
     }.flowOn(Dispatchers.IO)
+
+    override val currencyPairs: Flow<List<PairCurrency>>
+        get() = TODO("Not yet implemented")
 
     override suspend fun updateFlagFromJson() {
         val res = context.resources
@@ -46,7 +52,7 @@ class CurrencyRepositoryImpl @Inject constructor(
         flagList.forEach { flagJson ->
             val flagId = res.getIdentifier(flagJson.flag, "drawable", context.packageName)
 
-            dao.updateFlagByShortCode(flagJson.shortCode, flagId)
+            currencyDao.updateFlagByShortCode(flagJson.shortCode, flagId)
         }
     }
 
@@ -55,10 +61,10 @@ class CurrencyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFiatCurrencyList() {
-        if (dao.isEmpty()) {
+        if (currencyDao.isEmpty()) {
             try {
                 val result = apiService.getCurrencyList(CurrencyType.FIAT.name.lowercase())
-                dao.insertAllFiat(result.response.toEntity())
+                currencyDao.insertAllFiat(result.response.toEntity())
                 updateFlagFromJson()
                 setPopularCurrencyList(popularCurrencyShortCodeList)
                 fiatCurrencies.map { list ->
@@ -74,22 +80,19 @@ class CurrencyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllFiat() {
-        dao.deleteAllFiat()
+        currencyDao.deleteAllFiat()
     }
 
     override suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency) {
         Log.d("checkbox", "repo $fiatCurrency")
-        dao.updateFavoriteCurrency(fiatCurrency.id)
+        currencyDao.updateFavoriteCurrency(fiatCurrency.id)
     }
 
     override suspend fun updateCurrencyName(fiatCurrency: FiatCurrency) {
-        val resId = context.resources.getIdentifier(
-            "cur${fiatCurrency.shortCode.lowercase()}",
-            "string",
-            context.packageName
-        )
-        val nameRus = context.getString(resId)
-        dao.updateCurrencyName(fiatCurrency.shortCode, nameRus)
+        val res = context.resources
+        val stringId = "cur${fiatCurrency.shortCode.lowercase()}"
+        val currencyNameId = res.getIdentifier(stringId, "strings", context.packageName)
+        currencyDao.updateCurrencyName(fiatCurrency.shortCode, res.getString(currencyNameId))
 
     }
 
@@ -101,9 +104,13 @@ class CurrencyRepositoryImpl @Inject constructor(
         apiService.getPairRates(currencyFromShortCode.shortCode, currencyToShortCode.shortCode, amount)
     }
 
+    override suspend fun addNewCurrencyPair(pairCurrency: PairCurrency) {
+        pairCurrencyDao.addNewCurrencyPair(PairCurrencyEntity.fromDto(pairCurrency))
+    }
+
     override suspend fun setPopularCurrencyList(popularCurrencyShortCodeList : List<String>) {
         popularCurrencyShortCodeList.map {
-            dao.updateCurrencyPopularityByShortCode(it)
+            currencyDao.updateCurrencyPopularityByShortCode(it)
         }
     }
 

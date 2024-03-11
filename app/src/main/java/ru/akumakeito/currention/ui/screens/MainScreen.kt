@@ -24,9 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.navigation.AppNavGraph
 import ru.akumakeito.currention.navigation.NavigationItem
@@ -38,7 +40,9 @@ import ru.akumakeito.currention.ui.items.CustomTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    currencyViewModel: CurrencyViewModel = hiltViewModel()
+) {
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
     val currentScreenRoute = navBackStackEntry?.destination?.route
