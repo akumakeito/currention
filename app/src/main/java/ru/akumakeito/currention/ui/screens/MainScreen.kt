@@ -1,11 +1,9 @@
 package ru.akumakeito.currention.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -18,24 +16,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.navigation.AppNavGraph
 import ru.akumakeito.currention.navigation.NavigationItem
-import ru.akumakeito.currention.navigation.NavigationState
 import ru.akumakeito.currention.navigation.Screen
 import ru.akumakeito.currention.navigation.rememberNavigationState
-import ru.akumakeito.currention.ui.items.CustomTopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +44,7 @@ fun MainScreen(
         floatingActionButton = {
             if ( currentScreenRoute == Screen.CurrencyRatesScreen.route) {
                 FloatingActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { currencyViewModel.addNewCurrencyPair()},
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
 

@@ -35,8 +35,10 @@ class CurrencyRepositoryImpl @Inject constructor(
         it.toDto()
     }.flowOn(Dispatchers.IO)
 
-    override val currencyPairs: Flow<List<PairCurrency>>
-        get() = TODO("Not yet implemented")
+    override val currencyPairs: Flow<List<PairCurrency>> = pairCurrencyDao.getAllPairs().map {
+        it.toDto()
+    }.flowOn(Dispatchers.IO)
+
 
     override suspend fun updateFlagFromJson() {
         val res = context.resources

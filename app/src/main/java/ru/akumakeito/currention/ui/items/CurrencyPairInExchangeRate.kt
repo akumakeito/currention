@@ -2,11 +2,9 @@ package ru.akumakeito.currention.ui.items
 
 import SpacerWidth
 import android.content.res.Configuration
-import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -27,23 +25,14 @@ import androidx.compose.ui.unit.dp
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
-import ru.akumakeito.currention.ui.screens.rub
-import ru.akumakeito.currention.ui.screens.usd
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
-val example = PairCurrency(
-    id = 1,
-    fromCurrency = usd,
-    toCurrency = rub,
-    toCurrencyLastRate = 91.6358,
-    toCurrencyNewRate = 90.9500,
-    rateCurrency = 0.0f
-)
 
 @Composable
 fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
     isEditing: Boolean = true,
+    onEditPairClickListener : () -> Unit,
     onCurrencyDropDownClickListener : (FiatCurrency) -> Unit,
     onDeletePairClickListener : () -> Unit
 ) {

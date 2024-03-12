@@ -1,23 +1,15 @@
 package ru.akumakeito.currention
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
@@ -25,6 +17,34 @@ import ru.akumakeito.currention.domain.PairCurrency
 import ru.akumakeito.currention.model.SearchState
 import ru.akumakeito.currention.repository.CurrencyRepository
 import javax.inject.Inject
+
+
+val usd = FiatCurrency(
+    1,
+    "Доллар США",
+    "USD",
+    "840",
+    "$",
+    R.drawable.flag_usd
+)
+
+val rub = FiatCurrency(
+    1,
+    "Российский рубль",
+    "RUB",
+    "643",
+    "P",
+    R.drawable.flag_rub
+)
+private val newPair =
+    PairCurrency(
+        id = 1,
+        fromCurrency = usd,
+        toCurrency = rub,
+        toCurrencyLastRate = 0.0,
+        toCurrencyNewRate = 0.0,
+        rateCurrency = 0.0f
+    )
 
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
@@ -40,13 +60,12 @@ class CurrencyViewModel @Inject constructor(
 
     private val _fiatCurrencies = repository.fiatCurrencies
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     val fiatCurrencies = _searchingState.flatMapLatest { state ->
         _fiatCurrencies.map { currencies ->
 
             if (state.searchText.isBlank()) {
-                currencies.sortedByDescending {it.isPopular  }.sortedByDescending { it.isFavorite }
+                currencies.sortedByDescending { it.isPopular }.sortedByDescending { it.isFavorite }
 
             } else {
                 currencies.filter { it.doesMatchSearchQuery(state.searchText) }
@@ -54,8 +73,14 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    fun addNewCurrencyPair(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
-        repository.addNewCurrencyPair(pairCurrency)
+    private val _editPairCurrency = MutableStateFlow(newPair)
+    val newPairCurrency = _editPairCurrency.asStateFlow()
+
+    private val _currencyPairs = repository.currencyPairs
+    val currencyPairs = _currencyPairs
+
+    fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
+        repository.addNewCurrencyPair(newPair)
     }
 
 
@@ -69,7 +94,11 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    fun getPairRates(currencyFromShortCode : FiatCurrency, currencyToShortCode : FiatCurrency, amount : Int) {
+    fun getPairRates(
+        currencyFromShortCode: FiatCurrency,
+        currencyToShortCode: FiatCurrency,
+        amount: Int
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getPairRates(currencyFromShortCode, currencyToShortCode, amount)
         }
