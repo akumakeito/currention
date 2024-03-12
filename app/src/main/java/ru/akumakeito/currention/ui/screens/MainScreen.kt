@@ -42,9 +42,12 @@ fun MainScreen(
 
     Scaffold(
         floatingActionButton = {
-            if ( currentScreenRoute == Screen.CurrencyRatesScreen.route) {
+            if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
                 FloatingActionButton(
-                    onClick = { currencyViewModel.addNewCurrencyPair()},
+                    onClick = {
+                        currencyViewModel.addNewCurrencyPair()
+                        currencyViewModel.editPair()
+                    },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
 
@@ -63,7 +66,11 @@ fun MainScreen(
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                 title = {
                     Text(
-                        text = stringResource(id = Screen.getScreenByRoute(currentScreenRoute ?: "").titleResId),
+                        text = stringResource(
+                            id = Screen.getScreenByRoute(
+                                currentScreenRoute ?: ""
+                            ).titleResId
+                        ),
                         style = MaterialTheme.typography.headlineLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )

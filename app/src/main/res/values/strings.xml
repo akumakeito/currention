@@ -177,6 +177,7 @@
     <string name="add_new_pair">add new pair</string>
     <string name="converter">Конвертер валют</string>
     <string name="settings">Параметры</string>
+    <string name="done">Готово</string>
 
 
 </resources>

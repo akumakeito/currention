@@ -38,7 +38,7 @@ val rub = FiatCurrency(
 )
 private val newPair =
     PairCurrency(
-        id = 1,
+        id = 0,
         fromCurrency = usd,
         toCurrency = rub,
         toCurrencyLastRate = 0.0,
@@ -73,11 +73,16 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    private val _editPairCurrency = MutableStateFlow(newPair)
-    val newPairCurrency = _editPairCurrency.asStateFlow()
+
 
     private val _currencyPairs = repository.currencyPairs
     val currencyPairs = _currencyPairs
+
+    private val _editPairCurrency = MutableStateFlow(newPair)
+    val editPairCurrency = _editPairCurrency.asStateFlow()
+
+    private val _isEditing = MutableStateFlow(false)
+    val isEditing = _isEditing.asStateFlow()
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
         repository.addNewCurrencyPair(newPair)
@@ -92,6 +97,19 @@ class CurrencyViewModel @Inject constructor(
         _searchingState.update {
             it.copy(searchText = text)
         }
+    }
+
+    fun updatePair() = viewModelScope.launch(Dispatchers.IO) {
+
+    }
+
+    fun editPair(pairCurrency: PairCurrency) {
+        _editPairCurrency.update { pairCurrency }
+        _isEditing.update { true }
+    }
+
+    fun editPair() {
+        _isEditing.update { true }
     }
 
     fun getPairRates(
