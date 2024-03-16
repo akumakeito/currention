@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,18 +32,19 @@ fun CurrencyExchangeRatesScreen(
 
     val currencyPairs by currencyViewModel.currencyPairs.collectAsState(emptyList())
     val isEditing by currencyViewModel.isEditing.collectAsState()
+    val editingPair by currencyViewModel.editPairCurrency.collectAsState()
+
 
     Column(Modifier.padding(paddingValues)) {
         LazyColumn(
         ) {
             itemsIndexed(currencyPairs) { index, item ->
 
-
+    Log.d("editingPair", "item ${item}  \nedit ${editingPair}")
 
                 CurrencyPairInExchangeRate(
                     pairCurrency = item,
-                    isEditing = isEditing,
-                    onEditPairClickListener = {},
+                    onEditStateChange = {editingPair.id == item.id},
                     onDeletePairClickListener = {},
                     onCurrencyDropDownClickListener = {})
             }

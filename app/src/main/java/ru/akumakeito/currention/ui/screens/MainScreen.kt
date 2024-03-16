@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -45,8 +46,8 @@ fun MainScreen(
             if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
                 FloatingActionButton(
                     onClick = {
+                        Log.d("editingPair", "FAB click")
                         currencyViewModel.addNewCurrencyPair()
-                        currencyViewModel.editPair()
                     },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
@@ -130,7 +131,7 @@ fun MainScreen(
         AppNavGraph(
             navHostController = navigationState.navHostController,
             currencyRatesContent = {
-                CurrencyExchangeRatesScreen(paddingValues = paddingValues)
+                CurrencyExchangeRatesScreen(paddingValues = paddingValues, currencyViewModel = currencyViewModel)
             },
             convertScreenContent = {
                 CurrencyConverterScreen()

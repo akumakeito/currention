@@ -74,7 +74,6 @@ class CurrencyViewModel @Inject constructor(
     }
 
 
-
     private val _currencyPairs = repository.currencyPairs
     val currencyPairs = _currencyPairs
 
@@ -85,7 +84,10 @@ class CurrencyViewModel @Inject constructor(
     val isEditing = _isEditing.asStateFlow()
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
-        repository.addNewCurrencyPair(newPair)
+        val newAddedPair = repository.addNewCurrencyPair(newPair)
+        Log.d("editingPair", "new pair $newAddedPair")
+        _editPairCurrency.update { newAddedPair }
+        Log.d("editingPair", "edit pair ${_editPairCurrency.value}")
     }
 
 
@@ -108,8 +110,8 @@ class CurrencyViewModel @Inject constructor(
         _isEditing.update { true }
     }
 
-    fun editPair() {
-        _isEditing.update { true }
+    fun getPairById(id : Int) = viewModelScope.launch {
+        repository.getPairById(id)
     }
 
     fun getPairRates(

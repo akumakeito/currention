@@ -35,13 +35,12 @@ import ru.akumakeito.currention.ui.theme.CurrentionTheme
 @Composable
 fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
-    isEditing: Boolean,
-    onEditStateChange : (isEditing : Boolean) -> Unit,
+    onEditStateChange : () -> Boolean,
     onCurrencyDropDownClickListener : (FiatCurrency) -> Unit,
     onDeletePairClickListener : () -> Unit
 ) {
     var isEditState by remember {
-        mutableStateOf(isEditing)
+        mutableStateOf(onEditStateChange())
     }
     Row(
         modifier = Modifier
@@ -52,7 +51,7 @@ fun CurrencyPairInExchangeRate(
     ) {
 
         CurrencyFlagAmountShortCode(fiatCurrency = pairCurrency.fromCurrency, amount = "1",
-            isEditing = isEditing,
+            isEditing = isEditState,
             onCurrencyDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.fromCurrency) }
         )
 
@@ -67,10 +66,10 @@ fun CurrencyPairInExchangeRate(
         CurrencyFlagAmountShortCode(
             fiatCurrency = pairCurrency.toCurrency,
             amount = "${pairCurrency.toCurrencyNewRate}",
-            isEditing = isEditing,
+            isEditing = isEditState,
             onCurrencyDropDownClickListener = {onCurrencyDropDownClickListener(pairCurrency.toCurrency)},
         )
-        if (isEditing) {
+        if (isEditState) {
             IconButton(onClick = { onDeletePairClickListener }) {
                 Icon(Icons.Default.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
             }
@@ -90,11 +89,15 @@ fun CurrencyFlagAmountShortCode(
     isEditing: Boolean = true,
     onCurrencyDropDownClickListener : (FiatCurrency) -> Unit
 ) {
+
+    var isEditState by remember {
+        mutableStateOf(isEditing)
+    }
     Row(verticalAlignment = Alignment.CenterVertically) {
         CurrencyFlag(flagId = fiatCurrency.flag)
 
         SpacerWidth(width = 8)
-        if (isEditing) {
+        if (isEditState) {
         Text(
             text = fiatCurrency.shortCode,
             style = MaterialTheme.typography.bodyLarge,
@@ -107,7 +110,7 @@ fun CurrencyFlagAmountShortCode(
             )
         }
 
-        if (isEditing) {
+        if (isEditState) {
             IconButton(onClick = { onCurrencyDropDownClickListener(fiatCurrency) }) {
                 Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.outline)
             }

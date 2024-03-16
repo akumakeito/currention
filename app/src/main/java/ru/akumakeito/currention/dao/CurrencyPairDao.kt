@@ -13,7 +13,13 @@ interface CurrencyPairDao {
     @Query("SELECT * FROM pair_currency")
     fun getAllPairs() : Flow<List<PairCurrencyEntity>>
 
+    @Query("SELECT * FROM pair_currency WHERE id = :id")
+    fun getPairById(id : Int) : PairCurrencyEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNewCurrencyPair(pairCurrency: PairCurrencyEntity)
+
+    @Query("SELECT * FROM pair_currency ORDER BY id DESC LIMIT 1")
+    suspend fun getLastInsertedPair() : PairCurrencyEntity
 
 }
