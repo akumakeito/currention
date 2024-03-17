@@ -85,9 +85,8 @@ class CurrencyViewModel @Inject constructor(
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
         val newAddedPair = repository.addNewCurrencyPair(newPair)
-        Log.d("editingPair", "new pair $newAddedPair")
         _editPairCurrency.update { newAddedPair }
-        Log.d("editingPair", "edit pair ${_editPairCurrency.value}")
+        _isEditing.update { true }
     }
 
 

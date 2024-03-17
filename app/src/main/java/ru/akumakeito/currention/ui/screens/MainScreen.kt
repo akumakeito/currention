@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -39,25 +40,29 @@ fun MainScreen(
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
     val currentScreenRoute = navBackStackEntry?.destination?.route
+    val isEditing by currencyViewModel.isEditing.collectAsState()
 
 
     Scaffold(
         floatingActionButton = {
             if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
-                FloatingActionButton(
-                    onClick = {
-                        Log.d("editingPair", "FAB click")
-                        currencyViewModel.addNewCurrencyPair()
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
+                if (!isEditing) {
+                    FloatingActionButton(
+                        onClick = {
+                            Log.d("editingPair", "FAB click")
+                            currencyViewModel.addNewCurrencyPair()
+                        },
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ) {
 
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add_new_pair)
-                    )
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.add_new_pair)
+                        )
 
+                    }
                 }
+
             }
 
         },

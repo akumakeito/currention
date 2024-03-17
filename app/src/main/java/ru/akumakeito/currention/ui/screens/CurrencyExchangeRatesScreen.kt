@@ -3,6 +3,8 @@ package ru.akumakeito.currention.ui.screens
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,40 +36,47 @@ fun CurrencyExchangeRatesScreen(
     val isEditing by currencyViewModel.isEditing.collectAsState()
     val editingPair by currencyViewModel.editPairCurrency.collectAsState()
 
+    Log.d("editingPair", "isEditing ${isEditing}")
 
-    Column(Modifier.padding(paddingValues)) {
+
+    Column(
+        Modifier
+            .padding(paddingValues)
+            .fillMaxSize()) {
         LazyColumn(
         ) {
             itemsIndexed(currencyPairs) { index, item ->
 
-    Log.d("editingPair", "item ${item}  \nedit ${editingPair}")
+                Log.d("editingPair", "item ${item}  \nedit ${editingPair}")
 
                 CurrencyPairInExchangeRate(
                     pairCurrency = item,
-                    onEditStateChange = {editingPair.id == item.id},
+                    onEditStateChange = { editingPair.id == item.id },
                     onDeletePairClickListener = {},
                     onCurrencyDropDownClickListener = {})
             }
 
         }
-    }
 
-    if (isEditing) {
-        Button(
-            onClick = { currencyViewModel.updatePair() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+        if (isEditing) {
+            Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = { currencyViewModel.updatePair() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.done),
+                        fontWeight = FontWeight.Bold
+                    )
 
-        ) {
-            Text(
-                text = stringResource(R.string.done),
-                fontWeight = FontWeight.Bold
-            )
+                }
+
         }
 
-    }
 
+    }
 
 
 }
