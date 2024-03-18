@@ -81,7 +81,7 @@ fun CurrencyPairInExchangeRate(
             onCurrencyDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.toCurrency) },
         )
         if (isEditState) {
-            IconButton(onClick = { onDeletePairClickListener }) {
+            IconButton(onClick = { onDeletePairClickListener() }) {
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = null,
