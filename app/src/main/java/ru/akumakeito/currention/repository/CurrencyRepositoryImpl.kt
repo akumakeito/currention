@@ -115,6 +115,10 @@ class CurrencyRepositoryImpl @Inject constructor(
         return pair.toDto()
     }
 
+    override suspend fun deletePairById(id: Int) {
+        pairCurrencyDao.deletePairById(id)
+    }
+
     override suspend fun addNewCurrencyPair(pairCurrency: PairCurrency): PairCurrency {
         pairCurrencyDao.addNewCurrencyPair(PairCurrencyEntity.fromDto(pairCurrency))
         val newPair = pairCurrencyDao.getLastInsertedPair()

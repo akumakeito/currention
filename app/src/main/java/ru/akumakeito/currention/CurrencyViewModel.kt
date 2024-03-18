@@ -101,7 +101,8 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun updatePair() = viewModelScope.launch(Dispatchers.IO) {
-
+        _editPairCurrency.update { newPair }
+        _isEditing.update { false }
     }
 
     fun editPair(pairCurrency: PairCurrency) {
@@ -111,6 +112,10 @@ class CurrencyViewModel @Inject constructor(
 
     fun getPairById(id : Int) = viewModelScope.launch {
         repository.getPairById(id)
+    }
+
+    fun deletePairById(id : Int) = viewModelScope.launch {
+        repository.deletePairById(id)
     }
 
     fun getPairRates(

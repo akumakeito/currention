@@ -1,9 +1,9 @@
 package ru.akumakeito.currention.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.akumakeito.currention.CurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
@@ -29,20 +28,22 @@ import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 @Composable
 fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
-    currencyViewModel: CurrencyViewModel = hiltViewModel()
+    currencyViewModel: CurrencyViewModel
 ) {
+
 
     val currencyPairs by currencyViewModel.currencyPairs.collectAsState(emptyList())
     val isEditing by currencyViewModel.isEditing.collectAsState()
     val editingPair by currencyViewModel.editPairCurrency.collectAsState()
 
-    Log.d("editingPair", "isEditing ${isEditing}")
 
 
     Column(
-        Modifier
+        modifier = Modifier
             .padding(paddingValues)
-            .fillMaxSize()) {
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         LazyColumn(
         ) {
             itemsIndexed(currencyPairs) { index, item ->
@@ -52,33 +53,28 @@ fun CurrencyExchangeRatesScreen(
                 CurrencyPairInExchangeRate(
                     pairCurrency = item,
                     onEditStateChange = { editingPair.id == item.id },
-                    onDeletePairClickListener = {},
+                    onDeletePairClickListener = {currencyViewModel.deletePairById(item.id)},
                     onCurrencyDropDownClickListener = {})
             }
 
         }
 
         if (isEditing) {
-            Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    onClick = { currencyViewModel.updatePair() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.done),
-                        fontWeight = FontWeight.Bold
-                    )
 
-                }
+            Button(
+                onClick = { currencyViewModel.updatePair() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.done),
+                    fontWeight = FontWeight.Bold
+                )
 
+            }
         }
-
-
     }
-
-
 }
 
 

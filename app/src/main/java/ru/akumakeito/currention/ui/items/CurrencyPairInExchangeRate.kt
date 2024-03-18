@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +36,21 @@ import ru.akumakeito.currention.ui.theme.CurrentionTheme
 @Composable
 fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
-    onEditStateChange : () -> Boolean,
-    onCurrencyDropDownClickListener : (FiatCurrency) -> Unit,
-    onDeletePairClickListener : () -> Unit
+    onEditStateChange: () -> Boolean,
+    onCurrencyDropDownClickListener: (FiatCurrency) -> Unit,
+    onDeletePairClickListener: () -> Unit
 ) {
+
+
     var isEditState by remember {
         mutableStateOf(onEditStateChange())
     }
+
+    LaunchedEffect(key1 = onEditStateChange()) {
+        isEditState = onEditStateChange()
+    }
+
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,7 +59,9 @@ fun CurrencyPairInExchangeRate(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        CurrencyFlagAmountShortCode(fiatCurrency = pairCurrency.fromCurrency, amount = "1",
+        CurrencyFlagAmountShortCode(
+            fiatCurrency = pairCurrency.fromCurrency,
+            amount = "1",
             isEditing = isEditState,
             onCurrencyDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.fromCurrency) }
         )
@@ -67,11 +78,15 @@ fun CurrencyPairInExchangeRate(
             fiatCurrency = pairCurrency.toCurrency,
             amount = "${pairCurrency.toCurrencyNewRate}",
             isEditing = isEditState,
-            onCurrencyDropDownClickListener = {onCurrencyDropDownClickListener(pairCurrency.toCurrency)},
+            onCurrencyDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.toCurrency) },
         )
         if (isEditState) {
             IconButton(onClick = { onDeletePairClickListener }) {
-                Icon(Icons.Default.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.outline
+                )
             }
         } else {
             CurrencyRate(rate = pairCurrency.rateCurrency)
@@ -86,23 +101,31 @@ fun CurrencyPairInExchangeRate(
 fun CurrencyFlagAmountShortCode(
     fiatCurrency: FiatCurrency,
     amount: String,
-    isEditing: Boolean = true,
-    onCurrencyDropDownClickListener : (FiatCurrency) -> Unit
+    isEditing: Boolean,
+    onCurrencyDropDownClickListener: (FiatCurrency) -> Unit
 ) {
+
+
 
     var isEditState by remember {
         mutableStateOf(isEditing)
     }
+
+    LaunchedEffect(key1 = isEditing) {
+        isEditState = isEditing
+    }
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         CurrencyFlag(flagId = fiatCurrency.flag)
 
         SpacerWidth(width = 8)
         if (isEditState) {
-        Text(
-            text = fiatCurrency.shortCode,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.outline
-        ) } else {
+            Text(
+                text = fiatCurrency.shortCode,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.outline
+            )
+        } else {
             Text(
                 text = "$amount ${fiatCurrency.shortCode}",
                 style = MaterialTheme.typography.bodyLarge,

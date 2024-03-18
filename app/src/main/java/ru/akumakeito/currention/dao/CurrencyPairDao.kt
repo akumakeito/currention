@@ -16,6 +16,9 @@ interface CurrencyPairDao {
     @Query("SELECT * FROM pair_currency WHERE id = :id")
     fun getPairById(id : Int) : PairCurrencyEntity
 
+    @Query("DELETE FROM pair_currency WHERE id = :id")
+    fun deletePairById(id : Int)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNewCurrencyPair(pairCurrency: PairCurrencyEntity)
 
