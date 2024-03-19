@@ -35,6 +35,7 @@ fun CurrencyExchangeRatesScreen(
     val currencyPairs by currencyViewModel.currencyPairs.collectAsState(emptyList())
     val isEditing by currencyViewModel.isEditing.collectAsState()
     val editingPair by currencyViewModel.editPairCurrency.collectAsState()
+    val favoriteCurrencies by currencyViewModel.favoriteCurrencies.collectAsState(emptyList())
 
 
 
@@ -54,7 +55,9 @@ fun CurrencyExchangeRatesScreen(
                     pairCurrency = item,
                     onEditStateChange = { editingPair.id == item.id },
                     onDeletePairClickListener = {currencyViewModel.deletePairById(item.id)},
-                    onCurrencyDropDownClickListener = {})
+                    favoriteCurrencyList = favoriteCurrencies
+                )
+//                    onCurrencyDropDownClickListener = {})
             }
 
         }

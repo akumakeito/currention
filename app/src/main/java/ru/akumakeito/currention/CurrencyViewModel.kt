@@ -73,6 +73,9 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
+    private val _favoriteCurrencies = repository.fiatCurrencies.map { it.filter { it.isPopular } }
+    val favoriteCurrencies = _favoriteCurrencies
+
 
     private val _currencyPairs = repository.currencyPairs
     val currencyPairs = _currencyPairs

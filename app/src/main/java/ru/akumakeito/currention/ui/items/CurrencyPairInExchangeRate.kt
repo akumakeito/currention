@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +41,8 @@ import ru.akumakeito.currention.ui.theme.CurrentionTheme
 fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
     onEditStateChange: () -> Boolean,
-    onCurrencyDropDownClickListener: (FiatCurrency) -> Unit,
+    favoriteCurrencyList: List<FiatCurrency>,
+//    onCurrencyDropDownClickListener: (currencyToChange : FiatCurrency, chosenCurrency :FiatCurrency) -> Unit,
     onDeletePairClickListener: () -> Unit
 ) {
 
@@ -63,7 +68,8 @@ fun CurrencyPairInExchangeRate(
             fiatCurrency = pairCurrency.fromCurrency,
             amount = "1",
             isEditing = isEditState,
-            onCurrencyDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.fromCurrency) }
+            favoriteCurrencyList = favoriteCurrencyList,
+//            onCurrencyItemDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.fromCurrency, it) }
         )
 
         Image(
@@ -78,7 +84,8 @@ fun CurrencyPairInExchangeRate(
             fiatCurrency = pairCurrency.toCurrency,
             amount = "${pairCurrency.toCurrencyNewRate}",
             isEditing = isEditState,
-            onCurrencyDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.toCurrency) },
+            favoriteCurrencyList = emptyList(),
+//            onCurrencyItemDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.toCurrency) },
         )
         if (isEditState) {
             IconButton(onClick = { onDeletePairClickListener() }) {
@@ -102,9 +109,13 @@ fun CurrencyFlagAmountShortCode(
     fiatCurrency: FiatCurrency,
     amount: String,
     isEditing: Boolean,
-    onCurrencyDropDownClickListener: (FiatCurrency) -> Unit
+    favoriteCurrencyList: List<FiatCurrency>,
+//    onCurrencyItemDropDownClickListener: () -> FiatCurrency
+
 ) {
 
+    var expanded by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
 
 
     var isEditState by remember {
@@ -134,12 +145,42 @@ fun CurrencyFlagAmountShortCode(
         }
 
         if (isEditState) {
-            IconButton(onClick = { onCurrencyDropDownClickListener(fiatCurrency) }) {
+            IconButton(onClick = { expanded = true }) {
                 Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.outline)
             }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                scrollState = scrollState
+            ) {
+                favoriteCurrencyList.forEach { currency ->
+
+                    DropdownMenuItem(
+                        text = { Text(text = currency.shortCode) },
+                        onClick = { },
+                        leadingIcon = {
+                            CurrencyFlag(flagId = currency.flag, 24)
+                        })
+                }
+
+                HorizontalDivider()
+                DropdownMenuItem(
+                    text = { Text(text = stringResource(id = R.string.all_currencies)) },
+                    onClick = { /* Handle send feedback! */ })
+            }
         }
+        LaunchedEffect(expanded) {
+            if (expanded) {
+                // Scroll to show the bottom menu items.
+                scrollState.scrollTo(scrollState.maxValue)
+            }
+        }
+
+
     }
 }
+
 
 @Composable
 fun CurrencyRate(rate: Float) {
