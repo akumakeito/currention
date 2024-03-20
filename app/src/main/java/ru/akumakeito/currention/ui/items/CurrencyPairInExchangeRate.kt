@@ -3,6 +3,8 @@ package ru.akumakeito.currention.ui.items
 import SpacerWidth
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -26,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +46,9 @@ fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
     onEditStateChange: () -> Boolean,
     favoriteCurrencyList: List<FiatCurrency>,
-//    onCurrencyDropDownClickListener: (currencyToChange : FiatCurrency, chosenCurrency :FiatCurrency) -> Unit,
+    onCurrencyFromDropDownClickListener: () -> Unit,
+    onCurrencyToDropDownClickListener: () -> Unit,
+    onEditPairClickListener: () -> Unit,
     onDeletePairClickListener: () -> Unit
 ) {
 
@@ -51,17 +57,27 @@ fun CurrencyPairInExchangeRate(
         mutableStateOf(onEditStateChange())
     }
 
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(key1 = onEditStateChange()) {
         isEditState = onEditStateChange()
     }
 
 
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .pointerInput(true) {
+                detectTapGestures(onLongPress = {
+                    expanded = true
+                })
+            },
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
 
         CurrencyFlagAmountShortCode(
@@ -69,7 +85,7 @@ fun CurrencyPairInExchangeRate(
             amount = "1",
             isEditing = isEditState,
             favoriteCurrencyList = favoriteCurrencyList,
-//            onCurrencyItemDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.fromCurrency, it) }
+            onCurrencyItemDropDownClickListener = { onCurrencyFromDropDownClickListener() }
         )
 
         Image(
@@ -84,8 +100,8 @@ fun CurrencyPairInExchangeRate(
             fiatCurrency = pairCurrency.toCurrency,
             amount = "${pairCurrency.toCurrencyNewRate}",
             isEditing = isEditState,
-            favoriteCurrencyList = emptyList(),
-//            onCurrencyItemDropDownClickListener = { onCurrencyDropDownClickListener(pairCurrency.toCurrency) },
+            favoriteCurrencyList = favoriteCurrencyList,
+            onCurrencyItemDropDownClickListener = { onCurrencyToDropDownClickListener() },
         )
         if (isEditState) {
             IconButton(onClick = { onDeletePairClickListener() }) {
@@ -99,6 +115,40 @@ fun CurrencyPairInExchangeRate(
             CurrencyRate(rate = pairCurrency.rateCurrency)
         }
 
+    }
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+        modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
+    ) {
+
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = stringResource(R.string.edit)
+                )
+            },
+            onClick = {
+                onEditPairClickListener()
+                expanded = false
+            },
+            leadingIcon = {
+                Icon(Icons.Default.Create, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+            })
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = stringResource(R.string.delete)
+                )
+            },
+            onClick = {
+                onDeletePairClickListener()
+                expanded = false
+            },
+            leadingIcon = {
+                Icon(Icons.Default.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+            })
 
     }
 
@@ -110,12 +160,15 @@ fun CurrencyFlagAmountShortCode(
     amount: String,
     isEditing: Boolean,
     favoriteCurrencyList: List<FiatCurrency>,
-//    onCurrencyItemDropDownClickListener: () -> FiatCurrency
+    onCurrencyItemDropDownClickListener: () -> Unit
 
 ) {
 
     var expanded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+    var selectedItem by remember {
+        mutableStateOf(fiatCurrency)
+    }
 
 
     var isEditState by remember {
@@ -129,8 +182,11 @@ fun CurrencyFlagAmountShortCode(
     Row(verticalAlignment = Alignment.CenterVertically) {
         CurrencyFlag(flagId = fiatCurrency.flag)
 
+
+
         SpacerWidth(width = 8)
         if (isEditState) {
+
             Text(
                 text = fiatCurrency.shortCode,
                 style = MaterialTheme.typography.bodyLarge,
@@ -145,23 +201,32 @@ fun CurrencyFlagAmountShortCode(
         }
 
         if (isEditState) {
-            IconButton(onClick = { expanded = true }) {
+            IconButton(onClick = {
+                expanded = true
+            }) {
                 Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.outline)
             }
+
 
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                scrollState = scrollState
-            ) {
-                favoriteCurrencyList.forEach { currency ->
 
+                ) {
+
+                favoriteCurrencyList.forEach { currency ->
                     DropdownMenuItem(
                         text = { Text(text = currency.shortCode) },
-                        onClick = { },
+                        onClick = {
+                            onCurrencyItemDropDownClickListener()
+                            selectedItem = currency
+                            expanded = false
+                        },
                         leadingIcon = {
                             CurrencyFlag(flagId = currency.flag, 24)
-                        })
+                        },
+                        modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
+                    )
                 }
 
                 HorizontalDivider()
@@ -176,10 +241,9 @@ fun CurrencyFlagAmountShortCode(
                 scrollState.scrollTo(scrollState.maxValue)
             }
         }
-
-
     }
 }
+
 
 
 @Composable

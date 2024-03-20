@@ -38,7 +38,6 @@ fun CurrencyExchangeRatesScreen(
     val favoriteCurrencies by currencyViewModel.favoriteCurrencies.collectAsState(emptyList())
 
 
-
     Column(
         modifier = Modifier
             .padding(paddingValues)
@@ -54,16 +53,21 @@ fun CurrencyExchangeRatesScreen(
                 CurrencyPairInExchangeRate(
                     pairCurrency = item,
                     onEditStateChange = { editingPair.id == item.id },
-                    onDeletePairClickListener = {currencyViewModel.deletePairById(item.id)},
-                    favoriteCurrencyList = favoriteCurrencies
-                )
-//                    onCurrencyDropDownClickListener = {})
+                    onDeletePairClickListener = { currencyViewModel.deletePairById(item.id) },
+                    favoriteCurrencyList = favoriteCurrencies,
+                    onCurrencyFromDropDownClickListener = {
+                        currencyViewModel.updatePairCurrencyFrom(item.fromCurrency)
+                    },
+                    onCurrencyToDropDownClickListener = {
+                        currencyViewModel.updatePairCurrencyTo(item.toCurrency)
+                    },
+                    onEditPairClickListener = { currencyViewModel.editPair(item) },
+                    )
             }
 
         }
 
         if (isEditing) {
-
             Button(
                 onClick = { currencyViewModel.updatePair() },
                 modifier = Modifier
@@ -74,11 +78,13 @@ fun CurrencyExchangeRatesScreen(
                     text = stringResource(R.string.done),
                     fontWeight = FontWeight.Bold
                 )
-
             }
         }
     }
 }
+
+
+
 
 
 

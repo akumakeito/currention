@@ -108,6 +108,18 @@ class CurrencyViewModel @Inject constructor(
         _isEditing.update { false }
     }
 
+    fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
+        _editPairCurrency.update {
+            it.copy(fromCurrency = fromCurrency)
+        }
+    }
+
+    fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
+        _editPairCurrency.update {
+            it.copy(toCurrency = toCurrency)
+        }
+    }
+
     fun editPair(pairCurrency: PairCurrency) {
         _editPairCurrency.update { pairCurrency }
         _isEditing.update { true }

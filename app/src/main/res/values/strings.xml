@@ -178,6 +178,8 @@
     <string name="converter">Конвертер валют</string>
     <string name="settings">Параметры</string>
     <string name="done">Готово</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
 
 
 </resources>
