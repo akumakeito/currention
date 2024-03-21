@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.akumakeito.currention.CurrencyViewModel
+import ru.akumakeito.currention.PairCurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.navigation.AppNavGraph
 import ru.akumakeito.currention.navigation.NavigationItem
@@ -35,12 +36,13 @@ import ru.akumakeito.currention.navigation.rememberNavigationState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    currencyViewModel: CurrencyViewModel = hiltViewModel()
+    currencyViewModel: CurrencyViewModel = hiltViewModel(),
+    pairCurrencyViewModel: PairCurrencyViewModel = hiltViewModel()
 ) {
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
     val currentScreenRoute = navBackStackEntry?.destination?.route
-    val isEditing by currencyViewModel.isEditing.collectAsState()
+    val isEditing by pairCurrencyViewModel.isEditing.collectAsState()
 
 
     Scaffold(
@@ -50,7 +52,7 @@ fun MainScreen(
                     FloatingActionButton(
                         onClick = {
                             Log.d("editingPair", "FAB click")
-                            currencyViewModel.addNewCurrencyPair()
+                            pairCurrencyViewModel.addNewCurrencyPair()
                         },
                         containerColor = MaterialTheme.colorScheme.primary
                     ) {
@@ -136,7 +138,7 @@ fun MainScreen(
         AppNavGraph(
             navHostController = navigationState.navHostController,
             currencyRatesContent = {
-                CurrencyExchangeRatesScreen(paddingValues = paddingValues, currencyViewModel = currencyViewModel)
+                CurrencyExchangeRatesScreen(paddingValues = paddingValues, pairViewModel = pairCurrencyViewModel)
             },
             convertScreenContent = {
                 CurrencyConverterScreen()

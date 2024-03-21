@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.PairCurrency
 import ru.akumakeito.currention.model.SearchState
 import ru.akumakeito.currention.repository.CurrencyRepository
 import javax.inject.Inject
@@ -36,15 +35,6 @@ val rub = FiatCurrency(
     "P",
     R.drawable.flag_rub
 )
-private val newPair =
-    PairCurrency(
-        id = 0,
-        fromCurrency = usd,
-        toCurrency = rub,
-        toCurrencyLastRate = 0.0,
-        toCurrencyNewRate = 0.0,
-        rateCurrency = 0.0f
-    )
 
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
@@ -73,25 +63,10 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    private val _favoriteCurrencies = repository.fiatCurrencies.map { it.filter { it.isPopular } } //TODO заменить на is Favorite
-    val favoriteCurrencies = _favoriteCurrencies
 
 
-    private val _currencyPairs = repository.currencyPairs
-    val currencyPairs = _currencyPairs
 
 
-    private val _editPairCurrency = MutableStateFlow(newPair)
-    val editPairCurrency = _editPairCurrency.asStateFlow()
-
-    private val _isEditing = MutableStateFlow(false)
-    val isEditing = _isEditing.asStateFlow()
-
-    fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
-        val newAddedPair = repository.addNewCurrencyPair(newPair)
-        _editPairCurrency.update { newAddedPair }
-        _isEditing.update { true }
-    }
 
 
     fun getFiatCurrencies() = viewModelScope.launch(Dispatchers.IO) {
@@ -104,47 +79,7 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    fun updatePair() = viewModelScope.launch(Dispatchers.IO) {
-       repository.updateCurrencyPair(_editPairCurrency.value)
-        _editPairCurrency.update { newPair }
-        _isEditing.update { false }
-    }
 
-    fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
-        _editPairCurrency.update {
-            it.copy(fromCurrency = fromCurrency)
-        }
-    }
-
-    fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
-        _editPairCurrency.update {
-            it.copy(toCurrency = toCurrency)
-        }
-    }
-
-    fun editPair(pairCurrency: PairCurrency) {
-        _editPairCurrency.update { pairCurrency }
-        _isEditing.update { true }
-    }
-
-    fun getPairById(id : Int) = viewModelScope.launch {
-        repository.getPairById(id)
-    }
-
-    fun deletePairById(id : Int) = viewModelScope.launch {
-        repository.deletePairById(id)
-        _isEditing.update { false }
-    }
-
-    fun getPairRates(
-        currencyFromShortCode: FiatCurrency,
-        currencyToShortCode: FiatCurrency,
-        amount: Int
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getPairRates(currencyFromShortCode, currencyToShortCode, amount)
-        }
-    }
 
     fun updateFavoriteCurrency(currency: FiatCurrency) {
         Log.d("checkbox", "vm $currency")

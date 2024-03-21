@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import ru.akumakeito.currention.CurrencyViewModel
+import ru.akumakeito.currention.PairCurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 
@@ -27,14 +27,14 @@ import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 @Composable
 fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
-    currencyViewModel: CurrencyViewModel
+    pairViewModel: PairCurrencyViewModel
 ) {
 
 
-    val currencyPairs by currencyViewModel.currencyPairs.collectAsState()
-    val isEditing by currencyViewModel.isEditing.collectAsState()
-    val editingPair by currencyViewModel.editPairCurrency.collectAsState()
-    val favoriteCurrencies by currencyViewModel.favoriteCurrencies.collectAsState(emptyList())
+    val currencyPairs by pairViewModel.currencyPairs.collectAsState()
+    val isEditing by pairViewModel.isEditing.collectAsState()
+    val editingPair by pairViewModel.editPairCurrency.collectAsState()
+    val favoriteCurrencies by pairViewModel.favoriteCurrencies.collectAsState(emptyList())
 
 
 
@@ -46,20 +46,20 @@ fun CurrencyExchangeRatesScreen(
     ) {
         LazyColumn(
         ) {
-            items(currencyPairs, key = { it.id }) { item ->
+            items(currencyPairs, key = {it.id}) { item ->
 
                 CurrencyPairInExchangeRate(
                     pairCurrency = item,
                     onEditStateChange = { editingPair.id == item.id },
-                    onDeletePairClickListener = { currencyViewModel.deletePairById(item.id) },
+                    onDeletePairClickListener = { pairViewModel.deletePairById(item.id) },
                     favoriteCurrencyList = favoriteCurrencies,
                     onCurrencyFromDropDownClickListener = {selectedCurrency ->
-                        currencyViewModel.updatePairCurrencyFrom(selectedCurrency)
+                        pairViewModel.updatePairCurrencyFrom(selectedCurrency)
                     },
                     onCurrencyToDropDownClickListener = {selectedCurrency ->
-                        currencyViewModel.updatePairCurrencyTo(selectedCurrency)
+                        pairViewModel.updatePairCurrencyTo(selectedCurrency)
                     },
-                    onEditPairClickListener = { currencyViewModel.editPair(item) },
+                    onEditPairClickListener = { pairViewModel.editPair(item) },
                     editingPair = editingPair
                     )
             }
@@ -68,7 +68,7 @@ fun CurrencyExchangeRatesScreen(
 
         if (isEditing) {
             Button(
-                onClick = { currencyViewModel.updatePair() },
+                onClick = { pairViewModel.updatePair() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
