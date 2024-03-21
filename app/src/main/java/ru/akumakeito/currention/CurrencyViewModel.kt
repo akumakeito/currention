@@ -73,12 +73,13 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    private val _favoriteCurrencies = repository.fiatCurrencies.map { it.filter { it.isPopular } }
+    private val _favoriteCurrencies = repository.fiatCurrencies.map { it.filter { it.isPopular } } //TODO заменить на is Favorite
     val favoriteCurrencies = _favoriteCurrencies
 
 
     private val _currencyPairs = repository.currencyPairs
     val currencyPairs = _currencyPairs
+
 
     private val _editPairCurrency = MutableStateFlow(newPair)
     val editPairCurrency = _editPairCurrency.asStateFlow()
@@ -104,6 +105,7 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun updatePair() = viewModelScope.launch(Dispatchers.IO) {
+       repository.updateCurrencyPair(_editPairCurrency.value)
         _editPairCurrency.update { newPair }
         _isEditing.update { false }
     }

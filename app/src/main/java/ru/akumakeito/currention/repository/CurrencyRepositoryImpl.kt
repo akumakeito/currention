@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.api.ApiService
 import ru.akumakeito.currention.dao.CurrencyDao
@@ -31,13 +35,15 @@ class CurrencyRepositoryImpl @Inject constructor(
 
     ) : CurrencyRepository {
 
+        private val scope : CoroutineScope = CoroutineScope(Dispatchers.IO)
+
     override val fiatCurrencies: Flow<List<FiatCurrency>> = currencyDao.getAllFiat().map {
         it.toDto()
     }.flowOn(Dispatchers.IO)
 
-    override val currencyPairs: Flow<List<PairCurrency>> = pairCurrencyDao.getAllPairs().map {
+    override val currencyPairs: StateFlow<List<PairCurrency>> = pairCurrencyDao.getAllPairs().map {
         it.toDto()
-    }.flowOn(Dispatchers.IO)
+    }.stateIn(scope, SharingStarted.Lazily, emptyList())
 
 
     override suspend fun updateFlagFromJson() {
@@ -96,6 +102,10 @@ class CurrencyRepositoryImpl @Inject constructor(
         val currencyNameId = res.getIdentifier(stringId, "strings", context.packageName)
         currencyDao.updateCurrencyName(fiatCurrency.shortCode, res.getString(currencyNameId))
 
+    }
+
+    override suspend fun updateCurrencyPair(pairCurrency: PairCurrency) {
+        pairCurrencyDao.updateCurrencyPair(PairCurrencyEntity.fromDto(pairCurrency))
     }
 
     override suspend fun getPairRates(

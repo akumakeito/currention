@@ -46,8 +46,9 @@ fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
     onEditStateChange: () -> Boolean,
     favoriteCurrencyList: List<FiatCurrency>,
-    onCurrencyFromDropDownClickListener: () -> Unit,
-    onCurrencyToDropDownClickListener: () -> Unit,
+    editingPair : PairCurrency,
+    onCurrencyFromDropDownClickListener: (FiatCurrency) -> Unit,
+    onCurrencyToDropDownClickListener: (FiatCurrency) -> Unit,
     onEditPairClickListener: () -> Unit,
     onDeletePairClickListener: () -> Unit
 ) {
@@ -55,6 +56,10 @@ fun CurrencyPairInExchangeRate(
 
     var isEditState by remember {
         mutableStateOf(onEditStateChange())
+    }
+
+    var currencyPair by remember {
+        mutableStateOf(pairCurrency)
     }
 
     var expanded by remember {
@@ -65,7 +70,12 @@ fun CurrencyPairInExchangeRate(
         isEditState = onEditStateChange()
     }
 
+    LaunchedEffect(key1 = editingPair) {
+        if (currencyPair.id == editingPair.id) {
+            currencyPair = editingPair
+        }
 
+    }
 
     Row(
         modifier = Modifier
@@ -81,11 +91,11 @@ fun CurrencyPairInExchangeRate(
     ) {
 
         CurrencyFlagAmountShortCode(
-            fiatCurrency = pairCurrency.fromCurrency,
+            fiatCurrency = currencyPair.fromCurrency,
             amount = "1",
             isEditing = isEditState,
             favoriteCurrencyList = favoriteCurrencyList,
-            onCurrencyItemDropDownClickListener = { onCurrencyFromDropDownClickListener() }
+            onCurrencyItemDropDownClickListener = { selectedCurrency -> onCurrencyFromDropDownClickListener(selectedCurrency) }
         )
 
         Image(
@@ -97,11 +107,11 @@ fun CurrencyPairInExchangeRate(
         )
 
         CurrencyFlagAmountShortCode(
-            fiatCurrency = pairCurrency.toCurrency,
+            fiatCurrency = currencyPair.toCurrency,
             amount = "${pairCurrency.toCurrencyNewRate}",
             isEditing = isEditState,
             favoriteCurrencyList = favoriteCurrencyList,
-            onCurrencyItemDropDownClickListener = { onCurrencyToDropDownClickListener() },
+            onCurrencyItemDropDownClickListener = { selectedCurrency -> onCurrencyToDropDownClickListener(selectedCurrency)},
         )
         if (isEditState) {
             IconButton(onClick = { onDeletePairClickListener() }) {
@@ -159,20 +169,24 @@ fun CurrencyFlagAmountShortCode(
     fiatCurrency: FiatCurrency,
     amount: String,
     isEditing: Boolean,
+    onCurrencyItemDropDownClickListener: (FiatCurrency) -> Unit,
     favoriteCurrencyList: List<FiatCurrency>,
-    onCurrencyItemDropDownClickListener: () -> Unit
-
 ) {
 
     var expanded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
-    var selectedItem by remember {
-        mutableStateOf(fiatCurrency)
-    }
 
 
     var isEditState by remember {
         mutableStateOf(isEditing)
+    }
+
+    var currency by remember {
+        mutableStateOf(fiatCurrency)
+    }
+
+    LaunchedEffect(fiatCurrency) {
+        currency = fiatCurrency
     }
 
     LaunchedEffect(key1 = isEditing) {
@@ -180,7 +194,7 @@ fun CurrencyFlagAmountShortCode(
     }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
-        CurrencyFlag(flagId = fiatCurrency.flag)
+        CurrencyFlag(flagId = currency.flag)
 
 
 
@@ -188,13 +202,13 @@ fun CurrencyFlagAmountShortCode(
         if (isEditState) {
 
             Text(
-                text = fiatCurrency.shortCode,
+                text = currency.shortCode,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.outline
             )
         } else {
             Text(
-                text = "$amount ${fiatCurrency.shortCode}",
+                text = "$amount ${currency.shortCode}",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.outline
             )
@@ -218,8 +232,7 @@ fun CurrencyFlagAmountShortCode(
                     DropdownMenuItem(
                         text = { Text(text = currency.shortCode) },
                         onClick = {
-                            onCurrencyItemDropDownClickListener()
-                            selectedItem = currency
+                            onCurrencyItemDropDownClickListener(currency)
                             expanded = false
                         },
                         leadingIcon = {
@@ -243,7 +256,6 @@ fun CurrencyFlagAmountShortCode(
         }
     }
 }
-
 
 
 @Composable

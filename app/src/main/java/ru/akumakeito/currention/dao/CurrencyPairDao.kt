@@ -22,6 +22,9 @@ interface CurrencyPairDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNewCurrencyPair(pairCurrency: PairCurrencyEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateCurrencyPair(pairCurrency: PairCurrencyEntity)
+
     @Query("SELECT * FROM pair_currency ORDER BY id DESC LIMIT 1")
     suspend fun getLastInsertedPair() : PairCurrencyEntity
 
