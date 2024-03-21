@@ -8,19 +8,27 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,7 +54,8 @@ fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
     onEditStateChange: () -> Boolean,
     favoriteCurrencyList: List<FiatCurrency>,
-    editingPair : PairCurrency,
+    allCurrencies: List<FiatCurrency>,
+    editingPair: PairCurrency,
     onCurrencyFromDropDownClickListener: (FiatCurrency) -> Unit,
     onCurrencyToDropDownClickListener: (FiatCurrency) -> Unit,
     onEditPairClickListener: () -> Unit,
@@ -95,7 +104,12 @@ fun CurrencyPairInExchangeRate(
             amount = "1",
             isEditing = isEditState,
             favoriteCurrencyList = favoriteCurrencyList,
-            onCurrencyItemDropDownClickListener = { selectedCurrency -> onCurrencyFromDropDownClickListener(selectedCurrency) }
+            onCurrencyItemDropDownClickListener = { selectedCurrency ->
+                onCurrencyFromDropDownClickListener(
+                    selectedCurrency
+                )
+            },
+            allCurrencies = allCurrencies,
         )
 
         Image(
@@ -111,7 +125,12 @@ fun CurrencyPairInExchangeRate(
             amount = "${pairCurrency.toCurrencyNewRate}",
             isEditing = isEditState,
             favoriteCurrencyList = favoriteCurrencyList,
-            onCurrencyItemDropDownClickListener = { selectedCurrency -> onCurrencyToDropDownClickListener(selectedCurrency)},
+            onCurrencyItemDropDownClickListener = { selectedCurrency ->
+                onCurrencyToDropDownClickListener(
+                    selectedCurrency
+                )
+            },
+            allCurrencies = allCurrencies,
         )
         if (isEditState) {
             IconButton(onClick = { onDeletePairClickListener() }) {
@@ -144,7 +163,11 @@ fun CurrencyPairInExchangeRate(
                 expanded = false
             },
             leadingIcon = {
-                Icon(Icons.Default.Create, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+                Icon(
+                    Icons.Default.Create,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.outline
+                )
             })
         DropdownMenuItem(
             text = {
@@ -157,13 +180,18 @@ fun CurrencyPairInExchangeRate(
                 expanded = false
             },
             leadingIcon = {
-                Icon(Icons.Default.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.outline
+                )
             })
 
     }
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyFlagAmountShortCode(
     fiatCurrency: FiatCurrency,
@@ -171,6 +199,7 @@ fun CurrencyFlagAmountShortCode(
     isEditing: Boolean,
     onCurrencyItemDropDownClickListener: (FiatCurrency) -> Unit,
     favoriteCurrencyList: List<FiatCurrency>,
+    allCurrencies: List<FiatCurrency>,
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -185,12 +214,20 @@ fun CurrencyFlagAmountShortCode(
         mutableStateOf(fiatCurrency)
     }
 
+    var currencyList by remember {
+        mutableStateOf(favoriteCurrencyList)
+    }
+
     LaunchedEffect(fiatCurrency) {
         currency = fiatCurrency
     }
 
     LaunchedEffect(key1 = isEditing) {
         isEditState = isEditing
+    }
+
+    var searchingState by remember {
+        mutableStateOf("")
     }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -224,11 +261,46 @@ fun CurrencyFlagAmountShortCode(
 
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false },
+                onDismissRequest = {
+                    expanded = false
+                    currencyList = favoriteCurrencyList
+                },
+                modifier = Modifier
+                    .height(400.dp)
+                    .width(130.dp)
+                    .background(color = MaterialTheme.colorScheme.tertiaryContainer)
 
-                ) {
+            ) {
+                DropdownMenuItem(
+                    text = {
+                        TextField(
+                            value = searchingState,
+                            onValueChange = { searchingState = it },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.Search,
+                                    null,
+                                    tint = MaterialTheme.colorScheme.outline
+                                )
+                            },
+                            modifier = Modifier
+                                .heightIn(24.dp)
+                                .widthIn(130.dp),
+                            singleLine = true,
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                disabledIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            )
+                        )
+                    },
 
-                favoriteCurrencyList.forEach { currency ->
+                    onClick = { currencyList = allCurrencies },
+                )
+                HorizontalDivider()
+
+
+                currencyList.forEach { currency ->
                     DropdownMenuItem(
                         text = { Text(text = currency.shortCode) },
                         onClick = {
@@ -238,20 +310,15 @@ fun CurrencyFlagAmountShortCode(
                         leadingIcon = {
                             CurrencyFlag(flagId = currency.flag, 24)
                         },
-                        modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
                     )
                 }
 
-                HorizontalDivider()
-                DropdownMenuItem(
-                    text = { Text(text = stringResource(id = R.string.all_currencies)) },
-                    onClick = { /* Handle send feedback! */ })
+
             }
         }
         LaunchedEffect(expanded) {
-            if (expanded) {
-                // Scroll to show the bottom menu items.
-                scrollState.scrollTo(scrollState.maxValue)
+            if (!expanded) {
+                currencyList = favoriteCurrencyList
             }
         }
     }

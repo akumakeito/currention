@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.akumakeito.currention.CurrencyViewModel
-import ru.akumakeito.currention.PairCurrencyViewModel
+import ru.akumakeito.currention.viewmodel.CurrencyViewModel
+import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.navigation.AppNavGraph
 import ru.akumakeito.currention.navigation.NavigationItem

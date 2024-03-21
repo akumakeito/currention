@@ -1,4 +1,4 @@
-package ru.akumakeito.currention
+package ru.akumakeito.currention.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,7 +41,10 @@ class PairCurrencyViewModel @Inject constructor(
     private val _isEditing = MutableStateFlow(false)
     val isEditing = _isEditing.asStateFlow()
 
-    private val _favoriteCurrencies = currencyRepository.fiatCurrencies.map { it.filter { it.isPopular } } //TODO заменить на is Favorite
+    private val _fiatCurrencies = currencyRepository.fiatCurrencies
+    val fiatCurrencies = _fiatCurrencies
+
+    private val _favoriteCurrencies = _fiatCurrencies.map { it.filter { it.isPopular } } //TODO заменить на is Favorite
     val favoriteCurrencies = _favoriteCurrencies
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
         val newAddedPair = pairCurrencyRepository.addNewCurrencyPair(newPair)

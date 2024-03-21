@@ -1,4 +1,4 @@
-package ru.akumakeito.currention
+package ru.akumakeito.currention.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.model.SearchState
 import ru.akumakeito.currention.repository.CurrencyRepository
