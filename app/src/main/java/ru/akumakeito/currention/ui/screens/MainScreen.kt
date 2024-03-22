@@ -1,10 +1,13 @@
 package ru.akumakeito.currention.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,16 +24,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.akumakeito.currention.viewmodel.CurrencyViewModel
-import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.navigation.AppNavGraph
 import ru.akumakeito.currention.navigation.NavigationItem
 import ru.akumakeito.currention.navigation.Screen
 import ru.akumakeito.currention.navigation.rememberNavigationState
+import ru.akumakeito.currention.viewmodel.CurrencyViewModel
+import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,36 +104,54 @@ fun MainScreen(
         },
 
         bottomBar = {
-            NavigationBar {
+
+            Column {
+
+                if (isEditing) {
+                    Button(
+                        onClick = { pairCurrencyViewModel.updatePair() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.done),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                NavigationBar {
 
 
-                val navItems = listOf(
-                    NavigationItem.CurrencyRates,
-                    NavigationItem.Convert,
-                    NavigationItem.Settings
-                )
-
-                navItems.forEach { item ->
-                    val selected = navBackStackEntry?.destination?.route == item.screen.route
-
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            if (!selected) {
-                                navigationState.navigateTo(item.screen.route)
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = item.iconResId),
-                                contentDescription = item.titleResId.toString()
-                            )
-                        },
-                        label = {
-                            Text(text = stringResource(id = item.titleResId))
-                        }
-
+                    val navItems = listOf(
+                        NavigationItem.CurrencyRates,
+                        NavigationItem.Convert,
+                        NavigationItem.Settings
                     )
+
+                    navItems.forEach { item ->
+                        val selected = navBackStackEntry?.destination?.route == item.screen.route
+
+                        NavigationBarItem(
+                            selected = selected,
+                            onClick = {
+                                if (!selected) {
+                                    navigationState.navigateTo(item.screen.route)
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = item.iconResId),
+                                    contentDescription = item.titleResId.toString()
+                                )
+                            },
+                            label = {
+                                Text(text = stringResource(id = item.titleResId))
+                            }
+
+                        )
+                    }
                 }
             }
         }
