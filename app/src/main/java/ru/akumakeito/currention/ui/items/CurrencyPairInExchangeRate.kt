@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.items
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -34,18 +35,19 @@ import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CurrencyPairInExchangeRate(
     pairCurrency: PairCurrency,
     onEditStateChange: () -> Boolean,
-    favoriteCurrencyList: List<FiatCurrency>,
-    allCurrencies: List<FiatCurrency>,
+    currencyList: List<FiatCurrency>,
     editingPair: PairCurrency,
     onCurrencyFromDropDownClickListener: (FiatCurrency) -> Unit,
     onCurrencyToDropDownClickListener: (FiatCurrency) -> Unit,
     onEditPairClickListener: () -> Unit,
     onDeletePairClickListener: () -> Unit,
     onSearchTextChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
 //    searchingString: String
 ) {
 
@@ -73,7 +75,11 @@ fun CurrencyPairInExchangeRate(
     }
 
     var currencyListState by remember {
-        mutableStateOf(favoriteCurrencyList)
+        mutableStateOf(currencyList)
+    }
+
+    LaunchedEffect(key1 = currencyList) {
+        currencyListState = currencyList
     }
 //    var searchingState by remember {
 //        mutableStateOf(searchingString)
@@ -93,7 +99,8 @@ fun CurrencyPairInExchangeRate(
                 detectTapGestures(onPress = {
                     expanded = true
                 })
-            },
+            }
+        ,
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {

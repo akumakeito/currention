@@ -65,10 +65,8 @@ fun CurrencyFlagAmountShortCode(
         mutableStateOf(currencyList)
     }
 
-    LaunchedEffect(expanded) {
-        if (!expanded) {
+    LaunchedEffect(currencyList) {
             currencyListState = currencyList
-        }
     }
 
 //    var searchingText by rememberSaveable {
@@ -117,15 +115,18 @@ fun CurrencyFlagAmountShortCode(
             }
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false },
+                onDismissRequest = { expanded = false
+                                   onSearchTextChanged("")},
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
                     .imePadding()
+
 
             ) {
                 DropDownCurrencyList(
                     currencyList = currencyList,
                     onDropDownCurrencyClickListener = onCurrencyItemDropDownClickListener,
-                    onSearchTextChanged = onSearchTextChanged
+                    onSearchTextChanged = onSearchTextChanged,
+                    onExpandedChange = { expanded = it }
                 )
             }
 

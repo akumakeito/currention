@@ -52,17 +52,14 @@ class PairCurrencyViewModel @Inject constructor(
     private val _fiatCurrencies = currencyRepository.fiatCurrencies
     @OptIn(ExperimentalCoroutinesApi::class)
     val fiatCurrencies = _searchingState.flatMapLatest { state ->
-
         _fiatCurrencies.map { currencies ->
             if (state.searchText.isBlank()) {
-                currencies
+                currencies.filter { it.isPopular }  //TODO заменить на is Favorite
             } else {
-
-                    currencies.filter { it.doesMatchSearchQuery(state.searchText) }
+               currencies.filter { it.doesMatchSearchQuery(state.searchText) }
 
             }
         }
-
 
     }.stateIn(
         viewModelScope,
@@ -70,8 +67,7 @@ class PairCurrencyViewModel @Inject constructor(
         initialValue = emptyList(),
     )
 
-    private val _favoriteCurrencies = _fiatCurrencies.map { it.filter { it.isPopular } } //TODO заменить на is Favorite
-    val favoriteCurrencies = _favoriteCurrencies
+
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
         val newAddedPair = pairCurrencyRepository.addNewCurrencyPair(newPair)
         _editPairCurrency.update { newAddedPair }

@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
@@ -26,11 +28,9 @@ fun CurrencyExchangeRatesScreen(
     val currencyPairs by pairViewModel.currencyPairs.collectAsState()
     val isEditing by pairViewModel.isEditing.collectAsState()
     val editingPair by pairViewModel.editPairCurrency.collectAsState()
-    val favoriteCurrencies by pairViewModel.favoriteCurrencies.collectAsState(emptyList())
-    val allCurrencies by pairViewModel.fiatCurrencies.collectAsState(emptyList())
+    val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())
 //    val searchingState by pairViewModel.searchingState.collectAsState()
     val state = rememberLazyListState()
-
 
 
 
@@ -49,8 +49,7 @@ fun CurrencyExchangeRatesScreen(
                     pairCurrency = item,
                     onEditStateChange = { editingPair.id == item.id },
                     onDeletePairClickListener = { pairViewModel.deletePairById(item.id) },
-                    favoriteCurrencyList = favoriteCurrencies,
-                    allCurrencies = allCurrencies,
+                    currencyList = currencyList,
                     onCurrencyFromDropDownClickListener = {selectedCurrency ->
                         pairViewModel.updatePairCurrencyFrom(selectedCurrency)
                     },
