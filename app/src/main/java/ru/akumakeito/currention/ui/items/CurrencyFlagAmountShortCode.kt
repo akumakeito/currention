@@ -1,0 +1,136 @@
+package ru.akumakeito.currention.ui.items
+
+import SpacerWidth
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import ru.akumakeito.currention.domain.FiatCurrency
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun CurrencyFlagAmountShortCode(
+    fiatCurrency: FiatCurrency,
+    amount: String,
+    isEditing: Boolean,
+    onCurrencyItemDropDownClickListener: (FiatCurrency) -> Unit,
+    currencyList: List<FiatCurrency>,
+    onSearchTextChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
+//    searchingString: String
+) {
+
+    var expanded by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+
+    val scope = rememberCoroutineScope()
+
+
+    var isEditState by remember {
+        mutableStateOf(isEditing)
+    }
+
+    LaunchedEffect(key1 = isEditing) {
+        isEditState = isEditing
+    }
+
+    var currency by remember {
+        mutableStateOf(fiatCurrency)
+    }
+
+    LaunchedEffect(fiatCurrency) {
+        currency = fiatCurrency
+    }
+
+    var currencyListState by remember {
+        mutableStateOf(currencyList)
+    }
+
+    LaunchedEffect(expanded) {
+        if (!expanded) {
+            currencyListState = currencyList
+        }
+    }
+
+//    var searchingText by rememberSaveable {
+//        mutableStateOf("")
+//    }
+//
+//    var searchingState by rememberSaveable {
+//        mutableStateOf("")
+//    }
+
+//    LaunchedEffect(searchingString) {
+//        searchingState = searchingString
+//        currencyList = allCurrencies
+//    }
+
+
+
+
+
+
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        FlagItem(flagId = currency.flag)
+
+        SpacerWidth(width = 8)
+        if (isEditState) {
+
+            Text(
+                text = currency.shortCode,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.outline
+            )
+        } else {
+            Text(
+                text = "$amount ${currency.shortCode}",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.outline
+            )
+        }
+
+        if (isEditState) {
+            IconButton(onClick = {
+                expanded = true
+            }) {
+                Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.outline)
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
+                    .imePadding()
+
+            ) {
+                DropDownCurrencyList(
+                    currencyList = currencyList,
+                    onDropDownCurrencyClickListener = onCurrencyItemDropDownClickListener,
+                    onSearchTextChanged = onSearchTextChanged
+                )
+            }
+
+
+
+        }
+    }
+}

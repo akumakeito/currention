@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import ru.akumakeito.currention.R
 
 @Composable
-fun CurrencyFlag(flagId : Int, size : Int = 40) {
+fun FlagItem(flagId : Int, size : Int = 40) {
     Image(
         painter = painterResource(id = flagId),
         contentDescription = stringResource(R.string.flag),

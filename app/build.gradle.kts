@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 import java.util.Properties
 
 plugins {
@@ -82,6 +81,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

@@ -1,13 +1,9 @@
 package ru.akumakeito.currention.ui.items
 
 import SpacerWidth
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -20,10 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 
 @Composable
@@ -44,7 +37,7 @@ fun CurrencyCardToChooseFavorite(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            CurrencyFlag(flagId = currency.flag)
+            FlagItem(flagId = currency.flag)
             SpacerWidth(width = 16)
             Text(
                 text = "${currency.name} (${currency.shortCode})",
