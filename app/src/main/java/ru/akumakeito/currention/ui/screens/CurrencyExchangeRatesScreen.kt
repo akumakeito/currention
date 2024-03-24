@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.launch
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 
@@ -21,7 +25,8 @@ import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 @Composable
 fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
-    pairViewModel: PairCurrencyViewModel
+    pairViewModel: PairCurrencyViewModel,
+    modifier: Modifier = Modifier
 ) {
 
 
@@ -29,8 +34,10 @@ fun CurrencyExchangeRatesScreen(
     val isEditing by pairViewModel.isEditing.collectAsState()
     val editingPair by pairViewModel.editPairCurrency.collectAsState()
     val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())
-//    val searchingState by pairViewModel.searchingState.collectAsState()
     val state = rememberLazyListState()
+
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
 
 
@@ -41,26 +48,39 @@ fun CurrencyExchangeRatesScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         LazyColumn(
-            state = state
+            state = state,
+//            modifier = modifier
+//                .bringIntoViewRequester(bringIntoViewRequester)
+//                .onFocusEvent { focusState ->
+//                    if (focusState.isFocused) {
+//                        coroutineScope.launch {
+//                            bringIntoViewRequester.bringIntoView()
+//                        }
+//                    }
+//                }
         ) {
-            items(currencyPairs, key = {it.id}) { item ->
+            itemsIndexed(currencyPairs) { index, item ->
 
                 CurrencyPairInExchangeRate(
                     pairCurrency = item,
-                    onEditStateChange = { editingPair.id == item.id },
+                    onEditStateChange = {
+                        coroutineScope.launch {
+                            state.animateScrollToItem(index)
+                        }
+                        editingPair.id == item.id
+                    },
                     onDeletePairClickListener = { pairViewModel.deletePairById(item.id) },
                     currencyList = currencyList,
-                    onCurrencyFromDropDownClickListener = {selectedCurrency ->
+                    onCurrencyFromDropDownClickListener = { selectedCurrency ->
                         pairViewModel.updatePairCurrencyFrom(selectedCurrency)
                     },
-                    onCurrencyToDropDownClickListener = {selectedCurrency ->
+                    onCurrencyToDropDownClickListener = { selectedCurrency ->
                         pairViewModel.updatePairCurrencyTo(selectedCurrency)
                     },
                     onEditPairClickListener = { pairViewModel.editPair(item) },
                     editingPair = editingPair,
-                    onSearchTextChanged = {pairViewModel.onSearchTextChange(it)},
-//                    searchingString = searchingState.searchText
-                    )
+                    onSearchTextChanged = { pairViewModel.onSearchTextChange(it) },
+                )
             }
 
         }

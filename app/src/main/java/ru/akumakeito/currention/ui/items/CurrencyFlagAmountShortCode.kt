@@ -36,7 +36,6 @@ fun CurrencyFlagAmountShortCode(
     currencyList: List<FiatCurrency>,
     onSearchTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
-//    searchingString: String
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -69,24 +68,6 @@ fun CurrencyFlagAmountShortCode(
             currencyListState = currencyList
     }
 
-//    var searchingText by rememberSaveable {
-//        mutableStateOf("")
-//    }
-//
-//    var searchingState by rememberSaveable {
-//        mutableStateOf("")
-//    }
-
-//    LaunchedEffect(searchingString) {
-//        searchingState = searchingString
-//        currencyList = allCurrencies
-//    }
-
-
-
-
-
-
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         FlagItem(flagId = currency.flag)
@@ -117,7 +98,7 @@ fun CurrencyFlagAmountShortCode(
                 expanded = expanded,
                 onDismissRequest = { expanded = false
                                    onSearchTextChanged("")},
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
+                modifier = modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
                     .imePadding()
 
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -48,7 +49,6 @@ fun CurrencyPairInExchangeRate(
     onDeletePairClickListener: () -> Unit,
     onSearchTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
-//    searchingString: String
 ) {
 
 
@@ -81,15 +81,6 @@ fun CurrencyPairInExchangeRate(
     LaunchedEffect(key1 = currencyList) {
         currencyListState = currencyList
     }
-//    var searchingState by remember {
-//        mutableStateOf(searchingString)
-//    }
-//
-//    LaunchedEffect(searchingString) {
-//        searchingState = searchingString
-//        currencyList = allCurrencies
-//    }
-
 
     Row(
         modifier = Modifier
@@ -112,7 +103,7 @@ fun CurrencyPairInExchangeRate(
             currencyList = currencyListState,
             onCurrencyItemDropDownClickListener = onCurrencyFromDropDownClickListener,
             onSearchTextChanged = { onSearchTextChanged(it) },
-//            searchingString = searchingState
+            modifier = modifier.imePadding()
         )
 
         Image(
@@ -131,7 +122,7 @@ fun CurrencyPairInExchangeRate(
             currencyList = currencyListState,
             onCurrencyItemDropDownClickListener = onCurrencyToDropDownClickListener,
             onSearchTextChanged = { onSearchTextChanged(it) },
-//            searchingString = searchingState
+            modifier = modifier.imePadding()
         )
 
 
