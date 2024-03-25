@@ -2,26 +2,51 @@ package ru.akumakeito.currention.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import ru.akumakeito.currention.R
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 
+@Composable
+fun KeyboardAware(
+    content: @Composable () -> Unit
+) {
+    Box(modifier = Modifier.imePadding()) {
+        content()
+    }
+}
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
@@ -36,8 +61,9 @@ fun CurrencyExchangeRatesScreen(
     val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())
     val state = rememberLazyListState()
 
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
+
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
 
 
 
@@ -49,15 +75,7 @@ fun CurrencyExchangeRatesScreen(
     ) {
         LazyColumn(
             state = state,
-//            modifier = modifier
-//                .bringIntoViewRequester(bringIntoViewRequester)
-//                .onFocusEvent { focusState ->
-//                    if (focusState.isFocused) {
-//                        coroutineScope.launch {
-//                            bringIntoViewRequester.bringIntoView()
-//                        }
-//                    }
-//                }
+
         ) {
             itemsIndexed(currencyPairs) { index, item ->
 
@@ -82,6 +100,39 @@ fun CurrencyExchangeRatesScreen(
                     onSearchTextChanged = { pairViewModel.onSearchTextChange(it) },
                 )
             }
+
+        }
+
+        if (isEditing) {
+            Button(
+                onClick = { pairViewModel.updatePair() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(16.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.done),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        } else {
+                FloatingActionButton(
+                    modifier = Modifier.navigationBarsPadding()
+                        .padding(16.dp)
+                        .align(Alignment.End),
+                    onClick = {
+                        pairViewModel.addNewCurrencyPair()
+                    },
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = stringResource(R.string.add_new_pair)
+                    )
+
+                }
 
         }
 

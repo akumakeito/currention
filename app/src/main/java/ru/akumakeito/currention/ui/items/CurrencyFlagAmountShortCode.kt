@@ -89,7 +89,8 @@ fun CurrencyFlagAmountShortCode(
         }
 
         if (isEditState) {
-            IconButton(onClick = {
+            IconButton(modifier = Modifier.imePadding(),
+                onClick = {
                 expanded = true
             }) {
                 Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.outline)
