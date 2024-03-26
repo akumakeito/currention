@@ -112,8 +112,6 @@ fun CurrencyFlagAmountShortCode(
                 )
             }
 
-
-
         }
     }
 }
