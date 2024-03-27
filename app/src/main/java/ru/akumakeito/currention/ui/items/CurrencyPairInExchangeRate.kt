@@ -142,10 +142,6 @@ fun CurrencyPairInExchangeRate(
             }
         }
 
-
-
-
-
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = { expanded = false },
@@ -188,6 +184,8 @@ fun CurrencyPairInExchangeRate(
             })
 
     }
+
+
 
 }
 
