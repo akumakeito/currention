@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
@@ -25,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,11 +60,6 @@ fun CurrencyExchangeRatesScreen(
     val state = rememberLazyListState()
 
     val coroutineScope = rememberCoroutineScope()
-
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
-
-
-
     Column(
         modifier = Modifier
             .padding(paddingValues)
@@ -74,8 +67,7 @@ fun CurrencyExchangeRatesScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         LazyColumn(
-            state = state,
-
+            state = state
         ) {
             itemsIndexed(currencyPairs) { index, item ->
 
