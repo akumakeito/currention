@@ -1,13 +1,20 @@
 package ru.akumakeito.currention.ui.screens
 
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,12 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -41,7 +50,7 @@ import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 @Composable
 fun MainScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel(),
-    pairCurrencyViewModel: PairCurrencyViewModel = hiltViewModel()
+    pairViewModel: PairCurrencyViewModel = hiltViewModel()
 ) {
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
@@ -51,6 +60,8 @@ fun MainScreen(
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
+    val isEditing by pairViewModel.isEditing.collectAsState()
+
 
     LaunchedEffect(key1 = keyboardHeight) {
         coroutineScope.launch {
@@ -61,6 +72,28 @@ fun MainScreen(
 
 
     Scaffold(
+        floatingActionButton = {
+            if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
+                if(!isEditing) {
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .padding(16.dp),
+                        onClick = {
+                            pairViewModel.addNewCurrencyPair()
+                        },
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.add_new_pair)
+                        )
+
+                    }
+
+                }
+            }
+        },
 
         topBar = {
             TopAppBar(
@@ -93,6 +126,22 @@ fun MainScreen(
         },
 
         bottomBar = {
+            Column {
+
+            if (isEditing) {
+                Button(
+                    onClick = { pairViewModel.updatePair() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .padding(16.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.done),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
 
                 NavigationBar {
 
@@ -128,13 +177,14 @@ fun MainScreen(
                 }
             }
         }
+        }
     ) { paddingValues ->
 
         AppNavGraph(
             navHostController = navigationState.navHostController,
             currencyRatesContent = {
                 KeyboardAware {
-                    CurrencyExchangeRatesScreen(paddingValues = paddingValues, pairViewModel = pairCurrencyViewModel, modifier = Modifier.verticalScroll(scrollState)
+                    CurrencyExchangeRatesScreen(paddingValues = paddingValues, pairViewModel = pairViewModel, modifier = Modifier.verticalScroll(scrollState)
 
                     )
                 }

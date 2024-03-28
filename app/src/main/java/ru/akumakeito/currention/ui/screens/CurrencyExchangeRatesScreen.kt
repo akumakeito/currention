@@ -54,7 +54,6 @@ fun CurrencyExchangeRatesScreen(
 
 
     val currencyPairs by pairViewModel.currencyPairs.collectAsState()
-    val isEditing by pairViewModel.isEditing.collectAsState()
     val editingPair by pairViewModel.editPairCurrency.collectAsState()
     val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())
     val state = rememberLazyListState()
@@ -95,38 +94,7 @@ fun CurrencyExchangeRatesScreen(
 
         }
 
-        if (isEditing) {
-            Button(
-                onClick = { pairViewModel.updatePair() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .padding(16.dp),
-            ) {
-                Text(
-                    text = stringResource(R.string.done),
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        } else {
-                FloatingActionButton(
-                    modifier = Modifier.navigationBarsPadding()
-                        .padding(16.dp)
-                        .align(Alignment.End),
-                    onClick = {
-                        pairViewModel.addNewCurrencyPair()
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
 
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add_new_pair)
-                    )
-
-                }
-
-        }
 
 
     }
