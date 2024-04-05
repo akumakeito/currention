@@ -122,4 +122,12 @@ class PairCurrencyViewModel @Inject constructor(
             pairCurrencyRepository.getPairRates(currencyFromShortCode, currencyToShortCode, amount)
         }
     }
+
+    fun onSwipeToDelete(pairCurrency: PairCurrency) {
+        deletePairById(pairCurrency.id)
+    }
+
+    fun onSwipeToEdit(pairCurrency: PairCurrency) {
+        editPair(pairCurrency)
+    }
 }

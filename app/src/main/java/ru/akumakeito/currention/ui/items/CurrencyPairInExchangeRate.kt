@@ -2,23 +2,12 @@ package ru.akumakeito.currention.ui.items
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,8 +34,6 @@ fun CurrencyPairInExchangeRate(
     editingPair: PairCurrency,
     onCurrencyFromDropDownClickListener: (FiatCurrency) -> Unit,
     onCurrencyToDropDownClickListener: (FiatCurrency) -> Unit,
-    onEditPairClickListener: () -> Unit,
-    onDeletePairClickListener: () -> Unit,
     onSearchTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -90,8 +77,7 @@ fun CurrencyPairInExchangeRate(
                 detectTapGestures(onPress = {
                     expanded = true
                 })
-            }
-        ,
+            },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -126,67 +112,58 @@ fun CurrencyPairInExchangeRate(
         )
 
 
-            Box {
-                if (isEditState) {
 
-                    IconButton(onClick = { onDeletePairClickListener() }) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.outline
-                        )
-                    }
-                } else {
-                    CurrencyRate(rate = pairCurrency.rateCurrency)
-                }
-            }
+        if (!isEditState) {
+
+            CurrencyRate(rate = pairCurrency.rateCurrency)
         }
-
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false },
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
-    ) {
-
-        DropdownMenuItem(
-            text = {
-                Text(
-                    text = stringResource(R.string.edit)
-                )
-            },
-            onClick = {
-                onEditPairClickListener()
-                expanded = false
-            },
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Create,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.outline
-                )
-            })
-        DropdownMenuItem(
-            text = {
-                Text(
-                    text = stringResource(R.string.delete)
-                )
-            },
-            onClick = {
-                onDeletePairClickListener()
-                expanded = false
-            },
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.outline
-                )
-            })
-
     }
-
-
-
 }
+
+//    DropdownMenu(
+//        expanded = expanded,
+//        onDismissRequest = { expanded = false },
+//        modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer)
+//    ) {
+//
+//        DropdownMenuItem(
+//            text = {
+//                Text(
+//                    text = stringResource(R.string.edit)
+//                )
+//            },
+//            onClick = {
+//                onEditPairClickListener()
+//                expanded = false
+//            },
+//            leadingIcon = {
+//                Icon(
+//                    Icons.Default.Create,
+//                    contentDescription = null,
+//                    tint = MaterialTheme.colorScheme.outline
+//                )
+//            })
+//        DropdownMenuItem(
+//            text = {
+//                Text(
+//                    text = stringResource(R.string.delete)
+//                )
+//            },
+//            onClick = {
+//                onDeletePairClickListener()
+//                expanded = false
+//            },
+//            leadingIcon = {
+//                Icon(
+//                    Icons.Default.Delete,
+//                    contentDescription = null,
+//                    tint = MaterialTheme.colorScheme.outline
+//                )
+//            })
+//
+//    }
+
+
+
 
 

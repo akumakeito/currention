@@ -6,18 +6,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,9 +26,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import me.saket.swipe.SwipeAction
+import me.saket.swipe.SwipeableActionsBox
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
@@ -69,32 +68,78 @@ fun CurrencyExchangeRatesScreen(
             state = state
         ) {
             itemsIndexed(currencyPairs) { index, item ->
-
-                CurrencyPairInExchangeRate(
-                    pairCurrency = item,
-                    onEditStateChange = {
-                        coroutineScope.launch {
-                            state.animateScrollToItem(index)
+                val delete = SwipeAction(
+                    onSwipe = { pairViewModel.onSwipeToDelete(item) },
+                    icon = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = stringResource(id = R.string.delete),
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                            Text(
+                                text = stringResource(id = R.string.delete),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
-                        editingPair.id == item.id
+
                     },
-                    onDeletePairClickListener = { pairViewModel.deletePairById(item.id) },
-                    currencyList = currencyList,
-                    onCurrencyFromDropDownClickListener = { selectedCurrency ->
-                        pairViewModel.updatePairCurrencyFrom(selectedCurrency)
-                    },
-                    onCurrencyToDropDownClickListener = { selectedCurrency ->
-                        pairViewModel.updatePairCurrencyTo(selectedCurrency)
-                    },
-                    onEditPairClickListener = { pairViewModel.editPair(item) },
-                    editingPair = editingPair,
-                    onSearchTextChanged = { pairViewModel.onSearchTextChange(it) },
+                    background = MaterialTheme.colorScheme.error.copy(alpha = 0.5f),
+                    isUndo = true
                 )
+
+                val edit = SwipeAction(
+                    onSwipe = { pairViewModel.onSwipeToEdit(item) },
+                    icon = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                stringResource(id = R.string.edit),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            Icon(
+                                Icons.Default.Create,
+                                contentDescription = stringResource(id = R.string.edit),
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+
+                    },
+                    background = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    isUndo = true
+                )
+
+                SwipeableActionsBox(
+                    swipeThreshold = 100.dp,
+                    startActions = listOf(edit),
+                    endActions = listOf(delete),
+                    backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.outline
+                ) {
+                    CurrencyPairInExchangeRate(
+                        pairCurrency = item,
+                        onEditStateChange = {
+                            coroutineScope.launch {
+                                state.animateScrollToItem(index)
+                            }
+                            editingPair.id == item.id
+                        },
+                        currencyList = currencyList,
+                        onCurrencyFromDropDownClickListener = { selectedCurrency ->
+                            pairViewModel.updatePairCurrencyFrom(selectedCurrency)
+                        },
+                        onCurrencyToDropDownClickListener = { selectedCurrency ->
+                            pairViewModel.updatePairCurrencyTo(selectedCurrency)
+                        },
+                        editingPair = editingPair,
+                        onSearchTextChanged = { pairViewModel.onSearchTextChange(it) },
+                    )
+                }
+
+
             }
 
         }
-
-
 
 
     }
