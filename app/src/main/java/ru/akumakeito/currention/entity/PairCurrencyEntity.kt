@@ -17,7 +17,7 @@ data class PairCurrencyEntity(
     val toCurrency : FiatCurrency,
     val toCurrencyLastRate : Double,
     val toCurrencyNewRate : Double,
-    val rateCurrency : Float
+    val rateCurrency : Float?
 ) {
     fun toDto() = PairCurrency(
         id,

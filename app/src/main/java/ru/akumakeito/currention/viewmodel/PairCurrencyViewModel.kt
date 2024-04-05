@@ -70,7 +70,11 @@ class PairCurrencyViewModel @Inject constructor(
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
         val newAddedPair = pairCurrencyRepository.addNewCurrencyPair(newPair)
-        _editPairCurrency.update { newAddedPair }
+        editPair(newAddedPair)
+    }
+
+    private fun editPair(pairCurrency: PairCurrency) {
+        _editPairCurrency.update { pairCurrency }
         _isEditing.update { true }
     }
 
@@ -99,16 +103,13 @@ class PairCurrencyViewModel @Inject constructor(
         }
     }
 
-    fun editPair(pairCurrency: PairCurrency) {
-        _editPairCurrency.update { pairCurrency }
-        _isEditing.update { true }
-    }
+
 
     fun getPairById(id : Int) = viewModelScope.launch {
         pairCurrencyRepository.getPairById(id)
     }
 
-    fun deletePairById(id : Int) = viewModelScope.launch {
+    private fun deletePairById(id : Int) = viewModelScope.launch {
         pairCurrencyRepository.deletePairById(id)
         _isEditing.update { false }
     }

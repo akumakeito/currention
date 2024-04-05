@@ -115,7 +115,7 @@ fun CurrencyPairInExchangeRate(
 
         if (!isEditState) {
 
-            CurrencyRate(rate = pairCurrency.rateCurrency)
+            CurrencyRate(rate = pairCurrency.rateCurrency ?: 0.0f)
         }
     }
 }

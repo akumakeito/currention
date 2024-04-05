@@ -17,28 +17,34 @@ import javax.inject.Inject
 class PairCurrencyRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val pairCurrencyDao: CurrencyPairDao,
-    ) : PairCurrencyRepository {
-    private val scope : CoroutineScope = CoroutineScope(Dispatchers.IO)
+) : PairCurrencyRepository {
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     override val currencyPairs: StateFlow<List<PairCurrency>> = pairCurrencyDao.getAllPairs().map {
         it.toDto()
     }.stateIn(scope, SharingStarted.Lazily, emptyList())
 
     override suspend fun updateCurrencyPair(pairCurrency: PairCurrency) {
-        pairCurrencyDao.updateCurrencyPair(PairCurrencyEntity.fromDto(pairCurrency))
+
+        val newRates = getPairRates(pairCurrency.fromCurrency, pairCurrency.toCurrency, 1)
+        val updatedPair = pairCurrency.copy(
+            toCurrencyLastRate = pairCurrency.toCurrencyNewRate,
+            toCurrencyNewRate = newRates.value,
+            rateCurrency = pairCurrency.getRateInPerc()
+        )
+        pairCurrencyDao.updateCurrencyPair(PairCurrencyEntity.fromDto(updatedPair))
     }
 
     override suspend fun getPairRates(
         currencyFromShortCode: FiatCurrency,
         currencyToShortCode: FiatCurrency,
         amount: Int
-    ) {
-        apiService.getPairRates(
-            currencyFromShortCode.shortCode,
-            currencyToShortCode.shortCode,
-            amount
-        )
-    }
+    ) = apiService.getPairRates(
+        currencyFromShortCode.shortCode,
+        currencyToShortCode.shortCode,
+        amount
+    )
+
 
     override suspend fun getPairById(id: Int): PairCurrency {
         val pair = pairCurrencyDao.getPairById(id)

@@ -6,8 +6,8 @@ data class PairCurrency(
     val toCurrency : FiatCurrency,
     val toCurrencyLastRate : Double,
     val toCurrencyNewRate : Double,
-    val rateCurrency : Float
+    val rateCurrency : Float?
 ) {
-    fun getRateInPerc() : Double = (toCurrencyNewRate - toCurrencyLastRate) / toCurrencyLastRate * 100
+    fun getRateInPerc() : Float = ((toCurrencyNewRate - toCurrencyLastRate) / toCurrencyLastRate * 100).toFloat()
 
 }
