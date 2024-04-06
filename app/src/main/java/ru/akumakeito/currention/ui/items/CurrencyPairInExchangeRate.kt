@@ -103,7 +103,7 @@ fun CurrencyPairInExchangeRate(
 
         CurrencyFlagAmountShortCode(
             fiatCurrency = currencyPair.toCurrency,
-            amount = "${pairCurrency.toCurrencyNewRate}",
+            amount = String.format("%.2f",pairCurrency.toCurrencyNewRate),
             isEditing = isEditState,
             currencyList = currencyListState,
             onCurrencyItemDropDownClickListener = onCurrencyToDropDownClickListener,
