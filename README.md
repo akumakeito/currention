@@ -1,4 +1,9 @@
 # Приложение по конвертации валют
 Проект находтся в разработке. 
 
-Использую Jetpack Compose
+- Jetpack Compose
+- Retrofit
+- Okhttp
+- Room
+- Dagger Hilt
+
