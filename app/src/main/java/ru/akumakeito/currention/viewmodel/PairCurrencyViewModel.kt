@@ -91,6 +91,11 @@ class PairCurrencyViewModel @Inject constructor(
         _isEditing.update { false }
     }
 
+    fun updatePairRates(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
+        pairCurrencyRepository.updateCurrencyPair(pairCurrency)
+
+    }
+
     fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
         _editPairCurrency.update {
             it.copy(fromCurrency = fromCurrency)
