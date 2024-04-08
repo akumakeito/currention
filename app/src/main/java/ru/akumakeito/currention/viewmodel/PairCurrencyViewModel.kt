@@ -67,6 +67,10 @@ class PairCurrencyViewModel @Inject constructor(
         initialValue = emptyList(),
     )
 
+    init {
+        updateAllPairsRates()
+    }
+
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
         val newAddedPair = pairCurrencyRepository.addNewCurrencyPair(newPair)
@@ -93,8 +97,15 @@ class PairCurrencyViewModel @Inject constructor(
 
     fun updatePairRates(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
         pairCurrencyRepository.updateCurrencyPair(pairCurrency)
-
     }
+
+    fun updateAllPairsRates() = viewModelScope.launch(Dispatchers.IO) {
+        _currencyPairs.value.forEach {
+            updatePairRates(it)
+        }
+    }
+
+
 
     fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
         _editPairCurrency.update {

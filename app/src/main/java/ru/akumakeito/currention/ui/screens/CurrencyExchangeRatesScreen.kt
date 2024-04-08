@@ -51,7 +51,6 @@ fun CurrencyExchangeRatesScreen(
     modifier: Modifier = Modifier
 ) {
 
-
     val currencyPairs by pairViewModel.currencyPairs.collectAsState()
     val editingPair by pairViewModel.editPairCurrency.collectAsState()
     val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())

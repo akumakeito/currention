@@ -111,7 +111,7 @@ fun MainScreen(
                 },
                 actions = {
                     if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = { pairViewModel.updateAllPairsRates()}) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_update_rates),
                                 contentDescription = stringResource(
