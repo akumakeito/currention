@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.repository
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -10,8 +11,10 @@ import ru.akumakeito.currention.api.ApiService
 import ru.akumakeito.currention.dao.CurrencyPairDao
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.dto.ConvertFiatOnDateServerResponse
 import ru.akumakeito.currention.entity.PairCurrencyEntity
 import ru.akumakeito.currention.entity.toDto
+import java.time.LocalDate
 import javax.inject.Inject
 
 class PairCurrencyRepositoryImpl @Inject constructor(
@@ -26,24 +29,77 @@ class PairCurrencyRepositoryImpl @Inject constructor(
 
     override suspend fun updateCurrencyPair(pairCurrency: PairCurrency) {
 
+        var oldPair = getPairById(pairCurrency.id)
+
         val newRates = getPairRates(pairCurrency.fromCurrency, pairCurrency.toCurrency, 1)
-        val updatedPair = pairCurrency.copy(
-            toCurrencyLastRate = pairCurrency.toCurrencyNewRate,
-            toCurrencyNewRate = newRates.value,
-            rateCurrency = pairCurrency.getRateInPerc()
-        )
-        pairCurrencyDao.updateCurrencyPair(PairCurrencyEntity.fromDto(updatedPair))
+
+        if (isFromToCurrenciesSame(pairCurrency, oldPair)) {
+            oldPair = updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency)
+        }
+
+
+        var updatedPair = if (oldPair.toCurrencyLastRate == 0.0 || pairCurrency.toCurrencyLastRate == 0.0) {
+            val previousRate = getCurrencyRateOnPreviousDate(
+                pairCurrency.fromCurrency,
+                pairCurrency.toCurrency
+            ).rates[pairCurrency.toCurrency.shortCode]
+
+            Log.d("PairCurrencyRepositoryImpl", "previousRate: $previousRate")
+            pairCurrency.copy(
+                toCurrencyLastRate = previousRate ?: 0.1,
+                toCurrencyNewRate = newRates.value
+            )
+        } else if (newRates.value == pairCurrency.toCurrencyNewRate) {
+            pairCurrency
+        } else {
+            pairCurrency.copy(
+                toCurrencyLastRate = pairCurrency.toCurrencyNewRate,
+                toCurrencyNewRate = newRates.value
+            )
+        }
+
+        val updatedPairWithRate = updatedPair.copy(rateCurrency = updatedPair.getRateInPerc())
+        pairCurrencyDao.updateCurrencyPair(PairCurrencyEntity.fromDto(updatedPairWithRate))
+
     }
 
+    override suspend fun updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency: PairCurrency) : PairCurrency {
+        val updatedPair = pairCurrency.copy(
+            toCurrencyLastRate = 0.0
+        )
+        pairCurrencyDao.updateCurrencyPair(PairCurrencyEntity.fromDto(updatedPair))
+        return updatedPair
+    }
+
+
     override suspend fun getPairRates(
-        currencyFromShortCode: FiatCurrency,
-        currencyToShortCode: FiatCurrency,
+        currencyFrom: FiatCurrency,
+        currencyTo: FiatCurrency,
         amount: Int
     ) = apiService.getPairRates(
-        currencyFromShortCode.shortCode,
-        currencyToShortCode.shortCode,
+        currencyFrom.shortCode,
+        currencyTo.shortCode,
         amount
     )
+
+    override suspend fun isFromToCurrenciesSame(
+        pairCurrency: PairCurrency,
+        updatedPairCurrency: PairCurrency
+    ): Boolean  =updatedPairCurrency.fromCurrency.shortCode.lowercase() != pairCurrency.fromCurrency.shortCode.lowercase()
+            || updatedPairCurrency.toCurrency.shortCode.lowercase() != pairCurrency.toCurrency.shortCode.lowercase()
+
+
+    override suspend fun getCurrencyRateOnPreviousDate(
+        currencyFrom: FiatCurrency,
+        currencyTo: FiatCurrency
+    ): ConvertFiatOnDateServerResponse {
+        val requestDate = LocalDate.now().minusDays(1)
+        return apiService.getCurrencyRateOnDate(
+            currencyFrom.shortCode,
+            requestDate.toString(),
+            listOf(currencyTo.shortCode)
+        )
+    }
 
 
     override suspend fun getPairById(id: Int): PairCurrency {

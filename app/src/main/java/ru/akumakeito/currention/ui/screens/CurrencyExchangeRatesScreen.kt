@@ -110,7 +110,7 @@ fun CurrencyExchangeRatesScreen(
                 )
 
                 SwipeableActionsBox(
-                    swipeThreshold = 100.dp,
+                    swipeThreshold = 200.dp,
                     startActions = listOf(edit),
                     endActions = listOf(delete),
                     backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.outline
