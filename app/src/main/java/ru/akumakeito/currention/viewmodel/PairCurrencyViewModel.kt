@@ -15,9 +15,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.model.ErrorType
 import ru.akumakeito.currention.model.SearchState
+import ru.akumakeito.currention.model.StateModel
 import ru.akumakeito.currention.repository.CurrencyRepository
 import ru.akumakeito.currention.repository.PairCurrencyRepository
+import java.io.IOException
 import javax.inject.Inject
 
 private val newPair =
@@ -46,6 +49,9 @@ class PairCurrencyViewModel @Inject constructor(
     private val _isEditing = MutableStateFlow(false)
     val isEditing = _isEditing.asStateFlow()
 
+    private val _uiState = MutableStateFlow(StateModel())
+    val uiState = _uiState.asStateFlow()
+
     private val _searchingState = MutableStateFlow(SearchState())
     val searchingState = _searchingState.asStateFlow()
 
@@ -68,8 +74,24 @@ class PairCurrencyViewModel @Inject constructor(
     )
 
     init {
-        updateAllPairsRates()
-    }
+
+        try {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+            updateAllPairsRates()
+
+            _uiState.update {
+                StateModel()
+            }
+        } catch (networkException: IOException) {
+            _uiState.update {
+                it.copy(isError = ErrorType.NETWORK)
+            }
+        }
+
+
+           }
 
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
@@ -90,18 +112,35 @@ class PairCurrencyViewModel @Inject constructor(
 
 
     fun updatePair() = viewModelScope.launch(Dispatchers.IO) {
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
         pairCurrencyRepository.updateCurrencyPair(_editPairCurrency.value)
         _editPairCurrency.update { newPair }
         _isEditing.update { false }
+
+        _uiState.update {
+            it.copy(isLoading = false)
+        }
     }
 
     fun updatePairRates(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
+
         pairCurrencyRepository.updateCurrencyPair(pairCurrency)
+        _uiState.update {
+            it.copy(isLoading = false)
+        }
     }
 
     fun updateAllPairsRates() = viewModelScope.launch(Dispatchers.IO) {
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
         _currencyPairs.value.forEach {
             updatePairRates(it)
+        }
+        _uiState.update {
+            it.copy(isLoading = false)
         }
     }
 

@@ -16,9 +16,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,7 +45,9 @@ fun KeyboardAware(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun CurrencyExchangeRatesScreen(
     paddingValues: PaddingValues,
@@ -55,6 +59,9 @@ fun CurrencyExchangeRatesScreen(
     val editingPair by pairViewModel.editPairCurrency.collectAsState()
     val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())
     val state = rememberLazyListState()
+    val uiState = pairViewModel.uiState.collectAsState()
+
+    val pullRefreshState = rememberPullToRefreshState()
 
     val coroutineScope = rememberCoroutineScope()
     Column(
