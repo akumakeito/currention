@@ -124,12 +124,10 @@ class PairCurrencyViewModel @Inject constructor(
         }
     }
 
-    fun updatePairRates(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updatePairRates(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
 
         pairCurrencyRepository.updateCurrencyPair(pairCurrency)
-        _uiState.update {
-            it.copy(isLoading = false)
-        }
+
     }
 
     fun updateAllPairsRates() = viewModelScope.launch(Dispatchers.IO) {

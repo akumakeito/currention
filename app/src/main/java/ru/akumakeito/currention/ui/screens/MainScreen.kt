@@ -23,6 +23,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -56,6 +57,8 @@ fun MainScreen(
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
     val currentScreenRoute = navBackStackEntry?.destination?.route
 
+    val pullRefreshState = rememberPullToRefreshState()
+
 
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
@@ -74,7 +77,7 @@ fun MainScreen(
     Scaffold(
         floatingActionButton = {
             if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
-                if(!isEditing) {
+                if (!isEditing) {
                     FloatingActionButton(
                         modifier = Modifier
                             .padding(16.dp),
@@ -111,7 +114,10 @@ fun MainScreen(
                 },
                 actions = {
                     if (currentScreenRoute == Screen.CurrencyRatesScreen.route) {
-                        IconButton(onClick = { pairViewModel.updateAllPairsRates()}) {
+                        IconButton(onClick = {
+                            pullRefreshState.startRefresh()
+                            pairViewModel.updateAllPairsRates()
+                        }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_update_rates),
                                 contentDescription = stringResource(
@@ -128,20 +134,20 @@ fun MainScreen(
         bottomBar = {
             Column {
 
-            if (isEditing) {
-                Button(
-                    onClick = { pairViewModel.updatePair() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .navigationBarsPadding()
-                        .padding(16.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.done),
-                        fontWeight = FontWeight.Bold
-                    )
+                if (isEditing) {
+                    Button(
+                        onClick = { pairViewModel.updatePair() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .navigationBarsPadding()
+                            .padding(16.dp),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.done),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
-            }
 
                 NavigationBar {
 
@@ -174,9 +180,9 @@ fun MainScreen(
 
                         )
 
+                    }
                 }
             }
-        }
         }
     ) { paddingValues ->
 
@@ -184,7 +190,11 @@ fun MainScreen(
             navHostController = navigationState.navHostController,
             currencyRatesContent = {
                 KeyboardAware {
-                    CurrencyExchangeRatesScreen(paddingValues = paddingValues, pairViewModel = pairViewModel, modifier = Modifier.verticalScroll(scrollState)
+                    CurrencyExchangeRatesScreen(
+                        paddingValues = paddingValues,
+                        pairViewModel = pairViewModel,
+                        pullToRefreshState = pullRefreshState,
+                        modifier = Modifier.verticalScroll(scrollState)
 
                     )
                 }
