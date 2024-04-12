@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import ru.akumakeito.currention.R
@@ -72,8 +71,13 @@ fun CurrencyExchangeRatesScreen(
 
     if (pullRefreshState.isRefreshing) {
         LaunchedEffect(true) {
-            pairViewModel.updateAllPairsRates()
-            pullRefreshState.endRefresh()
+
+            try {
+                pairViewModel.updateAllPairsRates()
+            } finally {
+                pullRefreshState.endRefresh()
+
+            }
         }
     }
 
@@ -88,13 +92,13 @@ fun CurrencyExchangeRatesScreen(
             LinearProgressIndicator(
                 modifier = Modifier
                     .fillMaxWidth()
-                )
+            )
         }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = state
         ) {
-            itemsIndexed(currencyPairs) { index, item ->
+            items(currencyPairs, key = { it.id }) { item ->
                 val delete = SwipeAction(
                     onSwipe = { pairViewModel.onSwipeToDelete(item) },
                     icon = {
@@ -146,9 +150,9 @@ fun CurrencyExchangeRatesScreen(
                     CurrencyPairInExchangeRate(
                         pairCurrency = item,
                         onEditStateChange = {
-                            coroutineScope.launch {
-                                state.animateScrollToItem(index)
-                            }
+//                            coroutineScope.launch {
+//                                state.animateScrollToItem(index)
+//                            }
                             editingPair.id == item.id
                         },
                         currencyList = currencyList,

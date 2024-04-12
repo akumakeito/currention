@@ -92,6 +92,7 @@ fun CurrencyPairInExchangeRate(
             modifier = modifier.imePadding()
         )
 
+
         Image(
             painter = painterResource(id = R.drawable.equals),
             contentDescription = stringResource(R.string.equals),
@@ -99,6 +100,7 @@ fun CurrencyPairInExchangeRate(
                 .padding(horizontal = 0.dp)
                 .align(Alignment.CenterVertically)
         )
+
 
 
         CurrencyFlagAmountShortCode(

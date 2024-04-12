@@ -3,6 +3,7 @@ package ru.akumakeito.currention.ui.items
 import SpacerWidth
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
@@ -69,7 +70,9 @@ fun CurrencyFlagAmountShortCode(
     }
 
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable {
+        expanded = true
+    }) {
         FlagItem(flagId = currency.flag)
 
         SpacerWidth(width = 8)
