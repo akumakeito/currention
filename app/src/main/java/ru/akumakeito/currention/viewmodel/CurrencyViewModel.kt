@@ -19,23 +19,7 @@ import ru.akumakeito.currention.repository.CurrencyRepository
 import javax.inject.Inject
 
 
-val usd = FiatCurrency(
-    1,
-    "Доллар США",
-    "USD",
-    "840",
-    "$",
-    R.drawable.flag_usd
-)
 
-val rub = FiatCurrency(
-    1,
-    "Российский рубль",
-    "RUB",
-    "643",
-    "P",
-    R.drawable.flag_rub
-)
 
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
