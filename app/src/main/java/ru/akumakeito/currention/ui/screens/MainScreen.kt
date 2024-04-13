@@ -43,15 +43,19 @@ import ru.akumakeito.currention.navigation.AppNavGraph
 import ru.akumakeito.currention.navigation.NavigationItem
 import ru.akumakeito.currention.navigation.Screen
 import ru.akumakeito.currention.navigation.rememberNavigationState
+import ru.akumakeito.currention.viewmodel.ConvertCurrencyViewModel
 import ru.akumakeito.currention.viewmodel.CurrencyViewModel
 import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
+import ru.akumakeito.currention.viewmodel.SearchingViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     currencyViewModel: CurrencyViewModel = hiltViewModel(),
-    pairViewModel: PairCurrencyViewModel = hiltViewModel()
+    pairViewModel: PairCurrencyViewModel = hiltViewModel(),
+    searchingViewModel: SearchingViewModel = hiltViewModel(),
+    convertCurrencyViewModel: ConvertCurrencyViewModel = hiltViewModel()
 ) {
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
@@ -200,7 +204,10 @@ fun MainScreen(
                 }
             },
             convertScreenContent = {
-                CurrencyConverterScreen()
+                CurrencyConverterScreen(
+                   convertCurrencyViewModel,
+                    searchingViewModel
+                )
             },
             settingsScreenContent = {
                 SettingsScreen()

@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.repository.PairCurrencyRepository
@@ -32,6 +33,18 @@ class ConvertCurrencyViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             pairCurrencyRepository.convert(currencyFromShortCode, currencyToShortCode, amount)
+        }
+    }
+
+    fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
+        _convertingCurrencyState.update {
+            it.copy(fromCurrency = fromCurrency)
+        }
+    }
+
+    fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
+        _convertingCurrencyState.update {
+            it.copy(toCurrency = toCurrency)
         }
     }
 

@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import ru.akumakeito.currention.R
+import ru.akumakeito.currention.domain.FiatCurrency
 
 @Composable
 fun CurrencyRateInConverter(
-    convertingCurrency: ConvertingCurrency,
+    currencyFrom: FiatCurrency, currencyTo: FiatCurrency,
+    rate: Double,
     amount: Int,
     modifier: Modifier = Modifier
 ) {
@@ -28,9 +30,9 @@ fun CurrencyRateInConverter(
         Text(
             text = stringResource(
                 id = R.string.rate_for_one_currency_from,
-                convertingCurrency.fromCurrency.shortCode,
-                convertingCurrency.rate,
-                convertingCurrency.toCurrency.shortCode
+                currencyFrom.shortCode,
+                rate,
+                currencyTo.shortCode
             ),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.outline

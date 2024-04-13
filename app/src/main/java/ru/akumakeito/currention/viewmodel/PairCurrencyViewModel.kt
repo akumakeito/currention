@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -16,7 +14,6 @@ import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
 import ru.akumakeito.currention.model.ErrorType
-import ru.akumakeito.currention.model.SearchState
 import ru.akumakeito.currention.model.StateModel
 import ru.akumakeito.currention.repository.CurrencyRepository
 import ru.akumakeito.currention.repository.PairCurrencyRepository
@@ -44,21 +41,11 @@ class PairCurrencyViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(StateModel())
     val uiState = _uiState.asStateFlow()
 
-    private val _searchingState = MutableStateFlow(SearchState())
-    val searchingState = _searchingState.asStateFlow()
 
     private val _fiatCurrencies = currencyRepository.fiatCurrencies
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val fiatCurrencies = _searchingState.flatMapLatest { state ->
-        _fiatCurrencies.map { currencies ->
-            if (state.searchText.isBlank()) {
-                currencies.filter { it.isPopular }  //TODO заменить на is Favorite
-            } else {
-               currencies.filter { it.doesMatchSearchQuery(state.searchText) }
 
-            }
-        }
-
+    val fiatCurrencies = _fiatCurrencies.map { currencies ->
+        currencies.filter { it.isPopular }  //TODO заменить на is Favorite
     }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
@@ -83,7 +70,7 @@ class PairCurrencyViewModel @Inject constructor(
         }
 
 
-           }
+    }
 
 
     fun addNewCurrencyPair() = viewModelScope.launch(Dispatchers.IO) {
@@ -94,12 +81,6 @@ class PairCurrencyViewModel @Inject constructor(
     private fun editPair(pairCurrency: PairCurrency) {
         _editPairCurrency.update { pairCurrency }
         _isEditing.update { true }
-    }
-
-    fun onSearchTextChange(text: String) {
-        _searchingState.update {
-            it.copy(searchText = text)
-        }
     }
 
 
@@ -116,11 +97,12 @@ class PairCurrencyViewModel @Inject constructor(
         }
     }
 
-    private fun updatePairRates(pairCurrency: PairCurrency) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updatePairRates(pairCurrency: PairCurrency) =
+        viewModelScope.launch(Dispatchers.IO) {
 
-        pairCurrencyRepository.updateCurrencyPair(pairCurrency)
+            pairCurrencyRepository.updateCurrencyPair(pairCurrency)
 
-    }
+        }
 
     fun updateAllPairsRates() = viewModelScope.launch(Dispatchers.IO) {
         _uiState.update {
@@ -133,7 +115,6 @@ class PairCurrencyViewModel @Inject constructor(
             it.copy(isLoading = false)
         }
     }
-
 
 
     fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
@@ -149,16 +130,14 @@ class PairCurrencyViewModel @Inject constructor(
     }
 
 
-
-    fun getPairById(id : Int) = viewModelScope.launch {
+    fun getPairById(id: Int) = viewModelScope.launch {
         pairCurrencyRepository.getPairById(id)
     }
 
-    private fun deletePairById(id : Int) = viewModelScope.launch {
+    private fun deletePairById(id: Int) = viewModelScope.launch {
         pairCurrencyRepository.deletePairById(id)
         _isEditing.update { false }
     }
-
 
 
     fun onSwipeToDelete(pairCurrency: PairCurrency) {

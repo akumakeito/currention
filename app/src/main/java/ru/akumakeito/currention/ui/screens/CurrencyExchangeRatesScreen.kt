@@ -163,7 +163,7 @@ fun CurrencyExchangeRatesScreen(
                             pairViewModel.updatePairCurrencyTo(selectedCurrency)
                         },
                         editingPair = editingPair,
-                        onSearchTextChanged = { pairViewModel.onSearchTextChange(it) },
+                        onSearchTextChanged = { },
                     )
                 }
 
