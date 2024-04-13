@@ -20,18 +20,10 @@ import ru.akumakeito.currention.model.SearchState
 import ru.akumakeito.currention.model.StateModel
 import ru.akumakeito.currention.repository.CurrencyRepository
 import ru.akumakeito.currention.repository.PairCurrencyRepository
+import ru.akumakeito.currention.util.Constants.Companion.newPair
 import java.io.IOException
 import javax.inject.Inject
 
-private val newPair =
-    PairCurrency(
-        id = 0,
-        fromCurrency = usd,
-        toCurrency = rub,
-        toCurrencyLastRate = 0.0,
-        toCurrencyNewRate = 0.0,
-        rateCurrency = 0.0f
-    )
 
 @HiltViewModel
 class PairCurrencyViewModel @Inject constructor(
@@ -167,15 +159,7 @@ class PairCurrencyViewModel @Inject constructor(
         _isEditing.update { false }
     }
 
-    fun getPairRates(
-        currencyFromShortCode: FiatCurrency,
-        currencyToShortCode: FiatCurrency,
-        amount: Int
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            pairCurrencyRepository.getPairRates(currencyFromShortCode, currencyToShortCode, amount)
-        }
-    }
+
 
     fun onSwipeToDelete(pairCurrency: PairCurrency) {
         deletePairById(pairCurrency.id)

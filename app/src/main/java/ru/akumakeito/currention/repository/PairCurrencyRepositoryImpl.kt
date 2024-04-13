@@ -31,7 +31,7 @@ class PairCurrencyRepositoryImpl @Inject constructor(
 
         var oldPair = getPairById(pairCurrency.id)
 
-        val newRates = getPairRates(pairCurrency.fromCurrency, pairCurrency.toCurrency, 1)
+        val newRates = convert(pairCurrency.fromCurrency, pairCurrency.toCurrency, 1)
 
         if (isFromToCurrenciesSame(pairCurrency, oldPair)) {
             oldPair = updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency)
@@ -72,7 +72,7 @@ class PairCurrencyRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getPairRates(
+    override suspend fun convert(
         currencyFrom: FiatCurrency,
         currencyTo: FiatCurrency,
         amount: Int

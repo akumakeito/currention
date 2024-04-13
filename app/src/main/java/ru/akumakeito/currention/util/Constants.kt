@@ -2,6 +2,7 @@ package ru.akumakeito.currention.util
 
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.PairCurrency
 
 
 class Constants {
@@ -28,6 +29,16 @@ class Constants {
             "P",
             R.drawable.flag_rub
         )
+
+        val newPair =
+            PairCurrency(
+                id = 0,
+                fromCurrency = usd,
+                toCurrency = rub,
+                toCurrencyLastRate = 0.0,
+                toCurrencyNewRate = 0.0,
+                rateCurrency = 0.0f
+            )
 
     }
 }
