@@ -205,8 +205,8 @@ fun MainScreen(
             },
             convertScreenContent = {
                 CurrencyConverterScreen(
-                   convertCurrencyViewModel,
-                    searchingViewModel
+                    paddingValues = paddingValues,
+                    convertCurrencyViewModel, searchingViewModel
                 )
             },
             settingsScreenContent = {
