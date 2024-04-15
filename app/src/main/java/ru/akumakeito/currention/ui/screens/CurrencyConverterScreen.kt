@@ -33,8 +33,9 @@ fun CurrencyConverterScreen(
 
 
     ConvertingCurrencyRow(
-        currency = convertingCurrencyState.fromCurrency,
-        pairCurrency = convertingCurrencyState,
+        firstCurrency = convertingCurrencyState.firstCurrency,
+        secondCurrency = convertingCurrencyState.secondCurrency,
+        rate = convertingCurrencyState.rateFromFirstToSecond,
         amount = 1,
         currencyList = currencyList,
         onCurrencyItemDropDownClickListener = { selectedCurrency ->
@@ -50,8 +51,9 @@ fun CurrencyConverterScreen(
     }
 
     ConvertingCurrencyRow(
-        currency = convertingCurrencyState.toCurrency,
-        pairCurrency = convertingCurrencyState,
+        firstCurrency = convertingCurrencyState.secondCurrency,
+        secondCurrency = convertingCurrencyState.firstCurrency,
+        rate = convertingCurrencyState.rateFromSecondToFirst,
         amount = 1,
         currencyList = currencyList,
         onCurrencyItemDropDownClickListener = { selectedCurrency ->

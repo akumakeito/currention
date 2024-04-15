@@ -3,6 +3,7 @@ package ru.akumakeito.currention.util
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.dto.ConvertingPairCurrency
 
 
 class Constants {
@@ -39,6 +40,13 @@ class Constants {
                 toCurrencyNewRate = 0.0,
                 rateCurrency = 0.0f
             )
+
+        val convertingCurrency = ConvertingPairCurrency(
+            firstCurrency = usd,
+            secondCurrency = rub,
+            rateFromFirstToSecond = 0.0,
+            rateFromSecondToFirst = 0.0
+        )
 
     }
 }

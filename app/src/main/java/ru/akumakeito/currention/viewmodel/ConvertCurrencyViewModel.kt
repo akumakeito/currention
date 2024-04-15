@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.repository.PairCurrencyRepository
-import ru.akumakeito.currention.util.Constants.Companion.newPair
+import ru.akumakeito.currention.util.Constants.Companion.convertingCurrency
 import javax.inject.Inject
 
 
@@ -19,11 +19,22 @@ class ConvertCurrencyViewModel @Inject constructor(
     private val pairCurrencyRepository: PairCurrencyRepository
 ) : ViewModel() {
 
-    private val _convertingCurrencyState = MutableStateFlow(newPair)
+    private val _convertingCurrencyState = MutableStateFlow(convertingCurrency)
     val convertingCurrencyState = _convertingCurrencyState.asStateFlow()
 
     init {
-        convert(_convertingCurrencyState.value.fromCurrency, _convertingCurrencyState.value.toCurrency, 1)
+        convert(
+            _convertingCurrencyState.value.firstCurrency,
+            _convertingCurrencyState.value.secondCurrency,
+            1
+        )
+        convert(
+            _convertingCurrencyState.value.secondCurrency,
+            _convertingCurrencyState.value.firstCurrency,
+            1
+        )
+
+
     }
 
     private fun convert(
@@ -32,19 +43,31 @@ class ConvertCurrencyViewModel @Inject constructor(
         amount: Int
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            pairCurrencyRepository.convert(currencyFromShortCode, currencyToShortCode, amount)
+            val result =
+                pairCurrencyRepository.convert(currencyFromShortCode, currencyToShortCode, amount)
+            _convertingCurrencyState.update {
+                if (result.from == it.firstCurrency.shortCode) {
+                    it.copy(
+                        rateFromFirstToSecond = result.value,
+                    )
+                } else {
+                    it.copy(
+                        rateFromSecondToFirst = result.value,
+                    )
+                }
+            }
         }
     }
 
     fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
         _convertingCurrencyState.update {
-            it.copy(fromCurrency = fromCurrency)
+            it.copy(firstCurrency = fromCurrency)
         }
     }
 
     fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
         _convertingCurrencyState.update {
-            it.copy(toCurrency = toCurrency)
+            it.copy(secondCurrency = toCurrency)
         }
     }
 

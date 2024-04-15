@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.PairCurrency
 
 @Composable
 fun ConvertingCurrencyRow(
-    currency: FiatCurrency,
-    pairCurrency: PairCurrency,
+    firstCurrency: FiatCurrency,
+    secondCurrency: FiatCurrency,
+    rate: Double,
     amount: Int,
     onCurrencyItemDropDownClickListener: (FiatCurrency) -> Unit,
     currencyList: List<FiatCurrency>,
@@ -22,7 +22,7 @@ fun ConvertingCurrencyRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         CurrencyFlagAmountShortCode(
-            fiatCurrency = currency,
+            fiatCurrency = firstCurrency,
             amount = amount.toString(),
             isEditing = true,
             onCurrencyItemDropDownClickListener = onCurrencyItemDropDownClickListener,
@@ -31,9 +31,9 @@ fun ConvertingCurrencyRow(
         )
 
         CurrencyRateInConverter(
-            currencyFrom = pairCurrency.fromCurrency,
-            currencyTo = pairCurrency.toCurrency,
-            rate = pairCurrency.toCurrencyNewRate,
+            currencyFrom = firstCurrency,
+            currencyTo = secondCurrency,
+            rate = rate,
             amount = amount
         )
     }
