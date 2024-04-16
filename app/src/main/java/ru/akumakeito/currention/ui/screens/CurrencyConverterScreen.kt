@@ -37,6 +37,7 @@ fun CurrencyConverterScreen(
         secondCurrency = convertingCurrencyState.secondCurrency,
         rate = convertingCurrencyState.rateFromFirstToSecond,
         amount = 1,
+        readOnly = false,
         currencyList = currencyList,
         onCurrencyItemDropDownClickListener = { selectedCurrency ->
             convertCurrencyViewModel.updatePairCurrencyFrom(selectedCurrency) },
@@ -55,6 +56,7 @@ fun CurrencyConverterScreen(
         secondCurrency = convertingCurrencyState.firstCurrency,
         rate = convertingCurrencyState.rateFromSecondToFirst,
         amount = 1,
+        readOnly = true,
         currencyList = currencyList,
         onCurrencyItemDropDownClickListener = { selectedCurrency ->
             convertCurrencyViewModel.updatePairCurrencyFrom(selectedCurrency) },
