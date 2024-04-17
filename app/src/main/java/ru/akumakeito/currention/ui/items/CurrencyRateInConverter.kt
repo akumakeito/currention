@@ -25,7 +25,7 @@ fun CurrencyRateInConverter(
     rate: Double,
     amount: Int,
     readOnly: Boolean,
-    modifier: Modifier = Modifier
+
 ) {
     var value by rememberSaveable {
         mutableStateOf(amount.toString())
