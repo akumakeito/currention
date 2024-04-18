@@ -1,8 +1,9 @@
 package ru.akumakeito.currention.ui.items
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -16,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 
@@ -25,6 +29,7 @@ fun CurrencyRateInConverter(
     rate: Double,
     amount: Int,
     readOnly: Boolean,
+    modifier : Modifier = Modifier
 
 ) {
     var value by rememberSaveable {
@@ -43,26 +48,26 @@ fun CurrencyRateInConverter(
             color = MaterialTheme.colorScheme.outline
         )
 
-        TextField(
-            value = value,
-            onValueChange = { value = it },
-            singleLine = true,
-            modifier = Modifier
-                .align(Alignment.End)
-                .wrapContentWidth(Alignment.End),
-            textStyle = MaterialTheme.typography.titleLarge,
-            readOnly = readOnly,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = MaterialTheme.colorScheme.background,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
-                disabledIndicatorColor = MaterialTheme.colorScheme.background,
-                focusedContainerColor = MaterialTheme.colorScheme.background,
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                disabledContainerColor = MaterialTheme.colorScheme.background,
+            TextField(
+                value = value,
+                onValueChange = { value = it },
+                singleLine = true,
+                modifier =  Modifier.widthIn(1.dp, Dp.Infinity),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, fontStyle = MaterialTheme.typography.titleLarge.fontStyle),
+                readOnly = readOnly,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = MaterialTheme.colorScheme.background,
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
+                    disabledIndicatorColor = MaterialTheme.colorScheme.background,
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                    disabledContainerColor = MaterialTheme.colorScheme.background,
+                )
+
             )
 
-        )
+
 
 
     }
