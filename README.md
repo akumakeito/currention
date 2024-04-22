@@ -1,9 +1,11 @@
 # Приложение по конвертации валют
-Проект находтся в разработке. 
+
+Главная фича приложения
 
 - Jetpack Compose
 - Retrofit
 - Okhttp
 - Room
 - Dagger Hilt
+- Flow
 
