@@ -9,17 +9,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.FiatCurrency
 
@@ -29,12 +34,22 @@ fun CurrencyRateInConverter(
     rate: Double,
     amount: Int,
     readOnly: Boolean,
-    modifier : Modifier = Modifier
+    modifier: Modifier = Modifier
 
 ) {
     var value by rememberSaveable {
         mutableStateOf(amount.toString())
     }
+
+    val focusRequester = remember { FocusRequester() }
+
+    if (!readOnly) {
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
+    }
+
+
 
     Column(horizontalAlignment = Alignment.End) {
         Text(
@@ -48,26 +63,30 @@ fun CurrencyRateInConverter(
             color = MaterialTheme.colorScheme.outline
         )
 
-            TextField(
-                value = value,
-                onValueChange = { value = it },
-                singleLine = true,
-                modifier =  Modifier.widthIn(1.dp, Dp.Infinity),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, fontStyle = MaterialTheme.typography.titleLarge.fontStyle),
-                readOnly = readOnly,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = MaterialTheme.colorScheme.background,
-                    unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
-                    disabledIndicatorColor = MaterialTheme.colorScheme.background,
-                    focusedContainerColor = MaterialTheme.colorScheme.background,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                    disabledContainerColor = MaterialTheme.colorScheme.background,
-                )
-
+        TextField(
+            value = value,
+            onValueChange = { value = it },
+            singleLine = true,
+            modifier = Modifier
+                .widthIn(1.dp, Dp.Infinity)
+                .focusRequester(focusRequester),
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.End,
+                fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
+                fontSize = 24.sp
+            ),
+            readOnly = readOnly,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = MaterialTheme.colorScheme.background,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
+                disabledIndicatorColor = MaterialTheme.colorScheme.background,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                disabledContainerColor = MaterialTheme.colorScheme.background,
             )
 
-
+        )
 
 
     }

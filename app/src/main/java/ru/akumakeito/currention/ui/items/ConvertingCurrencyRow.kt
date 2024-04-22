@@ -18,6 +18,7 @@ fun ConvertingCurrencyRow(
     onCurrencyItemDropDownClickListener: (FiatCurrency) -> Unit,
     currencyList: List<FiatCurrency>,
     onSearchTextChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     Row(
@@ -32,6 +33,7 @@ fun ConvertingCurrencyRow(
             currencyList = currencyList,
             onSearchTextChanged = onSearchTextChanged
         )
+        
         Spacer(modifier = Modifier.weight(1f))
 
         CurrencyRateInConverter(
