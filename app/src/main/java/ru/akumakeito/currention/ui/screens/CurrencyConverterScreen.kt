@@ -10,10 +10,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.ui.items.ConvertingCurrencyRow
 import ru.akumakeito.currention.viewmodel.ConvertCurrencyViewModel
@@ -29,6 +32,8 @@ fun CurrencyConverterScreen(
     val convertingCurrencyState by convertCurrencyViewModel.convertingCurrencyState.collectAsState()
     val currencyList by searchingViewModel.fiatCurrencies.collectAsState(emptyList())
 
+    val coroutineScope = rememberCoroutineScope()
+
 
     Box(modifier = Modifier.padding(paddingValues)) {
 
@@ -38,13 +43,21 @@ fun CurrencyConverterScreen(
                 firstCurrency = convertingCurrencyState.firstCurrency,
                 secondCurrency = convertingCurrencyState.secondCurrency,
                 rate = convertingCurrencyState.rateFromFirstToSecond,
-                amount = 1,
+                amount = convertingCurrencyState.amount,
                 readOnly = false,
                 currencyList = currencyList,
                 onCurrencyItemDropDownClickListener = { selectedCurrency ->
                     convertCurrencyViewModel.updatePairCurrencyFrom(selectedCurrency)
                 },
                 onSearchTextChanged = { searchingViewModel.onSearchTextChange(it) },
+                onAmountTextChanged = { amount ->
+                    coroutineScope.launch {
+                        delay(3000)
+                        convertCurrencyViewModel.changeAmount(amount.toDouble())
+                    }
+
+
+                }
             )
 
             Box(contentAlignment = Alignment.Center) {
@@ -59,13 +72,14 @@ fun CurrencyConverterScreen(
                 firstCurrency = convertingCurrencyState.secondCurrency,
                 secondCurrency = convertingCurrencyState.firstCurrency,
                 rate = convertingCurrencyState.rateFromSecondToFirst,
-                amount = 1,
+                amount = convertingCurrencyState.rateByAmount,
                 readOnly = true,
                 currencyList = currencyList,
                 onCurrencyItemDropDownClickListener = { selectedCurrency ->
                     convertCurrencyViewModel.updatePairCurrencyFrom(selectedCurrency)
                 },
-                onSearchTextChanged = { searchingViewModel.onSearchTextChange(it) },
+                onSearchTextChanged = { searchingViewModel.onSearchTextChange(it)},
+                onAmountTextChanged = {}
 
             )
 

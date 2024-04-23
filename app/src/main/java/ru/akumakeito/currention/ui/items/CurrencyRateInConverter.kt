@@ -32,8 +32,9 @@ import ru.akumakeito.currention.domain.FiatCurrency
 fun CurrencyRateInConverter(
     currencyFrom: FiatCurrency, currencyTo: FiatCurrency,
     rate: Double,
-    amount: Int,
+    amount: Double?,
     readOnly: Boolean,
+    onAmountTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 
 ) {
@@ -65,7 +66,10 @@ fun CurrencyRateInConverter(
 
         TextField(
             value = value,
-            onValueChange = { value = it },
+            onValueChange = {
+                value = it
+                onAmountTextChanged(value)
+            },
             singleLine = true,
             modifier = Modifier
                 .widthIn(1.dp, Dp.Infinity)

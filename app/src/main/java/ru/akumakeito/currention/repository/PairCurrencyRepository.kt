@@ -12,7 +12,7 @@ interface PairCurrencyRepository {
 
     suspend fun updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency: PairCurrency) : PairCurrency
 
-    suspend fun convert(currencyFrom : FiatCurrency, currencyTo : FiatCurrency, amount : Int, ) : ConvertFiatServerResponse
+    suspend fun convert(currencyFrom : FiatCurrency, currencyTo : FiatCurrency, amount : Double, ) : ConvertFiatServerResponse
 
     suspend fun isFromToCurrenciesSame(pairCurrency : PairCurrency, updatedPairCurrency: PairCurrency) : Boolean
 

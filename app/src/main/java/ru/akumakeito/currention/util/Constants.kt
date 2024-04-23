@@ -45,7 +45,10 @@ class Constants {
             firstCurrency = usd,
             secondCurrency = rub,
             rateFromFirstToSecond = 0.0,
-            rateFromSecondToFirst = 0.0
+            rateFromSecondToFirst = 0.0,
+            amount = 0.0,
+            rateByAmount = 0.0
+
         )
 
     }

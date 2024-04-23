@@ -16,7 +16,7 @@ interface ApiService {
     suspend fun getLatest() : List<FiatResponse>
 
     @GET("convert")
-    suspend fun getPairRates(@Query("from")currencyFromShortCode : String, @Query("to")currencyToShortCode : String, @Query("amount") amount : Int) : ConvertFiatServerResponse
+    suspend fun getPairRates(@Query("from")currencyFromShortCode : String, @Query("to")currencyToShortCode : String, @Query("amount") amount : Double) : ConvertFiatServerResponse
 
     @GET("historical")
     suspend fun getCurrencyRateOnDate(@Query("base")currencyFromShortCode : String, @Query("date")date : String, @Query("symbols") currencyToShortCode : List<String>) : ConvertFiatOnDateServerResponse

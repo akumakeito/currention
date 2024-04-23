@@ -23,28 +23,46 @@ class ConvertCurrencyViewModel @Inject constructor(
     val convertingCurrencyState = _convertingCurrencyState.asStateFlow()
 
     init {
-        convert(
+        convertForOne(
             _convertingCurrencyState.value.firstCurrency,
             _convertingCurrencyState.value.secondCurrency,
-            1
-        )
-        convert(
+                   )
+        convertForOne(
             _convertingCurrencyState.value.secondCurrency,
             _convertingCurrencyState.value.firstCurrency,
-            1
+
         )
 
 
     }
 
-    private fun convert(
-        currencyFromShortCode: FiatCurrency,
-        currencyToShortCode: FiatCurrency,
-        amount: Int
+    fun changeAmount(amount: Double) {
+        _convertingCurrencyState.update {
+            it.copy(amount = amount)
+        }
+
+    }
+
+    private fun convert() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result =
+                pairCurrencyRepository.convert(
+                    _convertingCurrencyState.value.firstCurrency,
+                    _convertingCurrencyState.value.secondCurrency,
+                    _convertingCurrencyState.value.amount
+                )
+
+        }
+    }
+
+
+    private fun convertForOne(
+        currencyFrom: FiatCurrency,
+        currencyTo: FiatCurrency,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val result =
-                pairCurrencyRepository.convert(currencyFromShortCode, currencyToShortCode, amount)
+                pairCurrencyRepository.convert(currencyFrom, currencyTo, 1.0)
             _convertingCurrencyState.update {
                 if (result.from == it.firstCurrency.shortCode) {
                     it.copy(
