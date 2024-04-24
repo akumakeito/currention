@@ -32,14 +32,14 @@ import ru.akumakeito.currention.domain.FiatCurrency
 fun CurrencyRateInConverter(
     currencyFrom: FiatCurrency, currencyTo: FiatCurrency,
     rate: Double,
-    amount: Double?,
+    amount: String,
     readOnly: Boolean,
     onAmountTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 
 ) {
     var value by rememberSaveable {
-        mutableStateOf(amount.toString())
+        mutableStateOf("")
     }
 
     val focusRequester = remember { FocusRequester() }

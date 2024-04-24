@@ -53,7 +53,7 @@ fun CurrencyConverterScreen(
                 onAmountTextChanged = { amount ->
                     coroutineScope.launch {
                         delay(3000)
-                        convertCurrencyViewModel.changeAmount(amount.toDouble())
+                        convertCurrencyViewModel.changeAmount(amount)
                     }
 
 

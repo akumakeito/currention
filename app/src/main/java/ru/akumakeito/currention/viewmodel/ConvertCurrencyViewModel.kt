@@ -26,20 +26,22 @@ class ConvertCurrencyViewModel @Inject constructor(
         convertForOne(
             _convertingCurrencyState.value.firstCurrency,
             _convertingCurrencyState.value.secondCurrency,
-                   )
+        )
         convertForOne(
             _convertingCurrencyState.value.secondCurrency,
             _convertingCurrencyState.value.firstCurrency,
 
-        )
+            )
 
 
     }
 
-    fun changeAmount(amount: Double) {
+    fun changeAmount(amount: String) {
         _convertingCurrencyState.update {
-            it.copy(amount = amount)
+            it.copy(amount = if (amount.isEmpty()) 0.0 else amount.toDouble())
         }
+
+        convert()
 
     }
 
