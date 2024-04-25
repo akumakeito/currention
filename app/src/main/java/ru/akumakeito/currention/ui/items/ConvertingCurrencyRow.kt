@@ -24,6 +24,7 @@ fun ConvertingCurrencyRow(
     currencyList: List<FiatCurrency>,
     onSearchTextChanged: (String) -> Unit,
     onAmountTextChanged: (String) -> Unit,
+    onAmountDone: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var amountState by rememberSaveable {
@@ -57,7 +58,8 @@ fun ConvertingCurrencyRow(
             rate = rate,
             readOnly = readOnly,
             amount = amountState,
-            onAmountTextChanged = {onAmountTextChanged(it)}
+            onAmountTextChanged = {onAmountTextChanged(it)},
+            onAmountDone = {}
         )
     }
 

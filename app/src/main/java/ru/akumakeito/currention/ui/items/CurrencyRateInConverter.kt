@@ -2,6 +2,7 @@ package ru.akumakeito.currention.ui.items
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +35,7 @@ fun CurrencyRateInConverter(
     rate: Double,
     amount: String,
     readOnly: Boolean,
+    onAmountDone : () -> Unit,
     onAmountTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 
@@ -81,6 +83,7 @@ fun CurrencyRateInConverter(
             ),
             readOnly = readOnly,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardActions = KeyboardActions(onDone = {onAmountDone()}),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = MaterialTheme.colorScheme.background,
                 unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
