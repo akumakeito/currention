@@ -9,4 +9,10 @@ data class ConvertingPairCurrency(
     val rateFromSecondToFirst: Double,
     val amount: Double,
     val rateByAmount: Double
-)
+) {
+
+//    val rateByAmount.setValue(formatRateByAmount())
+    fun formatRateByAmount() : Double {
+        return "%.2f".format(rateByAmount).toDouble()
+    }
+}

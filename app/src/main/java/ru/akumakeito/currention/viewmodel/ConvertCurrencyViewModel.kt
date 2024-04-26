@@ -41,11 +41,9 @@ class ConvertCurrencyViewModel @Inject constructor(
             it.copy(amount = if (amount.isEmpty()) 0.0 else amount.toDouble())
         }
 
-        convert()
-
     }
 
-    private fun convert() {
+    fun convert() {
         viewModelScope.launch(Dispatchers.IO) {
             val result =
                 pairCurrencyRepository.convert(
@@ -53,6 +51,15 @@ class ConvertCurrencyViewModel @Inject constructor(
                     _convertingCurrencyState.value.secondCurrency,
                     _convertingCurrencyState.value.amount
                 )
+
+            val rateByAmount = result.value
+
+
+            _convertingCurrencyState.update {
+                it.copy(
+                    rateByAmount = result.value
+                )
+            }
 
         }
     }

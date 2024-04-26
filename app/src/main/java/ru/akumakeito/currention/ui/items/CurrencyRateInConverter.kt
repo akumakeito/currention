@@ -44,6 +44,10 @@ fun CurrencyRateInConverter(
         mutableStateOf("")
     }
 
+    LaunchedEffect(key1 = amount) {
+        value = amount
+    }
+
     val focusRequester = remember { FocusRequester() }
 
     if (!readOnly) {

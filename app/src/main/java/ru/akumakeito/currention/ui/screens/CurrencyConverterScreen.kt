@@ -55,9 +55,8 @@ fun CurrencyConverterScreen(
                         delay(3000)
                         convertCurrencyViewModel.changeAmount(amount)
                     }
-
-
-                }
+                },
+                onAmountDone = { convertCurrencyViewModel.convert() }
             )
 
             Box(contentAlignment = Alignment.Center) {
@@ -79,7 +78,8 @@ fun CurrencyConverterScreen(
                     convertCurrencyViewModel.updatePairCurrencyFrom(selectedCurrency)
                 },
                 onSearchTextChanged = { searchingViewModel.onSearchTextChange(it)},
-                onAmountTextChanged = {}
+                onAmountTextChanged = {},
+                onAmountDone = {}
 
             )
 

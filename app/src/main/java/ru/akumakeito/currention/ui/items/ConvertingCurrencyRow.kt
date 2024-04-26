@@ -43,7 +43,7 @@ fun ConvertingCurrencyRow(
     ) {
         CurrencyFlagAmountShortCode(
             fiatCurrency = firstCurrency,
-            amount = amountState,
+            amount ="",
             isEditing = true,
             onCurrencyItemDropDownClickListener = onCurrencyItemDropDownClickListener,
             currencyList = currencyList,
@@ -59,7 +59,7 @@ fun ConvertingCurrencyRow(
             readOnly = readOnly,
             amount = amountState,
             onAmountTextChanged = {onAmountTextChanged(it)},
-            onAmountDone = {}
+            onAmountDone = {onAmountDone()}
         )
     }
 
