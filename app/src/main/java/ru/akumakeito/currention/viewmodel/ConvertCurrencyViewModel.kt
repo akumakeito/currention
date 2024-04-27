@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
 import ru.akumakeito.currention.repository.PairCurrencyRepository
 import ru.akumakeito.currention.util.Constants.Companion.convertingCurrency
+import ru.akumakeito.currention.util.format
 import javax.inject.Inject
 
 
@@ -52,12 +53,12 @@ class ConvertCurrencyViewModel @Inject constructor(
                     _convertingCurrencyState.value.amount
                 )
 
-            val rateByAmount = result.value
+            val rateByAmount = result.value.format(2)
 
 
             _convertingCurrencyState.update {
                 it.copy(
-                    rateByAmount = result.value
+                    rateByAmount = rateByAmount.toDouble()
                 )
             }
 
@@ -86,16 +87,32 @@ class ConvertCurrencyViewModel @Inject constructor(
         }
     }
 
+    private fun updateRateForOne() {
+        convertForOne(
+            _convertingCurrencyState.value.firstCurrency,
+            _convertingCurrencyState.value.secondCurrency,
+        )
+        convertForOne(
+            _convertingCurrencyState.value.secondCurrency,
+            _convertingCurrencyState.value.firstCurrency,
+
+            )
+    }
+
     fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
         _convertingCurrencyState.update {
             it.copy(firstCurrency = fromCurrency)
         }
+
+        updateRateForOne()
     }
 
     fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
         _convertingCurrencyState.update {
             it.copy(secondCurrency = toCurrency)
         }
+
+        updateRateForOne()
     }
 
 }

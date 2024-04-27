@@ -11,8 +11,5 @@ data class ConvertingPairCurrency(
     val rateByAmount: Double
 ) {
 
-//    val rateByAmount.setValue(formatRateByAmount())
-    fun formatRateByAmount() : Double {
-        return "%.2f".format(rateByAmount).toDouble()
-    }
+
 }
