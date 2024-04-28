@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,10 +34,18 @@ fun CurrencyConverterScreen(
     val convertingCurrencyState by convertCurrencyViewModel.convertingCurrencyState.collectAsState()
     val currencyList by searchingViewModel.fiatCurrencies.collectAsState(emptyList())
 
+    val uiState = convertCurrencyViewModel.uiState.collectAsState()
+
     val coroutineScope = rememberCoroutineScope()
 
 
     Box(modifier = Modifier.padding(paddingValues)) {
+        if (uiState.value.isLoading) {
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
 
         Column(modifier = Modifier.padding(24.dp) ) {
 
@@ -52,7 +62,6 @@ fun CurrencyConverterScreen(
                 onSearchTextChanged = { searchingViewModel.onSearchTextChange(it) },
                 onAmountTextChanged = { amount ->
                     coroutineScope.launch {
-                        delay(3000)
                         convertCurrencyViewModel.changeAmount(amount)
                     }
                 },
@@ -75,7 +84,7 @@ fun CurrencyConverterScreen(
                 readOnly = true,
                 currencyList = currencyList,
                 onCurrencyItemDropDownClickListener = { selectedCurrency ->
-                    convertCurrencyViewModel.updatePairCurrencyFrom(selectedCurrency)
+                    convertCurrencyViewModel.updatePairCurrencyTo(selectedCurrency)
                 },
                 onSearchTextChanged = { searchingViewModel.onSearchTextChange(it)},
                 onAmountTextChanged = {},

@@ -9,9 +9,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.model.ErrorType
+import ru.akumakeito.currention.model.StateModel
 import ru.akumakeito.currention.repository.PairCurrencyRepository
 import ru.akumakeito.currention.util.Constants.Companion.convertingCurrency
 import ru.akumakeito.currention.util.format
+import java.io.IOException
 import javax.inject.Inject
 
 
@@ -23,16 +26,33 @@ class ConvertCurrencyViewModel @Inject constructor(
     private val _convertingCurrencyState = MutableStateFlow(convertingCurrency)
     val convertingCurrencyState = _convertingCurrencyState.asStateFlow()
 
-    init {
-        convertForOne(
-            _convertingCurrencyState.value.firstCurrency,
-            _convertingCurrencyState.value.secondCurrency,
-        )
-        convertForOne(
-            _convertingCurrencyState.value.secondCurrency,
-            _convertingCurrencyState.value.firstCurrency,
+    private val _uiState = MutableStateFlow(StateModel())
+    val uiState = _uiState.asStateFlow()
 
+    init {
+        try {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+            convertForOne(
+                _convertingCurrencyState.value.firstCurrency,
+                _convertingCurrencyState.value.secondCurrency,
             )
+            convertForOne(
+                _convertingCurrencyState.value.secondCurrency,
+                _convertingCurrencyState.value.firstCurrency,
+
+                )
+
+            _uiState.update {
+                StateModel()
+            }
+        } catch (networkException: IOException) {
+            _uiState.update {
+                it.copy(isError = ErrorType.NETWORK)
+            }
+        }
+
 
 
     }
@@ -46,6 +66,9 @@ class ConvertCurrencyViewModel @Inject constructor(
 
     fun convert() {
         viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
             val result =
                 pairCurrencyRepository.convert(
                     _convertingCurrencyState.value.firstCurrency,
@@ -60,6 +83,10 @@ class ConvertCurrencyViewModel @Inject constructor(
                 it.copy(
                     rateByAmount = rateByAmount.toDouble()
                 )
+            }
+
+            _uiState.update {
+                it.copy(isLoading = false)
             }
 
         }
@@ -105,6 +132,7 @@ class ConvertCurrencyViewModel @Inject constructor(
         }
 
         updateRateForOne()
+        convert()
     }
 
     fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
@@ -113,6 +141,7 @@ class ConvertCurrencyViewModel @Inject constructor(
         }
 
         updateRateForOne()
+        convert()
     }
 
 }
