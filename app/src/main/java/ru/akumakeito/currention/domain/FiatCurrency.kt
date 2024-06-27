@@ -1,11 +1,5 @@
 package ru.akumakeito.currention.domain
 
-import android.annotation.SuppressLint
-import android.content.Context
-import androidx.compose.ui.text.toLowerCase
-import dagger.hilt.android.qualifiers.ApplicationContext
-import ru.akumakeito.currention.R
-
 data class FiatCurrency(
     val id: Int,
     var name: String,
@@ -19,7 +13,7 @@ data class FiatCurrency(
 
     fun doesMatchSearchQuery(query: String): Boolean {
 
-            val machingCombinations = listOf(
+        val machingCombinations = listOf(
             "$name",
             "$name $shortCode",
             "$name$shortCode",

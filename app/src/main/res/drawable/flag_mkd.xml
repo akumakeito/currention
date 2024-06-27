@@ -3,41 +3,40 @@
     android:height="512dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
-  <group>
-    <clip-path
-        android:pathData="M0,0h512v512h-512z"/>
-    <path
-        android:pathData="M256,512C397.39,512 512,397.39 512,256C512,114.61 397.39,0 256,0C114.61,0 0,114.61 0,256C0,397.39 114.61,512 256,512Z"
-        android:fillColor="#FFDA44"/>
-    <path
-        android:pathData="M294.93,509.06C336.57,502.7 374.89,486.31 407.39,462.44L256,256L294.93,509.06Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M217.07,2.94C175.43,9.29 137.11,25.69 104.61,49.56L256,256L217.07,2.94Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M104.61,462.44C137.1,486.31 175.43,502.7 217.07,509.06L256,256L104.61,462.44Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M49.56,104.61C25.69,137.11 9.3,175.43 2.94,217.07L256,256L49.56,104.61Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M2.94,294.93C9.29,336.57 25.69,374.89 49.56,407.39L256,256L2.94,294.93Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M509.06,217.07C502.7,175.43 486.31,137.11 462.44,104.61L256,256L509.06,217.07Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M407.39,49.56C374.89,25.69 336.57,9.29 294.93,2.94L256,256L407.39,49.56Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M462.44,407.39C486.31,374.89 502.7,336.57 509.06,294.93L256,256L462.44,407.39Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M256,345.04C305.18,345.04 345.04,305.18 345.04,256C345.04,206.82 305.18,166.96 256,166.96C206.82,166.96 166.96,206.82 166.96,256C166.96,305.18 206.82,345.04 256,345.04Z"
-        android:fillColor="#D80027"/>
-    <path
-        android:pathData="M256,322.78C292.88,322.78 322.78,292.88 322.78,256C322.78,219.12 292.88,189.22 256,189.22C219.12,189.22 189.22,219.12 189.22,256C189.22,292.88 219.12,322.78 256,322.78Z"
-        android:fillColor="#FFDA44"/>
-  </group>
+    <group>
+        <clip-path android:pathData="M0,0h512v512h-512z" />
+        <path
+            android:fillColor="#FFDA44"
+            android:pathData="M256,512C397.39,512 512,397.39 512,256C512,114.61 397.39,0 256,0C114.61,0 0,114.61 0,256C0,397.39 114.61,512 256,512Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M294.93,509.06C336.57,502.7 374.89,486.31 407.39,462.44L256,256L294.93,509.06Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M217.07,2.94C175.43,9.29 137.11,25.69 104.61,49.56L256,256L217.07,2.94Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M104.61,462.44C137.1,486.31 175.43,502.7 217.07,509.06L256,256L104.61,462.44Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M49.56,104.61C25.69,137.11 9.3,175.43 2.94,217.07L256,256L49.56,104.61Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M2.94,294.93C9.29,336.57 25.69,374.89 49.56,407.39L256,256L2.94,294.93Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M509.06,217.07C502.7,175.43 486.31,137.11 462.44,104.61L256,256L509.06,217.07Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M407.39,49.56C374.89,25.69 336.57,9.29 294.93,2.94L256,256L407.39,49.56Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M462.44,407.39C486.31,374.89 502.7,336.57 509.06,294.93L256,256L462.44,407.39Z" />
+        <path
+            android:fillColor="#D80027"
+            android:pathData="M256,345.04C305.18,345.04 345.04,305.18 345.04,256C345.04,206.82 305.18,166.96 256,166.96C206.82,166.96 166.96,206.82 166.96,256C166.96,305.18 206.82,345.04 256,345.04Z" />
+        <path
+            android:fillColor="#FFDA44"
+            android:pathData="M256,322.78C292.88,322.78 322.78,292.88 322.78,256C322.78,219.12 292.88,189.22 256,189.22C219.12,189.22 189.22,219.12 189.22,256C189.22,292.88 219.12,322.78 256,322.78Z" />
+    </group>
 </vector>
