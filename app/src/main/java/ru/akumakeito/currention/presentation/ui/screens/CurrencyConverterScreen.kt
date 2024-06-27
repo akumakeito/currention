@@ -19,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.R
+import ru.akumakeito.currention.presentation.viewmodel.ConvertCurrencyViewModel
+import ru.akumakeito.currention.presentation.viewmodel.SearchingViewModel
 import ru.akumakeito.currention.ui.items.ConvertingCurrencyRow
-import ru.akumakeito.currention.viewmodel.ConvertCurrencyViewModel
-import ru.akumakeito.currention.viewmodel.SearchingViewModel
 
 @Composable
 fun CurrencyConverterScreen(

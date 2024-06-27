@@ -43,10 +43,10 @@ import ru.akumakeito.currention.presentation.navigation.AppNavGraph
 import ru.akumakeito.currention.presentation.navigation.NavigationItem
 import ru.akumakeito.currention.presentation.navigation.Screen
 import ru.akumakeito.currention.presentation.navigation.rememberNavigationState
-import ru.akumakeito.currention.viewmodel.ConvertCurrencyViewModel
-import ru.akumakeito.currention.viewmodel.CurrencyViewModel
-import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
-import ru.akumakeito.currention.viewmodel.SearchingViewModel
+import ru.akumakeito.currention.presentation.viewmodel.ConvertCurrencyViewModel
+import ru.akumakeito.currention.presentation.viewmodel.CurrencyViewModel
+import ru.akumakeito.currention.presentation.viewmodel.PairCurrencyViewModel
+import ru.akumakeito.currention.presentation.viewmodel.SearchingViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)

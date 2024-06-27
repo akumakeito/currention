@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -34,8 +35,8 @@ import androidx.compose.ui.unit.dp
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import ru.akumakeito.currention.R
+import ru.akumakeito.currention.presentation.viewmodel.PairCurrencyViewModel
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
-import ru.akumakeito.currention.viewmodel.PairCurrencyViewModel
 
 @Composable
 fun KeyboardAware(
