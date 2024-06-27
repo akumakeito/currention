@@ -2,8 +2,8 @@ package ru.akumakeito.currention.presentation.util
 
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.data.network.dto.ConvertingPairCurrency
-import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
+import ru.akumakeito.currention.domain.model.PairCurrency
 
 
 class Constants {

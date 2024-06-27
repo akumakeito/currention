@@ -12,8 +12,8 @@ import ru.akumakeito.currention.data.db.entity.PairCurrencyEntity
 import ru.akumakeito.currention.data.db.entity.toDto
 import ru.akumakeito.currention.data.network.ApiService
 import ru.akumakeito.currention.data.network.dto.ConvertFiatOnDateServerResponse
-import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
+import ru.akumakeito.currention.domain.model.PairCurrency
 import ru.akumakeito.currention.domain.repository.PairCurrencyRepository
 import java.time.LocalDate
 import javax.inject.Inject

@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.model.ErrorType
-import ru.akumakeito.currention.domain.model.StateModel
+import ru.akumakeito.currention.domain.model.FiatCurrency
 import ru.akumakeito.currention.domain.repository.PairCurrencyRepository
+import ru.akumakeito.currention.domain.state.ErrorType
+import ru.akumakeito.currention.domain.state.StateModel
 import ru.akumakeito.currention.presentation.util.Constants.Companion.convertingCurrency
 import ru.akumakeito.currention.presentation.util.format
 import java.io.IOException

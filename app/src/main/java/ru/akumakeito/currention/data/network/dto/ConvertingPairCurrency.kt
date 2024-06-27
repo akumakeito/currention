@@ -1,6 +1,6 @@
 package ru.akumakeito.currention.data.network.dto
 
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
 
 data class ConvertingPairCurrency(
     val firstCurrency: FiatCurrency,

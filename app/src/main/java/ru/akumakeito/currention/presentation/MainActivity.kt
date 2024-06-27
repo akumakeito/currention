@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
 import ru.akumakeito.currention.ui.screens.MainScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 

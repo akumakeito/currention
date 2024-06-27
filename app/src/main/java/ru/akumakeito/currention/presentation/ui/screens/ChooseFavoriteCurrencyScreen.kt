@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.akumakeito.currention.R
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
 import ru.akumakeito.currention.presentation.viewmodel.CurrencyViewModel
 import ru.akumakeito.currention.ui.items.CurrencyCardToChooseFavorite
 import ru.akumakeito.currention.ui.theme.CurrentionTheme

@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.domain
+package ru.akumakeito.currention.domain.model
 
 data class FiatCurrency(
     val id: Int,

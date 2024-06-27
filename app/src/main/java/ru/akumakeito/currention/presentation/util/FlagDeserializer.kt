@@ -1,7 +1,7 @@
 package ru.akumakeito.currention.presentation.util
 
 import com.google.gson.Gson
-import ru.akumakeito.currention.domain.FlagJsonItem
+import ru.akumakeito.currention.domain.model.FlagJsonItem
 import javax.inject.Inject
 import javax.inject.Singleton
 

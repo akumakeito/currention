@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.akumakeito.currention.R
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
 
 @Composable
 fun CurrencyRateInConverter(

@@ -1,7 +1,7 @@
 package ru.akumakeito.currention.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
 
 interface CurrencyRepository {
 

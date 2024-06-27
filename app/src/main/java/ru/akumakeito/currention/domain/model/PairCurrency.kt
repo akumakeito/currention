@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.domain
+package ru.akumakeito.currention.domain.model
 
 data class PairCurrency(
     val id: Int,

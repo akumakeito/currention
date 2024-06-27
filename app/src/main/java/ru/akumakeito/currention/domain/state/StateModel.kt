@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.domain.model
+package ru.akumakeito.currention.domain.state
 
 data class StateModel(
     val isLoading: Boolean = false,

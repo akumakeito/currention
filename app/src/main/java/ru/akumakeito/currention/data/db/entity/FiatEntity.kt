@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.data.network.dto.FiatResponse
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
 
 @Entity
 data class FiatEntity(

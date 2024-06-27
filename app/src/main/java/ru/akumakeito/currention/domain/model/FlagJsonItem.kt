@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.domain
+package ru.akumakeito.currention.domain.model
 
 import com.google.gson.annotations.SerializedName
 

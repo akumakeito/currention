@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.model.SearchState
+import ru.akumakeito.currention.domain.model.FiatCurrency
 import ru.akumakeito.currention.domain.repository.CurrencyRepository
+import ru.akumakeito.currention.domain.state.SearchState
 import javax.inject.Inject
 
 

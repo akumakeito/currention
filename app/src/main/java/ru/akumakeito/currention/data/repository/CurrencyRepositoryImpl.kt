@@ -13,8 +13,8 @@ import ru.akumakeito.currention.data.db.dao.CurrencyDao
 import ru.akumakeito.currention.data.db.entity.toDto
 import ru.akumakeito.currention.data.db.entity.toEntity
 import ru.akumakeito.currention.data.network.ApiService
-import ru.akumakeito.currention.domain.CurrencyType
-import ru.akumakeito.currention.domain.FiatCurrency
+import ru.akumakeito.currention.domain.model.CurrencyType
+import ru.akumakeito.currention.domain.model.FiatCurrency
 import ru.akumakeito.currention.domain.repository.CurrencyRepository
 import ru.akumakeito.currention.presentation.util.Constants.Companion.popularCurrencyShortCodeList
 import ru.akumakeito.currention.presentation.util.FlagDeserializer

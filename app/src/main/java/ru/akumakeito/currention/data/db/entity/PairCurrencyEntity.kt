@@ -3,8 +3,8 @@ package ru.akumakeito.currention.data.db.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
+import ru.akumakeito.currention.domain.model.PairCurrency
 
 @Entity(tableName = "pair_currency")
 data class PairCurrencyEntity(

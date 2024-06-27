@@ -3,8 +3,8 @@ package ru.akumakeito.currention.domain.repository
 import kotlinx.coroutines.flow.StateFlow
 import ru.akumakeito.currention.data.network.dto.ConvertFiatOnDateServerResponse
 import ru.akumakeito.currention.data.network.dto.ConvertFiatServerResponse
-import ru.akumakeito.currention.domain.FiatCurrency
-import ru.akumakeito.currention.domain.PairCurrency
+import ru.akumakeito.currention.domain.model.FiatCurrency
+import ru.akumakeito.currention.domain.model.PairCurrency
 
 interface PairCurrencyRepository {
     val currencyPairs: StateFlow<List<PairCurrency>>
