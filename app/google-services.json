@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275722431629",
+    "project_id": "currention-8ce8b",
+    "storage_bucket": "currention-8ce8b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275722431629:android:470d3ec78ad51b9c3cc6c4",
+        "android_client_info": {
+          "package_name": "ru.akumakeito.currention"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwi1VmxHn3noB6UT6Vd8wCnPeu0qOx9Xg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
