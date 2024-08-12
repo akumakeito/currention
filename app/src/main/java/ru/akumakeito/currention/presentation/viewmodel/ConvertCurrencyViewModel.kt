@@ -156,8 +156,7 @@ class ConvertCurrencyViewModel @Inject constructor(
             it.copy(firstCurrency = fromCurrency)
         }
 
-        updateRateForOne()
-        convert()
+        updateAndConvert()
     }
 
     fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
@@ -165,8 +164,26 @@ class ConvertCurrencyViewModel @Inject constructor(
             it.copy(secondCurrency = toCurrency)
         }
 
+        updateAndConvert()
+    }
+
+    private fun updateAndConvert() {
         updateRateForOne()
         convert()
+    }
+
+    fun reversePairCurrency() {
+        val currentCurrencyFrom = _convertingCurrencyState.value.firstCurrency
+        val currentCurrencyTo = _convertingCurrencyState.value.secondCurrency
+
+        _convertingCurrencyState.update {
+            it.copy(
+                firstCurrency = currentCurrencyTo,
+                secondCurrency = currentCurrencyFrom
+            )
+        }
+
+        updateAndConvert()
     }
 
 }

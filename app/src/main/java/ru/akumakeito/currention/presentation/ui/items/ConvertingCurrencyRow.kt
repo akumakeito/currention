@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.ui.items
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ru.akumakeito.currention.domain.model.FiatCurrency
-import ru.akumakeito.currention.presentation.util.formatWithRange
 
 @Composable
 fun ConvertingCurrencyRow(
@@ -30,11 +30,12 @@ fun ConvertingCurrencyRow(
     modifier: Modifier = Modifier
 ) {
     var amountState by rememberSaveable {
-        mutableStateOf(amount?.let { formatWithRange(it) })
+        mutableStateOf(amount)
     }
 
     LaunchedEffect(key1 = amount) {
-        amountState = amount?.let { formatWithRange(it) }
+        amountState = amount
+        Log.d("CurrencyConverterScreen", "amountState: ${amountState}")
     }
 
 
@@ -60,7 +61,7 @@ fun ConvertingCurrencyRow(
             currencyTo = secondCurrency,
             rate = rate,
             readOnly = readOnly,
-            amount = amountState ?: "",
+            amount = amountState,
             onAmountTextChanged = { onAmountTextChanged(it) },
             onAmountDone = { onAmountDone() },
             onClearAmount = { onClearAmount() }

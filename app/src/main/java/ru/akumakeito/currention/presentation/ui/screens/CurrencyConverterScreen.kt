@@ -72,7 +72,7 @@ fun CurrencyConverterScreen(
             Box(contentAlignment = Alignment.Center) {
 
                 HorizontalDivider()
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { convertCurrencyViewModel.reversePairCurrency() }) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_button_swap),
                         contentDescription = null

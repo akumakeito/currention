@@ -1,6 +1,5 @@
 package ru.akumakeito.currention.ui.items
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
@@ -26,22 +25,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.domain.model.FiatCurrency
+import ru.akumakeito.currention.presentation.util.formatWithRange
 
 @Composable
 fun CurrencyRateInConverter(
     currencyFrom: FiatCurrency,
     currencyTo: FiatCurrency,
     rate: Double,
-    amount: String,
+    amount: Double?,
     readOnly: Boolean,
     onAmountDone: () -> Unit,
     onAmountTextChanged: (String) -> Unit,
@@ -54,7 +52,7 @@ fun CurrencyRateInConverter(
     }
 
     LaunchedEffect(key1 = amount) {
-        value = amount
+        value = amount?.let { formatWithRange(it) } ?: ""
     }
 
     val focusRequester = remember { FocusRequester() }
@@ -103,11 +101,6 @@ fun CurrencyRateInConverter(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             keyboardActions = KeyboardActions(onDone = {
                 onAmountDone()
-                Log.d("CurrencyConverterScreen", "changeAmount: ${value.length}")
-                TextFieldValue(
-                    text = value,
-                    selection = TextRange(value.length)
-                )
             }),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = MaterialTheme.colorScheme.background,
