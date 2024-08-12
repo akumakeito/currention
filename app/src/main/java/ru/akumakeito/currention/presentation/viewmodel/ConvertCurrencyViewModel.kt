@@ -1,5 +1,6 @@
 package ru.akumakeito.currention.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,7 @@ import ru.akumakeito.currention.domain.model.FiatCurrency
 import ru.akumakeito.currention.domain.repository.PairCurrencyRepository
 import ru.akumakeito.currention.domain.state.ErrorType
 import ru.akumakeito.currention.domain.state.StateModel
-import ru.akumakeito.currention.presentation.util.Constants.Companion.convertingCurrency
+import ru.akumakeito.currention.presentation.util.Constants.Companion.defaultConvertingCurrency
 import ru.akumakeito.currention.presentation.util.format
 import java.io.IOException
 import javax.inject.Inject
@@ -23,8 +24,10 @@ class ConvertCurrencyViewModel @Inject constructor(
     private val pairCurrencyRepository: PairCurrencyRepository
 ) : ViewModel() {
 
-    private val _convertingCurrencyState = MutableStateFlow(convertingCurrency)
+    private val _convertingCurrencyState = MutableStateFlow(defaultConvertingCurrency)
     val convertingCurrencyState = _convertingCurrencyState.asStateFlow()
+
+    private val sum = MutableStateFlow("")
 
     private val _uiState = MutableStateFlow(StateModel())
     val uiState = _uiState.asStateFlow()
@@ -56,10 +59,16 @@ class ConvertCurrencyViewModel @Inject constructor(
 
     }
 
+    fun clearAmount() {
+        sum.value = ""
+        _convertingCurrencyState.value =
+            _convertingCurrencyState.value.copy(amount = null, convertedAmount = 0.0)
+    }
+
     fun changeAmount(amount: String) {
-        _convertingCurrencyState.update {
-            it.copy(amount = if (amount.isEmpty()) 0.0 else amount.toDouble())
-        }
+        sum.value = amount
+
+        Log.d("CurrencyConverterScreen", "changeAmount: ${_convertingCurrencyState.value.amount}")
 
     }
 
@@ -68,19 +77,23 @@ class ConvertCurrencyViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isLoading = true)
             }
+
+            _convertingCurrencyState.update {
+                it.copy(amount = parseAmount(sum.value))
+            }
             val result =
                 pairCurrencyRepository.convert(
                     _convertingCurrencyState.value.firstCurrency,
                     _convertingCurrencyState.value.secondCurrency,
-                    _convertingCurrencyState.value.amount
+                    _convertingCurrencyState.value.amount ?: 0.0
                 )
 
-            val rateByAmount = result.value.format(2)
+            val convertedAmount = result.value.format(2)
 
 
             _convertingCurrencyState.update {
                 it.copy(
-                    rateByAmount = rateByAmount.toDouble()
+                    convertedAmount = convertedAmount.toDouble()
                 )
             }
 
@@ -110,6 +123,19 @@ class ConvertCurrencyViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun parseAmount(input: String): Double? {
+        return try {
+            var sanitizedInput = if (input.contains(",")) input.replace(",", ".") else input
+            Log.d("CurrencyConverterScreen", "sanitizedInput: $sanitizedInput")
+            sanitizedInput = sanitizedInput.replace("..", ".")
+            Log.d("CurrencyConverterScreen", "sanitizedInput after regex: $sanitizedInput")
+
+            sanitizedInput.toDoubleOrNull()
+        } catch (e: NumberFormatException) {
+            null // Возвращаем null в случае ошибки
         }
     }
 

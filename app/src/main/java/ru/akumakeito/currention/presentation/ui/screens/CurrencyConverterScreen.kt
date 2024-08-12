@@ -23,6 +23,7 @@ import ru.akumakeito.currention.presentation.viewmodel.ConvertCurrencyViewModel
 import ru.akumakeito.currention.presentation.viewmodel.SearchingViewModel
 import ru.akumakeito.currention.ui.items.ConvertingCurrencyRow
 
+
 @Composable
 fun CurrencyConverterScreen(
     paddingValues: PaddingValues,
@@ -64,7 +65,8 @@ fun CurrencyConverterScreen(
                         convertCurrencyViewModel.changeAmount(amount)
                     }
                 },
-                onAmountDone = { convertCurrencyViewModel.convert() }
+                onAmountDone = { convertCurrencyViewModel.convert() },
+                onClearAmount = { convertCurrencyViewModel.clearAmount() }
             )
 
             Box(contentAlignment = Alignment.Center) {
@@ -82,7 +84,7 @@ fun CurrencyConverterScreen(
                 firstCurrency = convertingCurrencyState.secondCurrency,
                 secondCurrency = convertingCurrencyState.firstCurrency,
                 rate = convertingCurrencyState.rateFromSecondToFirst,
-                amount = convertingCurrencyState.rateByAmount,
+                amount = convertingCurrencyState.convertedAmount,
                 readOnly = true,
                 currencyList = currencyList,
                 onCurrencyItemDropDownClickListener = { selectedCurrency ->
@@ -90,14 +92,27 @@ fun CurrencyConverterScreen(
                 },
                 onSearchTextChanged = { searchingViewModel.onSearchTextChange(it) },
                 onAmountTextChanged = {},
-                onAmountDone = {}
+                onAmountDone = {},
+                onClearAmount = {}
 
             )
-
             HorizontalDivider()
 
 
+//            KeyboardScreen()
+//            NumberKeyboard(
+//                onNumberClick = { amount ->
+//                    coroutineScope.launch {
+//                        convertCurrencyViewModel.changeAmount(amount)
+//                    }
+//                },
+//                onDoneClick = { convertCurrencyViewModel.convert() },
+//                onBackspaceClick = {
+//                    coroutineScope.launch {
+//                        convertCurrencyViewModel.changeAmount("")
+//                    }
+//                }
+//            )
         }
-
     }
 }

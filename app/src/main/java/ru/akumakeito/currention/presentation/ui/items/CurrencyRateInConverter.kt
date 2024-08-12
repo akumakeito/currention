@@ -1,9 +1,14 @@
 package ru.akumakeito.currention.ui.items
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,7 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -31,12 +38,14 @@ import ru.akumakeito.currention.domain.model.FiatCurrency
 
 @Composable
 fun CurrencyRateInConverter(
-    currencyFrom: FiatCurrency, currencyTo: FiatCurrency,
+    currencyFrom: FiatCurrency,
+    currencyTo: FiatCurrency,
     rate: Double,
     amount: String,
     readOnly: Boolean,
     onAmountDone: () -> Unit,
     onAmountTextChanged: (String) -> Unit,
+    onClearAmount: () -> Unit,
     modifier: Modifier = Modifier
 
 ) {
@@ -52,13 +61,18 @@ fun CurrencyRateInConverter(
 
     if (!readOnly) {
         LaunchedEffect(Unit) {
+            value = ""
             focusRequester.requestFocus()
+
         }
     }
 
 
 
-    Column(horizontalAlignment = Alignment.End) {
+    Column(
+        horizontalAlignment = Alignment.End,
+        modifier = modifier
+    ) {
         Text(
             text = stringResource(
                 id = R.string.rate_for_one_currency_from,
@@ -87,7 +101,14 @@ fun CurrencyRateInConverter(
             ),
             readOnly = readOnly,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            keyboardActions = KeyboardActions(onDone = { onAmountDone() }),
+            keyboardActions = KeyboardActions(onDone = {
+                onAmountDone()
+                Log.d("CurrencyConverterScreen", "changeAmount: ${value.length}")
+                TextFieldValue(
+                    text = value,
+                    selection = TextRange(value.length)
+                )
+            }),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = MaterialTheme.colorScheme.background,
                 unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
@@ -95,11 +116,18 @@ fun CurrencyRateInConverter(
                 focusedContainerColor = MaterialTheme.colorScheme.background,
                 unfocusedContainerColor = MaterialTheme.colorScheme.background,
                 disabledContainerColor = MaterialTheme.colorScheme.background,
-            )
-
+            ),
+            trailingIcon = {
+                if (!readOnly) {
+                    IconButton(onClick = { onClearAmount() }) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.outline
+                        )
+                    }
+                }
+            }
         )
-
-
     }
-
 }

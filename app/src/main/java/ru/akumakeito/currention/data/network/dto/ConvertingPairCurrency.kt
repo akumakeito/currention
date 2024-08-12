@@ -7,8 +7,8 @@ data class ConvertingPairCurrency(
     val secondCurrency: FiatCurrency,
     val rateFromFirstToSecond: Double,
     val rateFromSecondToFirst: Double,
-    val amount: Double,
-    val rateByAmount: Double
+    val amount: Double? = null,
+    val convertedAmount: Double
 ) {
 
 

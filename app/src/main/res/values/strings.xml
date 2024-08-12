@@ -181,6 +181,7 @@
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="rate_for_one_currency_from">1 %1$s = %2$,.2f %3$s</string>
+    <string name="amount_placeholder">0.0</string>
 
 
 </resources>

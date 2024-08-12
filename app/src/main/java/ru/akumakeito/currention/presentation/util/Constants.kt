@@ -42,13 +42,13 @@ class Constants {
                 rateCurrency = 0.0f
             )
 
-        val convertingCurrency = ConvertingPairCurrency(
+        val defaultConvertingCurrency = ConvertingPairCurrency(
             firstCurrency = usd,
             secondCurrency = rub,
             rateFromFirstToSecond = 0.0,
             rateFromSecondToFirst = 0.0,
             amount = 0.0,
-            rateByAmount = 0.0
+            convertedAmount = 0.0
 
         )
 

@@ -5,6 +5,6 @@ data class ConvertFiatResponse(
     val date: String,
     val from: String,
     val to: String,
-    val amount: Int,
+    val amount: Double,
     val value: Double
 )

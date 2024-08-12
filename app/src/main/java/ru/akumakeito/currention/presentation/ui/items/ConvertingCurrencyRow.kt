@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ru.akumakeito.currention.domain.model.FiatCurrency
+import ru.akumakeito.currention.presentation.util.formatWithRange
 
 @Composable
 fun ConvertingCurrencyRow(
@@ -25,21 +26,23 @@ fun ConvertingCurrencyRow(
     onSearchTextChanged: (String) -> Unit,
     onAmountTextChanged: (String) -> Unit,
     onAmountDone: () -> Unit,
+    onClearAmount: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var amountState by rememberSaveable {
-        mutableStateOf(amount.toString())
+        mutableStateOf(amount?.let { formatWithRange(it) })
     }
 
     LaunchedEffect(key1 = amount) {
-        amountState = amount.toString()
+        amountState = amount?.let { formatWithRange(it) }
     }
 
 
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
     ) {
         CurrencyFlagAmountShortCode(
             fiatCurrency = firstCurrency,
@@ -57,9 +60,10 @@ fun ConvertingCurrencyRow(
             currencyTo = secondCurrency,
             rate = rate,
             readOnly = readOnly,
-            amount = amountState,
+            amount = amountState ?: "",
             onAmountTextChanged = { onAmountTextChanged(it) },
-            onAmountDone = { onAmountDone() }
+            onAmountDone = { onAmountDone() },
+            onClearAmount = { onClearAmount() }
         )
     }
 
