@@ -182,6 +182,10 @@
     <string name="delete">Удалить</string>
     <string name="rate_for_one_currency_from">1 %1$s = %2$,.2f %3$s</string>
     <string name="amount_placeholder">0.0</string>
+    <string name="switch_theme">Темная тема</string>
+    <string name="change_fav_cur">Изменить список валют</string>
+    <string name="change_language">Сменить язык</string>
+    <string name="app_info">О приложении</string>
 
 
 </resources>
