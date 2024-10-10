@@ -2,6 +2,7 @@
     <string name="app_name">Currention</string>
     <string name="title_activity_choose">Выбрать</string>
     <string name="choose_currencies">Выбери валюты, которые будешь конвертировать чаще всего и курс которых хочешь отслеживать</string>
+    <string name="favorite_currencies">Избранные валюты</string>
     <string name="popular">Популярные</string>
     <string name="all_currencies">Все валюты</string>
     <string name="next">Далее</string>

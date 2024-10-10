@@ -209,9 +209,20 @@ fun MainScreen(
                     convertCurrencyViewModel, searchingViewModel
                 )
             },
-            settingsScreenContent = {
-                SettingsScreen()
+//
+            settingsListContent = {
+                SettingsScreen(
+                    onSwitchTheme = {
+                    },
+                    onChangeFavoriteCurrencyClickListener = {
+                        navigationState.navigateTo(Screen.ChangeFavoriteCurrencyScreen.route)
+                    }
+                )
+            },
+            changeFavCurrencyScreenContent = {
+                ChooseFavoriteCurrencyScreen()
             }
+
         )
 
     }

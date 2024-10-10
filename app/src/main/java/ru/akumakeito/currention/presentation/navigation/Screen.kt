@@ -9,17 +9,24 @@ sealed class Screen(
     object CurrencyRatesScreen : Screen(CURRENCY_RATES_ROUTE, R.string.currency_rates)
     object ConvertScreen : Screen(CONVERT_ROUTE, R.string.converter)
     object SettingsScreen : Screen(SETTINGS_ROUTE, R.string.settings)
+    object SettingsListScreen : Screen(SETTINGS_LIST_ROUTE, R.string.settings)
+    object ChangeFavoriteCurrencyScreen :
+        Screen(CHANGE_FAVORITE_CURRENCY_ROUTE, R.string.favorite_currencies)
+
 
     companion object {
         const val CURRENCY_RATES_ROUTE = "currency_rates"
         const val CONVERT_ROUTE = "convert"
         const val SETTINGS_ROUTE = "settings"
+        const val SETTINGS_LIST_ROUTE = "settings_list"
+        const val CHANGE_FAVORITE_CURRENCY_ROUTE = "change_favorite_currency"
 
         fun getScreenByRoute(route: String): Screen {
             return when (route) {
                 CURRENCY_RATES_ROUTE -> CurrencyRatesScreen
                 CONVERT_ROUTE -> ConvertScreen
                 SETTINGS_ROUTE -> SettingsScreen
+                CHANGE_FAVORITE_CURRENCY_ROUTE -> ChangeFavoriteCurrencyScreen
                 else -> CurrencyRatesScreen
             }
         }

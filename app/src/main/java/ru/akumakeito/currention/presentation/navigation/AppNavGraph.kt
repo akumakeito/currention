@@ -4,19 +4,33 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 
 @Composable
 fun AppNavGraph(
     navHostController: NavHostController,
     currencyRatesContent: @Composable () -> Unit,
     convertScreenContent: @Composable () -> Unit,
-    settingsScreenContent: @Composable () -> Unit
+    settingsListContent: @Composable () -> Unit,
+    changeFavCurrencyScreenContent: @Composable () -> Unit
+
 ) {
 
     NavHost(
         navController = navHostController,
         startDestination = Screen.CurrencyRatesScreen.route
     ) {
+
+        navigation(
+            startDestination = Screen.SettingsListScreen.route,
+            route = Screen.SettingsScreen.route
+        ) {
+            settingsScreenNavGraph(
+                settingsListContent = settingsListContent,
+                changeFavCurrencyScreenContent = changeFavCurrencyScreenContent
+            )
+
+        }
         composable(Screen.CurrencyRatesScreen.route) {
             currencyRatesContent()
         }
@@ -25,9 +39,10 @@ fun AppNavGraph(
             convertScreenContent()
         }
 
-        composable(Screen.SettingsScreen.route) {
-            settingsScreenContent()
-        }
+//        composable(Screen.SettingsScreen.route) {
+//            settingsListContent()
+//        }
+
 
     }
 }

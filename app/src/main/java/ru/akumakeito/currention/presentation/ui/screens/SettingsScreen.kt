@@ -8,12 +8,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import ru.akumakeito.currention.R
 import ru.akumakeito.currention.presentation.ui.items.SettingsItem
 
 @Composable
 fun SettingsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSwitchTheme: () -> Unit,
+    onChangeFavoriteCurrencyClickListener: () -> Unit
 ) {
 
     Box(
@@ -27,7 +30,7 @@ fun SettingsScreen(
                 content = stringResource(id = R.string.switch_theme),
                 hasSwitch = true,
                 onSwitch = { /*TODO*/ },
-                onItemClick = { }
+                onItemClick = onSwitchTheme
             )
 
             SettingsItem(
@@ -35,7 +38,7 @@ fun SettingsScreen(
                 content = stringResource(id = R.string.change_fav_cur),
                 hasSwitch = false,
                 onSwitch = { },
-                onItemClick = { }
+                onItemClick = onChangeFavoriteCurrencyClickListener
             )
 
             SettingsItem(
@@ -55,4 +58,15 @@ fun SettingsScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun SettingsScreenPreview() {
+
+    SettingsScreen(
+        onSwitchTheme = {},
+        onChangeFavoriteCurrencyClickListener = {}
+    )
+
 }
