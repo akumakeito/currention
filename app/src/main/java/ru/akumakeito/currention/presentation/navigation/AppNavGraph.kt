@@ -16,6 +16,7 @@ fun AppNavGraph(
 
 ) {
 
+
     NavHost(
         navController = navHostController,
         startDestination = Screen.CurrencyRatesScreen.route
