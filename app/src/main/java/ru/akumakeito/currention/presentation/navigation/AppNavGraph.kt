@@ -15,8 +15,6 @@ fun AppNavGraph(
     changeFavCurrencyScreenContent: @Composable () -> Unit
 
 ) {
-
-
     NavHost(
         navController = navHostController,
         startDestination = Screen.CurrencyRatesScreen.route
