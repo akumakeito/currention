@@ -1,18 +1,23 @@
 import java.util.Properties
 
 plugins {
-    kotlin("kapt")
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.crashlytics)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools)
 }
 
 android {
     namespace = "ru.akumakeito.currention"
-    compileSdk = 34
+    compileSdk = 35
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "ru.akumakeito.currention"
@@ -36,10 +41,7 @@ android {
         }
     }
 
-
-
     buildTypes {
-
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -52,15 +54,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-        android.buildFeatures.buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+    kotlin {
+        jvmToolchain(17)
     }
     packaging {
         resources {
@@ -69,69 +64,54 @@ android {
     }
 }
 
-
 dependencies {
 
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    implementation("androidx.compose.material3:material3-android:1.2.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    val room_version = "2.6.1"
+    implementation(platform(libs.compose.bom))
+    implementation(libs.material3)
+    implementation(libs.material3.alt)
 
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.constraintlayout.compose)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.gson)
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.lifecycle.runtime.compose)
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.graphics)
+    implementation(libs.compose.tooling.preview)
+    implementation(libs.material3.alt)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+    implementation(libs.hilt.navigation.compose)
 
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation(libs.navigation.compose)
 
-    implementation("com.google.dagger:hilt-android:2.50")
-    kapt("com.google.dagger:hilt-android-compiler:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso)
+    androidTestImplementation(libs.compose.ui.test)
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.test.manifest)
 
-    val navVersion = "2.7.7"
+    implementation(libs.swipe)
+    implementation(libs.constraintlayout.compose)
 
-    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    implementation("me.saket.swipe:swipe:1.1.1")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics")
-
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
-
-}
-
-kapt {
-    correctErrorTypes = true
+    debugImplementation(libs.leakcanary)
 }

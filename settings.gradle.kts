@@ -15,4 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Currention"
 include(":app")
- 
+include(":feature")
+include(":feature:rates")
+include(":feature:convert")
+include(":feature:parameters")
