@@ -1,113 +1,193 @@
 package ru.akumakeito.currention.presentation
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.akumakeito.commonres.R
+import com.akumakeito.convert.presentation.convert.ConvertCurrencyViewModel
+import com.akumakeito.onboarding.presentation.OnboardingViewModel
+import com.akumakeito.rates.presentation.PairCurrencyViewModel
+import com.akumakeito.convert.presentation.search.SearchingInteractor
 import dagger.hilt.android.AndroidEntryPoint
-import ru.akumakeito.currention.domain.model.FiatCurrency
-import ru.akumakeito.currention.ui.screens.MainScreen
+import ru.akumakeito.currention.presentation.navigation.AppNavGraph
+import ru.akumakeito.currention.presentation.navigation.NavigationItem
+import ru.akumakeito.currention.presentation.navigation.ScreenRoute
+import ru.akumakeito.currention.presentation.navigation.rememberNavigationState
+import ru.akumakeito.currention.ui.screens.ChooseFavoriteCurrencyScreen
+import ru.akumakeito.currention.ui.screens.CurrencyConverterScreen
+import ru.akumakeito.currention.ui.screens.KeyboardAware
+import ru.akumakeito.currention.ui.screens.PairsScreen
+import ru.akumakeito.currention.ui.screens.SettingsScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navigationState = rememberNavigationState()
+            val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+            val currentScreenRoute = navBackStackEntry?.destination?.route
+
+            val pullRefreshState = rememberPullToRefreshState()
+
+
+            val onboardingViewModel: OnboardingViewModel = hiltViewModel()
+            val pairViewModel: PairCurrencyViewModel = hiltViewModel()
+            val convertCurrencyViewModel: ConvertCurrencyViewModel = hiltViewModel()
+            val scrollState = rememberScrollState()
+            val coroutineScope = rememberCoroutineScope()
+            val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
+            val isEditing = pairViewModel.isEditing.collectAsState()
+
+            val navHostController = rememberNavController()
+
             CurrentionTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    Scaffold(
+                        topBar = {
+                            TopAppBar(
+                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                                title = {
+                                    Text(
+                                        text = stringResource(
+                                            id = ScreenRoute.getScreenByRoute(
+                                                currentScreenRoute ?: ""
+                                            ).titleResId
+                                        ),
+                                        style = MaterialTheme.typography.headlineLarge,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                },
+                                actions = {
+                                    if (currentScreenRoute == ScreenRoute.PairScreenRoute.route) {
+                                        IconButton(onClick = {
+//                            pullRefreshState.startRefresh()
+                                            pairViewModel.updateAllPairsRates()
+                                        }) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_update_rates),
+                                                contentDescription = stringResource(
+                                                    R.string.update_rates
+                                                ),
+                                                modifier = Modifier.size(48.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            )
+                        },
 
+                        bottomBar = {
+                            NavigationBar {
 
+                                val navItems = listOf(
+                                    NavigationItem.PairRates,
+                                    NavigationItem.Convert,
+                                    NavigationItem.Settings
+                                )
+
+                                navItems.forEach { item ->
+                                    val selected =
+                                        navBackStackEntry?.destination?.route == item.screenRoute.route
+
+                                    NavigationBarItem(
+                                        selected = selected,
+                                        onClick = {
+                                            if (!selected) {
+                                                navigationState.navigateTo(item.screenRoute.route)
+                                            }
+                                        },
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(id = item.iconResId),
+                                                contentDescription = item.titleResId.toString()
+                                            )
+                                        },
+                                        label = {
+                                            Text(text = stringResource(id = item.titleResId))
+                                        }
+
+                                    )
+                                }
+                            }
+                        }
+                    ) { paddingValues ->
+
+                        AppNavGraph(
+                            navHostController = navigationState.navHostController,
+                            pairScreenContent = {
+                                KeyboardAware {
+                                    PairsScreen(
+                                        paddingValues = paddingValues,
+                                        pairViewModel = pairViewModel,
+                                        pullToRefreshState = pullRefreshState,
+                                        modifier = Modifier.verticalScroll(scrollState).padding(paddingValues.calculateBottomPadding())
+
+                                    )
+                                }
+                            },
+                            convertScreenContent = {
+                                CurrencyConverterScreen(
+                                    paddingValues = paddingValues,
+                                    convertCurrencyViewModel
+                                )
+                            },
+//
+                            settingsListContent = {
+                                SettingsScreen(
+                                    paddingValues = paddingValues,
+                                    onSwitchTheme = {
+                                    },
+                                    onChangeFavoriteCurrencyClickListener = {
+                                        navigationState.navigateTo(ScreenRoute.ChangeFavoriteCurrencyScreenRoute.route)
+                                    }
+                                )
+                            },
+                            changeFavCurrencyScreenContent = {
+                                ChooseFavoriteCurrencyScreen()
+                            }
+
+                        )
+
+                    }
                 }
             }
-
         }
-    }
-}
-
-
-@Composable
-fun CurrencyListMain(currencies: List<FiatCurrency>) {
-    LazyColumn {
-        items(currencies) { item ->
-            CurrencyCardTest(item)
-        }
-    }
-
-}
-
-@Composable
-fun CurrencyCardTest(
-    currency: FiatCurrency
-) {
-
-    val imageModifier = Modifier.size(40.dp)
-    Card() {
-        Row {
-            Log.d("flag", currency.flag.toString())
-            Image(
-                modifier = imageModifier,
-                painter = painterResource(id = currency.flag),
-                contentDescription = currency.name
-            )
-
-            Text(
-                text = currency.shortCode,
-                textAlign = TextAlign.Start
-            )
-            Text(
-                text = currency.name,
-                textAlign = TextAlign.End
-            )
-        }
-    }
-}
-
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
-)
-@Composable
-fun CurrencyListPreview() {
-    CurrentionTheme {
-
-        CurrencyListMain(
-            listOf(
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu"),
-                FiatCurrency(1, "USD", "US Dollar", "$", "fbfu")
-            )
-        )
     }
 }

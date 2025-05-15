@@ -1,28 +1,29 @@
 package ru.akumakeito.currention.presentation.navigation
 
-import ru.akumakeito.currention.R
+import com.akumakeito.commonres.R
+
 
 sealed class NavigationItem(
-    val screen: Screen,
     val titleResId: Int,
+    val screenRoute: ScreenRoute,
     val iconResId: Int
 ) {
 
-    object CurrencyRates : NavigationItem(
-        screen = Screen.CurrencyRatesScreen,
+    object PairRates : NavigationItem(
         titleResId = R.string.currency_rates,
+        screenRoute = ScreenRoute.PairScreenRoute,
         iconResId = R.drawable.ic_currency_rates
     )
 
     object Convert : NavigationItem(
-        screen = Screen.ConvertScreen,
         titleResId = R.string.converter,
+        screenRoute = ScreenRoute.ConvertScreenRoute,
         iconResId = R.drawable.ic_converter
     )
 
     object Settings : NavigationItem(
-        screen = Screen.SettingsScreen,
         titleResId = R.string.settings,
+        screenRoute = ScreenRoute.SettingsScreenRoute,
         iconResId = R.drawable.ic_settings
     )
 }

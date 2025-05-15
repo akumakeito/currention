@@ -11,14 +11,14 @@ fun NavGraphBuilder.settingsScreenNavGraph(
 
 ) {
     navigation(
-        startDestination = Screen.SettingsListScreen.route,
-        route = Screen.SettingsScreen.route
+        startDestination = ScreenRoute.SettingsListScreenRoute.route,
+        route = ScreenRoute.SettingsScreenRoute.route
     ) {
-        composable(Screen.ChangeFavoriteCurrencyScreen.route) {
+        composable(ScreenRoute.ChangeFavoriteCurrencyScreenRoute.route) {
             changeFavCurrencyScreenContent()
         }
 
-        composable(Screen.SettingsListScreen.route) {
+        composable(ScreenRoute.SettingsListScreenRoute.route) {
             settingsListContent()
         }
     }

@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.crashlytics) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.devtools) apply false
+    alias(libs.plugins.serialization) apply false
 }
 
 buildscript {

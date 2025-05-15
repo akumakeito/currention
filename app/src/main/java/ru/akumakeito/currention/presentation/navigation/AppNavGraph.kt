@@ -9,41 +9,38 @@ import androidx.navigation.compose.navigation
 @Composable
 fun AppNavGraph(
     navHostController: NavHostController,
-    currencyRatesContent: @Composable () -> Unit,
+    pairScreenContent: @Composable () -> Unit,
     convertScreenContent: @Composable () -> Unit,
     settingsListContent: @Composable () -> Unit,
     changeFavCurrencyScreenContent: @Composable () -> Unit
 
 ) {
 
-
     NavHost(
         navController = navHostController,
-        startDestination = Screen.CurrencyRatesScreen.route
+        startDestination = ScreenRoute.PairScreenRoute.route
     ) {
 
-        navigation(
-            startDestination = Screen.SettingsListScreen.route,
-            route = Screen.SettingsScreen.route
-        ) {
-            settingsScreenNavGraph(
-                settingsListContent = settingsListContent,
-                changeFavCurrencyScreenContent = changeFavCurrencyScreenContent
-            )
-
+//        navigation(
+//            startDestination = ScreenRoute.SettingsListScreenRoute.route,
+//            route = ScreenRoute.SettingsScreenRoute.route
+//        ) {
+//            settingsScreenNavGraph(
+//                settingsListContent = settingsListContent,
+//                changeFavCurrencyScreenContent = changeFavCurrencyScreenContent
+//            )
+//
+//        }
+        composable(ScreenRoute.PairScreenRoute.route) {
+            pairScreenContent()
         }
-        composable(Screen.CurrencyRatesScreen.route) {
-            currencyRatesContent()
-        }
 
-        composable(Screen.ConvertScreen.route) {
+        composable(ScreenRoute.ConvertScreenRoute.route) {
             convertScreenContent()
         }
 
-//        composable(Screen.SettingsScreen.route) {
-//            settingsListContent()
-//        }
-
-
+        composable(ScreenRoute.SettingsScreenRoute.route) {
+            settingsListContent()
+        }
     }
 }

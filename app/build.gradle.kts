@@ -9,6 +9,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -26,16 +27,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val keystoreFile = project.rootProject.file("secrets.properties")
-        val properties = Properties()
-        properties.load(keystoreFile.inputStream())
-        val authApiKey = properties.getProperty("AUTH_API_KEY")
 
-        buildConfigField(
-            type = "String",
-            name = "AUTH_API_KEY",
-            value = authApiKey
-        )
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -65,39 +57,33 @@ android {
 }
 
 dependencies {
-
-    implementation(platform(libs.compose.bom))
-    implementation(libs.material3)
-    implementation(libs.material3.alt)
-
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
-
-    implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.constraintlayout.compose)
-
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging)
-    implementation(libs.gson)
+    implementation(project(":feature:parameters"))
+    implementation(project(":feature:convert"))
+    implementation(project(":feature:rates"))
+    implementation(project(":feature:onboarding"))
+    implementation(project(":commonres"))
+    implementation(project(":commonmodels"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(libs.lifecycle.runtime.compose)
 
+    implementation(platform(libs.compose.bom))
+    implementation(libs.material3)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.constraintlayout.compose)
     implementation(libs.compose.ui)
     implementation(libs.compose.graphics)
     implementation(libs.compose.tooling.preview)
-    implementation(libs.material3.alt)
+    implementation(libs.swipe)
 
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -105,9 +91,6 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.test.manifest)
-
-    implementation(libs.swipe)
-    implementation(libs.constraintlayout.compose)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

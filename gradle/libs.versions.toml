@@ -1,5 +1,6 @@
 [versions]
 compose-bom = "2025.05.00"
+kotlinx-datetime = "0.4.1"
 material3 = "1.3.2"
 material3-alt = "1.3.2"
 room = "2.7.1"
@@ -25,9 +26,13 @@ kotlin = "2.1.21"
 google-services = "4.4.2"
 crashlytics = "3.0.3"
 devtools = "2.1.21-2.0.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+kotlinx-serialization = "1.8.0"
 
 [libraries]
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 material3 = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3" }
 material3-alt = { group = "androidx.compose.material3", name = "material3", version.ref = "material3-alt" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -39,7 +44,6 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -63,6 +67,9 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
@@ -74,3 +81,4 @@ crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyti
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 devtools = {id = "com.google.devtools.ksp", version.ref =  "devtools" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secrets-gradle-plugin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

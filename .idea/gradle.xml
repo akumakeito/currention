@@ -11,8 +11,13 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/commonmodels" />
+            <option value="$PROJECT_DIR$/commonres" />
+            <option value="$PROJECT_DIR$/commonui" />
+            <option value="$PROJECT_DIR$/db" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/convert" />
+            <option value="$PROJECT_DIR$/feature/onboarding" />
             <option value="$PROJECT_DIR$/feature/parameters" />
             <option value="$PROJECT_DIR$/feature/rates" />
           </set>

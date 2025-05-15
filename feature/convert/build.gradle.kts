@@ -1,7 +1,11 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -13,6 +17,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val keystoreFile = project.rootProject.file("secrets.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val authApiKey = properties.getProperty("AUTH_API_KEY")
+
+        buildConfigField(
+            type = "String",
+            name = "AUTH_API_KEY",
+            value = authApiKey
+        )
     }
 
     buildTypes {
@@ -23,7 +38,19 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -34,11 +61,37 @@ android {
 }
 
 dependencies {
+    implementation(project(":commonres"))
+    implementation(project(":commonui"))
+    implementation(project(":commonmodels"))
+    implementation(project(":db"))
 
-    implementation("androidx.core:core-ktx:1.16.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.appcompat)
+
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.datetime)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.material3)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.constraintlayout.compose)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.graphics)
+    implementation(libs.compose.tooling.preview)
+    implementation(libs.swipe)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso)
+
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+    implementation(libs.hilt.navigation.compose)
 }
