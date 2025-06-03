@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":feature:convert"))
     implementation(project(":commonmodels"))
     implementation(project(":commonui"))
+    implementation(project(":appsettings"))
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)

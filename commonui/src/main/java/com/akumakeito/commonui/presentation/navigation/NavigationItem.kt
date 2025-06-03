@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.presentation.navigation
+package com.akumakeito.commonui.presentation.navigation
 
 import com.akumakeito.commonres.R
 

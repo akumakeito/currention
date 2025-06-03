@@ -54,7 +54,7 @@ class PairCurrencyViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            currencyRepository.getInitialFiatCurrencyList()
+            currencyRepository.downloadInitialFiatCurrencyList()
         }
 
         try {

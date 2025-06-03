@@ -8,20 +8,19 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.akumakeito.commonres.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SegmentedButtonSingleSelect(modifier: Modifier = Modifier) {
-    var selectedIndex by remember { mutableStateOf(0) }
-    val options = listOf(R.string.fiat_currencies, R.string.crypto_currencies)
+fun SegmentedButtonSingleSelect(
+    modifier: Modifier = Modifier,
+    options: List<Int>,
+    selectedIndex: Int = 0,
+    onSelectionChanged: (Int) -> Unit,
+    contents: Map<Int, @Composable () -> Unit>
+) {
     SingleChoiceSegmentedButtonRow(
         modifier = modifier
             .fillMaxWidth()
@@ -29,13 +28,14 @@ fun SegmentedButtonSingleSelect(modifier: Modifier = Modifier) {
         options.forEachIndexed { index, label ->
             SegmentedButton(
                 selected = index == selectedIndex,
-                onClick = { selectedIndex = index },
+                onClick = {
+                    onSelectionChanged(index)
+                },
                 shape = SegmentedButtonDefaults.itemShape(
                     index = index,
                     count = options.size
                 ),
-
-                ) {
+            ) {
                 Text(
                     text = stringResource(label),
                     style = MaterialTheme.typography.labelLarge,
@@ -45,4 +45,8 @@ fun SegmentedButtonSingleSelect(modifier: Modifier = Modifier) {
         }
 
     }
+    SpacerHeight(height = 16)
+
+    contents[selectedIndex]?.invoke()
+
 }

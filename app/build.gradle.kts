@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.crashlytics)
+//    alias(libs.plugins.crashlytics)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools)
@@ -62,12 +62,15 @@ dependencies {
     implementation(project(":feature:rates"))
     implementation(project(":feature:onboarding"))
     implementation(project(":commonres"))
+    implementation(project(":commonui"))
     implementation(project(":commonmodels"))
+    implementation(project(":appsettings"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.material3)
@@ -92,9 +95,9 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.test.manifest)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+//    implementation(platform(libs.firebase.bom))
+//    implementation(libs.firebase.analytics)
+//    implementation(libs.firebase.crashlytics)
 
-    debugImplementation(libs.leakcanary)
+//    debugImplementation(libs.leakcanary)
 }

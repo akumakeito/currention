@@ -1,24 +1,22 @@
 package com.akumakeito.onboarding.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.akumakeito.appsettings.AppSettingsRepository
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.convert.domain.CurrencyRepository
-import com.akumakeito.convert.presentation.search.SearchState
 import com.akumakeito.convert.presentation.search.SearchingInteractor
-import com.akumakeito.convert.presentation.search.doesMatchSearchQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val repository: CurrencyRepository,
+    private val appSettingsRepository: AppSettingsRepository,
     private val searchingInteractor: SearchingInteractor,
 ) : ViewModel() {
 
@@ -30,21 +28,34 @@ class OnboardingViewModel @Inject constructor(
 
     val fiatCurrencies = searchingInteractor.fiatCurrencies
 
+    private val _selectedCurrencies = MutableStateFlow<List<FiatCurrency>>(emptyList())
+
+    val isButtonEnable = _selectedCurrencies.map { it.isNotEmpty() }
+
     fun getFiatCurrencies() = viewModelScope.launch {
-        repository.getInitialFiatCurrencyList()
+        repository.downloadInitialFiatCurrencyList()
     }
 
     fun onSearchTextChange(text: String) {
         searchingInteractor.onSearchTextChange(text)
     }
 
-
     fun updateFavoriteCurrency(currency: FiatCurrency) {
-        Log.d("checkbox", "vm $currency")
         viewModelScope.launch {
+            _selectedCurrencies.update { list ->
+                list.toMutableList().apply {
+                    if (contains(currency)) {
+                        remove(currency)
+                    } else {
+                        add(currency)
+                    }
+                }
+            }
             repository.updateFavoriteCurrency(currency)
         }
     }
 
-
+    fun onDoneClick() = viewModelScope.launch {
+        appSettingsRepository.setFirstStart(false)
+    }
 }

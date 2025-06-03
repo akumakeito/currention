@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.presentation.navigation
+package com.akumakeito.commonui.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

@@ -1,6 +1,8 @@
 package com.akumakeito.convert.domain
 
 import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.commonui.presentation.LaunchState
+import com.akumakeito.commonui.presentation.ResultState
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepository {
@@ -9,7 +11,7 @@ interface CurrencyRepository {
 
     suspend fun getLatest()
 
-    suspend fun getInitialFiatCurrencyList()
+    fun downloadInitialFiatCurrencyList() : Flow<ResultState>
     suspend fun deleteAllFiat()
 
     suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency)

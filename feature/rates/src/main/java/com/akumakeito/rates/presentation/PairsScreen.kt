@@ -1,8 +1,6 @@
 package ru.akumakeito.currention.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,24 +22,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 import com.akumakeito.rates.R
-import com.akumakeito.commonres.R as CommonRes
 import com.akumakeito.rates.presentation.PairCurrencyViewModel
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
+import ru.akumakeito.currention.ui.items.CustomTopAppBar
+import com.akumakeito.commonres.R as CommonRes
 
 @Composable
 fun KeyboardAware(
@@ -56,10 +54,9 @@ fun KeyboardAware(
 @Composable
 fun PairsScreen(
     paddingValues: PaddingValues,
-    pairViewModel: PairCurrencyViewModel,
-    pullToRefreshState: PullToRefreshState,
     modifier: Modifier = Modifier
 ) {
+    val pairViewModel: PairCurrencyViewModel = hiltViewModel()
 
     val currencyPairs by pairViewModel.currencyPairs.collectAsState()
     val editingPair by pairViewModel.editPairCurrency.collectAsState()
@@ -68,24 +65,17 @@ fun PairsScreen(
     val uiState by pairViewModel.uiState.collectAsState()
     val isEditing by pairViewModel.isEditing.collectAsState()
 
-
-    val pullRefreshState = rememberPullToRefreshState()
-//
-//
-//    if (pullRefreshState.isRefreshing) {
-//        LaunchedEffect(true) {
-//
-//            try {
-//                pairViewModel.updateAllPairsRates()
-//            } finally {
-//                pullRefreshState.endRefresh()
-//
-//            }
-//        }
-//    }
-
     Scaffold(
-        modifier = Modifier.padding(paddingValues),
+        modifier = modifier.padding(paddingValues),
+        topBar = {
+            CustomTopAppBar(
+                currentScreen = ScreenRoute.PairScreenRoute,
+                iconResId = CommonRes.drawable.ic_update_rates,
+                onActionClick = {
+                    pairViewModel.updateAllPairsRates()
+                }
+            )
+        },
         floatingActionButton = {
             if (!isEditing) {
                 FloatingActionButton(

@@ -5,6 +5,18 @@ data class StateModel(
     val isError: ErrorType? = null
 )
 
+sealed class ResultState {
+    data object Loading : ResultState()
+    data object Success : ResultState()
+    data class Error(val errorType: ErrorType) : ResultState()
+}
+
+sealed class LaunchState {
+    data object Starting : LaunchState()
+    data object Main : LaunchState()
+    data object OnBoarding : LaunchState()
+}
+
 enum class ErrorType {
     NETWORK,
     SERVER

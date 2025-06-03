@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.items.ConvertingCurrencyRow
 import com.akumakeito.convert.presentation.convert.ConvertCurrencyViewModel
@@ -26,8 +27,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun CurrencyConverterScreen(
     paddingValues: PaddingValues,
-    convertCurrencyViewModel: ConvertCurrencyViewModel,
 ) {
+    val convertCurrencyViewModel: ConvertCurrencyViewModel = hiltViewModel()
 
     val convertingCurrencyState by convertCurrencyViewModel.convertingCurrencyState.collectAsState()
     val currencyList by convertCurrencyViewModel.fiatCurrencyList.collectAsState(emptyList())

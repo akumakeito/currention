@@ -5,14 +5,16 @@ import android.util.Log
 import com.akumakeito.commonmodels.domain.CurrencyType
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonmodels.popularCurrencyShortCodeList
+import com.akumakeito.commonui.presentation.LaunchState
+import com.akumakeito.commonui.presentation.ResultState
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.toEntity
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.db.dao.CurrencyDao
 import com.akumakeito.db.entity.toModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class CurrencyRepositoryImpl(
@@ -30,7 +32,8 @@ class CurrencyRepositoryImpl(
 
     }
 
-    override suspend fun getInitialFiatCurrencyList() {
+    override fun downloadInitialFiatCurrencyList() :Flow<ResultState> = flow {
+        emit(ResultState.Loading)
         if (currencyDao.isEmpty()) {
             try {
                 val result = currencyApi.getCurrencyList(CurrencyType.FIAT.name.lowercase())
@@ -51,11 +54,16 @@ class CurrencyRepositoryImpl(
                         currencyDao.updateCurrencyName(it.shortCode, res.getString(currencyNameId))
                     }
                 }
+                Log.d("FixScreens", "downloadInitialFiatCurrencyList finished")
+                emit(ResultState.Success)
 
             } catch (e: Exception) {
                 e.printStackTrace()
+                false
             }
         }
+        Log.d("FixScreens", "download dont need")
+        emit(ResultState.Success)
     }
 
     override suspend fun deleteAllFiat() {

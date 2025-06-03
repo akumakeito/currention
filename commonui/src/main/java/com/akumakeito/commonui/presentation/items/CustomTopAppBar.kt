@@ -12,18 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.akumakeito.commonres.R
-import ru.akumakeito.currention.presentation.navigation.ScreenRoute
+import com.akumakeito.commonui.presentation.Dimens
+import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
     currentScreen: ScreenRoute,
-    isUpdatable: Boolean = false
+    iconResId: Int? = null,
+    onActionClick : () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+        modifier = modifier.padding(start = Dimens.x1, end = Dimens.x1),
         title = {
             Text(
                 text = stringResource(id = currentScreen.titleResId),
@@ -32,14 +34,12 @@ fun CustomTopAppBar(
             )
         },
         actions = {
-            if (isUpdatable) {
-                IconButton(onClick = { /*TODO*/ }) {
+            if (iconResId != null) {
+                IconButton(onClick = { onActionClick() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_update_rates),
-                        contentDescription = stringResource(
-                            R.string.update_rates
-                        ),
-                        modifier = Modifier.size(48.dp)
+                        contentDescription = "",
+                        modifier = Modifier.size(Dimens.IconSize)
                     )
                 }
             }

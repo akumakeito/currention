@@ -2,10 +2,12 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.devtools)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
 }
 
 android {
-    namespace = "com.akumakeito.db"
+    namespace = "com.akumakeito.appsettings"
     compileSdk = 35
 
     defaultConfig {
@@ -34,22 +36,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":commonmodels"))
-    implementation(project(":commonres"))
-
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
-    implementation(libs.converter.gson)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso)
-
-    implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
-    implementation(libs.hilt.navigation.compose)
 }

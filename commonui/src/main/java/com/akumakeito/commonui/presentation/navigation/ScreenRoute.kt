@@ -1,4 +1,4 @@
-package ru.akumakeito.currention.presentation.navigation
+package com.akumakeito.commonui.presentation.navigation
 
 import com.akumakeito.commonres.R
 
@@ -10,6 +10,7 @@ sealed class ScreenRoute(
     object ConvertScreenRoute : ScreenRoute(CONVERT_ROUTE, R.string.converter)
     object SettingsScreenRoute : ScreenRoute(SETTINGS_ROUTE, R.string.settings)
     object SettingsListScreenRoute : ScreenRoute(SETTINGS_LIST_ROUTE, R.string.settings)
+    object StartingScreenRoute : ScreenRoute(STARTING_ROUTE, R.string.app_name)
     object ChangeFavoriteCurrencyScreenRoute :
         ScreenRoute(CHANGE_FAVORITE_CURRENCY_ROUTE, R.string.favorite_currencies)
 
@@ -20,6 +21,7 @@ sealed class ScreenRoute(
         const val SETTINGS_ROUTE = "settings"
         const val SETTINGS_LIST_ROUTE = "settings_list"
         const val CHANGE_FAVORITE_CURRENCY_ROUTE = "change_favorite_currency"
+        const val STARTING_ROUTE = "starting"
 
         fun getScreenByRoute(route: String): ScreenRoute {
             return when (route) {
@@ -27,6 +29,8 @@ sealed class ScreenRoute(
                 CONVERT_ROUTE -> ConvertScreenRoute
                 SETTINGS_ROUTE -> SettingsScreenRoute
                 CHANGE_FAVORITE_CURRENCY_ROUTE -> ChangeFavoriteCurrencyScreenRoute
+                SETTINGS_LIST_ROUTE -> SettingsListScreenRoute
+                STARTING_ROUTE -> StartingScreenRoute
                 else -> PairScreenRoute
             }
         }

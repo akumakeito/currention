@@ -38,4 +38,9 @@ interface CurrencyDao {
                 "isFavorite = CASE WHEN isFavorite THEN 0 ELSE 1 END WHERE id = :id"
     )
     suspend fun updateFavoriteCurrency(id: Int)
+
+    @Query(
+        "SELECT * FROM FiatEntity WHERE isFavorite = 1"
+    )
+    suspend fun getFavoriteCurrencies(): List<FiatEntity>
 }

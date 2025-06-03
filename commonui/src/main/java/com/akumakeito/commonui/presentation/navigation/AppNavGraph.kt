@@ -1,24 +1,24 @@
-package ru.akumakeito.currention.presentation.navigation
+package com.akumakeito.commonui.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 
 @Composable
 fun AppNavGraph(
     navHostController: NavHostController,
+    startDestination: String,
     pairScreenContent: @Composable () -> Unit,
     convertScreenContent: @Composable () -> Unit,
     settingsListContent: @Composable () -> Unit,
-    changeFavCurrencyScreenContent: @Composable () -> Unit
-
+    changeFavCurrencyScreenContent: @Composable () -> Unit,
+    startingScreenContent: @Composable () -> Unit,
 ) {
 
     NavHost(
         navController = navHostController,
-        startDestination = ScreenRoute.PairScreenRoute.route
+        startDestination = startDestination,
     ) {
 
 //        navigation(
@@ -31,6 +31,11 @@ fun AppNavGraph(
 //            )
 //
 //        }
+
+        composable(ScreenRoute.ChangeFavoriteCurrencyScreenRoute.route) {
+            changeFavCurrencyScreenContent()
+        }
+
         composable(ScreenRoute.PairScreenRoute.route) {
             pairScreenContent()
         }
@@ -41,6 +46,10 @@ fun AppNavGraph(
 
         composable(ScreenRoute.SettingsScreenRoute.route) {
             settingsListContent()
+        }
+
+        composable(ScreenRoute.StartingScreenRoute.route) {
+            startingScreenContent()
         }
     }
 }

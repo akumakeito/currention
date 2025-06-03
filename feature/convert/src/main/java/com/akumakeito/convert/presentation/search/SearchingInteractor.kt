@@ -23,10 +23,9 @@ class SearchingInteractor @Inject constructor(
     val fiatCurrencies = _searchingState.flatMapLatest { state ->
         _fiatCurrencies.map { currencies ->
             if (state.searchText.isBlank()) {
-                currencies.filter { it.isPopular }  //TODO заменить на is Favorite
+                currencies.sortedByDescending { it.isFavorite }.sortedByDescending { it.isPopular } //TODO заменить на is Favorite
             } else {
                 currencies.filter { it.doesMatchSearchQuery(state.searchText) }
-
             }
         }
     }
