@@ -20,14 +20,5 @@ fun PairCurrencyEntity.toModel() = PairCurrency(
         rateCurrency
     )
 
-//        fun fromResponse(convertFiatResponse: ConvertFiatResponse) = PairCurrencyEntity(
-//            0,
-//            convertFiatResponse.from,
-//            convertFiatResponse.to,
-//            0.0,
-//            convertFiatResponse.value,
-//            0.0
-//        )
-
 fun List<PairCurrencyEntity>.toModel(): List<PairCurrency> = map { it.toModel() }
 

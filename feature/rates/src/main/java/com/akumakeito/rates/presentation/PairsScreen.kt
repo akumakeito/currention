@@ -25,13 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 import com.akumakeito.rates.R
 import com.akumakeito.rates.presentation.PairCurrencyViewModel
@@ -41,15 +42,6 @@ import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.ui.items.CustomTopAppBar
 import com.akumakeito.commonres.R as CommonRes
 
-@Composable
-fun KeyboardAware(
-    content: @Composable () -> Unit
-) {
-    Box(modifier = Modifier.imePadding()) {
-        content()
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PairsScreen(
@@ -57,13 +49,12 @@ fun PairsScreen(
     modifier: Modifier = Modifier
 ) {
     val pairViewModel: PairCurrencyViewModel = hiltViewModel()
-
-    val currencyPairs by pairViewModel.currencyPairs.collectAsState()
-    val editingPair by pairViewModel.editPairCurrency.collectAsState()
-    val currencyList by pairViewModel.fiatCurrencies.collectAsState(emptyList())
     val state = rememberLazyListState()
-    val uiState by pairViewModel.uiState.collectAsState()
-    val isEditing by pairViewModel.isEditing.collectAsState()
+
+    val currencyPairs by pairViewModel.currencyPairs.collectAsStateWithLifecycle()
+    val editingPair by pairViewModel.editPairCurrency.collectAsStateWithLifecycle()
+    val currencyList by pairViewModel.favoriteCurrencyList.collectAsStateWithLifecycle()
+    val isEditing by pairViewModel.isEditing.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier.padding(paddingValues),
@@ -80,18 +71,16 @@ fun PairsScreen(
             if (!isEditing) {
                 FloatingActionButton(
                     modifier = Modifier
-                        .padding(16.dp),
+                        .padding(Dimens.x2),
                     onClick = {
                         pairViewModel.addNewCurrencyPair()
                     },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
-
                     Icon(
                         imageVector = Icons.Rounded.Add,
                         contentDescription = stringResource(R.string.add_new_pair)
                     )
-
                 }
             }
         },
@@ -102,7 +91,7 @@ fun PairsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
-                        .padding(16.dp),
+                        .padding(Dimens.x2),
                 ) {
                     Text(
                         text = stringResource(CommonRes.string.done),
@@ -110,100 +99,84 @@ fun PairsScreen(
                     )
                 }
             }
-
         }
     ) { innerPadding ->
-        val coroutineScope = rememberCoroutineScope()
-        Box(
+
+        LazyColumn(
             modifier = Modifier
-                .padding(innerPadding)
-//            .nestedScroll(pullRefreshState.nestedScrollConnection)
-//        verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxSize()
+                .padding(innerPadding),
+            state = state
         ) {
-//        if (pullRefreshState.isRefreshing || uiState.value.isLoading) {
-//            LinearProgressIndicator(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//            )
-//        }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = state
-            ) {
+            items(currencyPairs, key = { it.id }) { item ->
+                val delete = SwipeAction(
+                    onSwipe = { pairViewModel.onSwipeToDelete(item) },
+                    icon = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = stringResource(id = CommonRes.string.delete),
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(Dimens.x2)
+                            )
+                            Text(
+                                text = stringResource(id = CommonRes.string.delete),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
 
-                items(currencyPairs, key = { it.id }) { item ->
-                    val delete = SwipeAction(
-                        onSwipe = { pairViewModel.onSwipeToDelete(item) },
-                        icon = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    Icons.Default.Delete,
-                                    contentDescription = stringResource(id = CommonRes.string.delete),
-                                    tint = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                                Text(
-                                    text = stringResource(id = CommonRes.string.delete),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
+                    },
+                    background = MaterialTheme.colorScheme.error,
+                    isUndo = true
+                )
 
+                val edit = SwipeAction(
+                    onSwipe = { pairViewModel.onSwipeToEdit(item) },
+                    icon = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                stringResource(id = CommonRes.string.edit),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            Icon(
+                                Icons.Default.Create,
+                                contentDescription = stringResource(id = CommonRes.string.edit),
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.padding(Dimens.x2)
+                            )
+                        }
+
+                    },
+                    background = MaterialTheme.colorScheme.primary,
+                    isUndo = true
+                )
+
+                SwipeableActionsBox(
+                    swipeThreshold = 200.dp,
+                    startActions = listOf(edit),
+                    endActions = listOf(delete),
+                    backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.outline
+                ) {
+                    CurrencyPairInExchangeRate(
+                        pairCurrency = item,
+                        onEditStateChange = {
+                            editingPair.id == item.id
                         },
-                        background = MaterialTheme.colorScheme.error.copy(alpha = 0.5f),
-                        isUndo = true
-                    )
-
-                    val edit = SwipeAction(
-                        onSwipe = { pairViewModel.onSwipeToEdit(item) },
-                        icon = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    stringResource(id = CommonRes.string.edit),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                                Icon(
-                                    Icons.Default.Create,
-                                    contentDescription = stringResource(id = CommonRes.string.edit),
-                                    tint = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                            }
-
+                        currencyList = currencyList,
+                        onCurrencyFromDropDownClickListener = { selectedCurrency ->
+                            pairViewModel.updatePairCurrencyFrom(selectedCurrency)
                         },
-                        background = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                        isUndo = true
+                        onCurrencyToDropDownClickListener = { selectedCurrency ->
+                            pairViewModel.updatePairCurrencyTo(selectedCurrency)
+                        },
+                        editingPair = editingPair,
                     )
-
-                    SwipeableActionsBox(
-                        swipeThreshold = 200.dp,
-                        startActions = listOf(edit),
-                        endActions = listOf(delete),
-                        backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.outline
-                    ) {
-                        CurrencyPairInExchangeRate(
-                            pairCurrency = item,
-                            onEditStateChange = {
-//                            coroutineScope.launch {
-//                                state.animateScrollToItem(index)
-//                            }
-                                editingPair.id == item.id
-                            },
-                            currencyList = currencyList,
-                            onCurrencyFromDropDownClickListener = { selectedCurrency ->
-                                pairViewModel.updatePairCurrencyFrom(selectedCurrency)
-                            },
-                            onCurrencyToDropDownClickListener = { selectedCurrency ->
-                                pairViewModel.updatePairCurrencyTo(selectedCurrency)
-                            },
-                            editingPair = editingPair,
-                            onSearchTextChanged = { },
-                        )
-                    }
                 }
             }
         }
     }
 }
+
 
 
 

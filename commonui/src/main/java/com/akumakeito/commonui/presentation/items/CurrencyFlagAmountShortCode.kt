@@ -39,10 +39,6 @@ fun CurrencyFlagAmountShortCode(
 ) {
 
     var expanded by remember { mutableStateOf(false) }
-    val scrollState = rememberScrollState()
-
-    val scope = rememberCoroutineScope()
-
 
     var isEditState by remember {
         mutableStateOf(isEditing)
@@ -69,7 +65,7 @@ fun CurrencyFlagAmountShortCode(
     }
 
 
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.clickable {
         expanded = true
     }) {
         FlagItem(flagId = currency.flag)
@@ -104,9 +100,8 @@ fun CurrencyFlagAmountShortCode(
                     expanded = false
                     onSearchTextChanged("")
                 },
-                modifier = modifier
+                modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.tertiaryContainer)
-                    .imePadding()
 
 
             ) {

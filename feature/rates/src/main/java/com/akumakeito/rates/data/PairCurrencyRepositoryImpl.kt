@@ -37,7 +37,6 @@ class PairCurrencyRepositoryImpl @Inject constructor(
             oldPair = updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency)
         }
 
-
         var updatedPair =
             if (oldPair.toCurrencyLastRate == 0.0 || pairCurrency.toCurrencyLastRate == 0.0) {
                 val previousRate = convertRepository.getCurrencyRateOnPreviousDate(
@@ -47,7 +46,7 @@ class PairCurrencyRepositoryImpl @Inject constructor(
 
                 Log.d("PairCurrencyRepositoryImpl", "previousRate: $previousRate")
                 pairCurrency.copy(
-                    toCurrencyLastRate = previousRate ?: 0.1,
+                    toCurrencyLastRate = previousRate ?: 0.0,
                     toCurrencyNewRate = newRates.value
                 )
             } else if (newRates.value == pairCurrency.toCurrencyNewRate) {
@@ -61,7 +60,6 @@ class PairCurrencyRepositoryImpl @Inject constructor(
 
         val updatedPairWithRate = updatedPair.copy(rateCurrency = updatedPair.getRateInPerc())
         pairCurrencyDao.updateCurrencyPair(updatedPairWithRate.toEntity())
-
     }
 
     override suspend fun updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency: PairCurrency): PairCurrency {
@@ -95,5 +93,4 @@ class PairCurrencyRepositoryImpl @Inject constructor(
         val newPair = pairCurrencyDao.getLastInsertedPair()
         return newPair.toModel()
     }
-
 }

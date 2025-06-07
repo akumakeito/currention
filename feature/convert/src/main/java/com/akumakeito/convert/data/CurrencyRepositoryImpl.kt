@@ -54,7 +54,6 @@ class CurrencyRepositoryImpl(
                         currencyDao.updateCurrencyName(it.shortCode, res.getString(currencyNameId))
                     }
                 }
-                Log.d("FixScreens", "downloadInitialFiatCurrencyList finished")
                 emit(ResultState.Success)
 
             } catch (e: Exception) {
@@ -62,7 +61,6 @@ class CurrencyRepositoryImpl(
                 false
             }
         }
-        Log.d("FixScreens", "download dont need")
         emit(ResultState.Success)
     }
 
@@ -71,11 +69,14 @@ class CurrencyRepositoryImpl(
     }
 
     override suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency) {
-        Log.d("checkbox", "repo $fiatCurrency")
         currencyDao.updateFavoriteCurrency(fiatCurrency.id)
     }
 
     override suspend fun getPopularCurrencyList(): List<FiatCurrency> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun getFavoriteCurrencyList(): List<FiatCurrency> {
+        return currencyDao.getFavoriteCurrencies().toModel()
     }
 }

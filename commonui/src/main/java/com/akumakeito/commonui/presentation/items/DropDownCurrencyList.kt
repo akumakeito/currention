@@ -1,10 +1,12 @@
 package com.akumakeito.commonui.presentation.items
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -36,11 +38,15 @@ fun DropDownCurrencyList(
 
     var expanded by remember { mutableStateOf(false) }
 
+    Log.d("DropDownCurrencyList", "currencyList: $currencyList")
+
+    val height = currencyList.size * 48
+
 
     Column(
         modifier = Modifier
             .width(130.dp)
-            .height(300.dp)
+            .height(height.dp)
             .background(color = MaterialTheme.colorScheme.tertiaryContainer)
     ) {
 

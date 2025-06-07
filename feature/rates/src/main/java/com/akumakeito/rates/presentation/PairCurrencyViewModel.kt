@@ -5,27 +5,22 @@ import androidx.lifecycle.viewModelScope
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.ErrorType
 import com.akumakeito.commonui.presentation.StateModel
-import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.rates.domain.PairCurrency
 import com.akumakeito.rates.domain.PairCurrencyRepository
 import com.akumakeito.rates.domain.newPair
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
 @HiltViewModel
 class PairCurrencyViewModel @Inject constructor(
     private val pairCurrencyRepository: PairCurrencyRepository,
     private val currencyRepository: CurrencyRepository,
-    private val convertRepository: ConvertRepository,
 ) : ViewModel() {
 
     private val _currencyPairs = pairCurrencyRepository.currencyPairs
@@ -41,41 +36,24 @@ class PairCurrencyViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(StateModel())
     val uiState = _uiState.asStateFlow()
 
-
-    private val _fiatCurrencies = currencyRepository.fiatCurrencies
-
-    val fiatCurrencies = _fiatCurrencies.map { currencies ->
-        currencies.filter { it.isPopular }  //TODO заменить на is Favorite
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = emptyList(),
-    )
+    private val _favoriteCurrencyList = MutableStateFlow<List<FiatCurrency>>(emptyList())
+    val favoriteCurrencyList = _favoriteCurrencyList.asStateFlow()
 
     init {
         viewModelScope.launch {
-            currencyRepository.downloadInitialFiatCurrencyList()
+            _favoriteCurrencyList.value = currencyRepository.getFavoriteCurrencyList()
         }
 
         try {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
             updateAllPairsRates()
-
-            _uiState.update {
-                StateModel()
-            }
         } catch (networkException: IOException) {
             _uiState.update {
                 it.copy(isError = ErrorType.NETWORK)
             }
         }
-
-
     }
 
-    fun addNewCurrencyPair() = viewModelScope.launch{
+    fun addNewCurrencyPair() = viewModelScope.launch {
         val newAddedPair = pairCurrencyRepository.addNewCurrencyPair(newPair)
         editPair(newAddedPair)
     }
@@ -85,25 +63,15 @@ class PairCurrencyViewModel @Inject constructor(
         _isEditing.update { true }
     }
 
-
     fun updatePair() = viewModelScope.launch {
-        _uiState.update {
-            it.copy(isLoading = true)
-        }
         pairCurrencyRepository.updateCurrencyPair(_editPairCurrency.value)
         _editPairCurrency.update { newPair }
         _isEditing.update { false }
-
-        _uiState.update {
-            it.copy(isLoading = false)
-        }
     }
 
     private fun updatePairRates(pairCurrency: PairCurrency) =
         viewModelScope.launch {
-
             pairCurrencyRepository.updateCurrencyPair(pairCurrency)
-
         }
 
     fun updateAllPairsRates() = viewModelScope.launch {
@@ -118,7 +86,6 @@ class PairCurrencyViewModel @Inject constructor(
         }
     }
 
-
     fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
         _editPairCurrency.update {
             it.copy(fromCurrency = fromCurrency)
@@ -129,11 +96,6 @@ class PairCurrencyViewModel @Inject constructor(
         _editPairCurrency.update {
             it.copy(toCurrency = toCurrency)
         }
-    }
-
-
-    fun getPairById(id: Int) = viewModelScope.launch {
-        pairCurrencyRepository.getPairById(id)
     }
 
     private fun deletePairById(id: Int) = viewModelScope.launch {

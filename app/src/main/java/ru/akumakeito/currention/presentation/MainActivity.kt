@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.commonui.presentation.StartingScreen
+import com.akumakeito.commonui.presentation.items.KeyboardAware
 import com.akumakeito.commonui.presentation.navigation.AppNavGraph
 import com.akumakeito.commonui.presentation.navigation.NavigationItem
 import com.akumakeito.commonui.presentation.navigation.ScreenRoute
@@ -30,7 +31,6 @@ import com.akumakeito.commonui.presentation.navigation.rememberNavigationState
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.ui.screens.ChooseFavoriteCurrencyScreen
 import ru.akumakeito.currention.ui.screens.CurrencyConverterScreen
-import ru.akumakeito.currention.ui.screens.KeyboardAware
 import ru.akumakeito.currention.ui.screens.PairsScreen
 import ru.akumakeito.currention.ui.screens.SettingsScreen
 import ru.akumakeito.currention.ui.theme.CurrentionTheme

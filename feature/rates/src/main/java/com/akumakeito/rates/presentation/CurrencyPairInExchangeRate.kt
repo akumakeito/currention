@@ -3,10 +3,7 @@ package ru.akumakeito.currention.ui.items
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,14 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonres.R
+import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.items.CurrencyFlagAmountShortCode
 import com.akumakeito.commonui.presentation.items.CurrencyRate
 import com.akumakeito.rates.domain.PairCurrency
@@ -36,11 +34,7 @@ fun CurrencyPairInExchangeRate(
     editingPair: PairCurrency,
     onCurrencyFromDropDownClickListener: (FiatCurrency) -> Unit,
     onCurrencyToDropDownClickListener: (FiatCurrency) -> Unit,
-    onSearchTextChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
-
-
     var isEditState by remember {
         mutableStateOf(onEditStateChange())
     }
@@ -63,63 +57,66 @@ fun CurrencyPairInExchangeRate(
         }
     }
 
-    var currencyListState by remember {
-        mutableStateOf(currencyList)
-    }
-
-    LaunchedEffect(key1 = currencyList) {
-        currencyListState = currencyList
-    }
-
-    Row(
+    ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
             .pointerInput(true) {
                 detectTapGestures(onPress = {
                     expanded = true
                 })
             },
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
     ) {
+
+        val (currencyFrom, equalSign, currencyTo, rate) = createRefs()
 
         CurrencyFlagAmountShortCode(
             fiatCurrency = currencyPair.fromCurrency,
             amount = "1",
             isEditing = isEditState,
-            currencyList = currencyListState,
+            currencyList = currencyList,
             onCurrencyItemDropDownClickListener = onCurrencyFromDropDownClickListener,
-            onSearchTextChanged = { onSearchTextChanged(it) },
-            modifier = modifier.imePadding()
+            onSearchTextChanged = {},
+            modifier = Modifier.constrainAs(currencyFrom) {
+                top.linkTo(parent.top, margin = Dimens.x2)
+                bottom.linkTo(parent.bottom, margin = Dimens.x2)
+                start.linkTo(parent.start, margin = Dimens.x3)
+            }
         )
-
 
         Image(
             painter = painterResource(id = R.drawable.equals),
             contentDescription = stringResource(R.string.equals),
             modifier = Modifier
-                .padding(horizontal = 0.dp)
-                .align(Alignment.CenterVertically)
+                .constrainAs(equalSign) {
+                    start.linkTo(currencyFrom.end, margin = Dimens.x2)
+                    top.linkTo(currencyFrom.top)
+                    bottom.linkTo(currencyFrom.bottom)
+                }
         )
-
-
 
         CurrencyFlagAmountShortCode(
             fiatCurrency = currencyPair.toCurrency,
             amount = String.format("%.2f", pairCurrency.toCurrencyNewRate),
             isEditing = isEditState,
-            currencyList = currencyListState,
+            currencyList = currencyList,
             onCurrencyItemDropDownClickListener = onCurrencyToDropDownClickListener,
-            onSearchTextChanged = { onSearchTextChanged(it) },
-            modifier = modifier.imePadding()
+            onSearchTextChanged = { },
+            modifier = Modifier.constrainAs(currencyTo) {
+                top.linkTo(currencyFrom.top)
+                bottom.linkTo(currencyFrom.bottom)
+                start.linkTo(equalSign.end, margin = Dimens.x2)
+            }
         )
 
-
-
         if (!isEditState) {
-
-            CurrencyRate(rate = pairCurrency.rateCurrency ?: 0.0f)
+            CurrencyRate(
+                rate = pairCurrency.rateCurrency ?: 0.0f,
+                modifier = Modifier.constrainAs(rate) {
+                    top.linkTo(currencyFrom.top)
+                    bottom.linkTo(currencyFrom.bottom)
+                    end.linkTo(parent.end, margin = Dimens.x3)
+                }
+            )
         }
     }
 }
