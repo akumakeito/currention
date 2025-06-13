@@ -64,7 +64,7 @@ dependencies {
     implementation(project(":commonres"))
     implementation(project(":commonui"))
     implementation(project(":commonmodels"))
-    implementation(project(":appsettings"))
+    implementation(project(":core"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

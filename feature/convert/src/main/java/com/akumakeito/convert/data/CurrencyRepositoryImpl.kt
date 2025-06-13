@@ -14,6 +14,8 @@ import com.akumakeito.db.dao.CurrencyDao
 import com.akumakeito.db.entity.toModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -69,7 +71,8 @@ class CurrencyRepositoryImpl(
     }
 
     override suspend fun updateFavoriteCurrency(fiatCurrency: FiatCurrency) {
-        currencyDao.updateFavoriteCurrency(fiatCurrency.id)
+        val updated = fiatCurrency.copy(isFavorite = !fiatCurrency.isFavorite).toEntity()
+        currencyDao.updateFavoriteCurrency(updated)
     }
 
     override suspend fun getPopularCurrencyList(): List<FiatCurrency> {
@@ -80,8 +83,7 @@ class CurrencyRepositoryImpl(
         return currencyDao.getFavoriteCurrencies().toModel()
     }
 
-    override fun getFavoriteCurrencyListFlow(): Flow<List<FiatCurrency>> = flow {
-        val result = getFavoriteCurrencyList()
-        emit(result)
-    }
+    override fun getFavoriteCurrencyListFlow(): Flow<List<FiatCurrency>> =  currencyDao.getFavoriteCurrenciesFlow().map {
+            it.toModel()
+        }
 }

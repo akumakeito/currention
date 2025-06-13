@@ -1,4 +1,4 @@
-package com.akumakeito.appsettings
+package com.akumakeito.core.appsettings
 
 import android.content.Context
 import androidx.datastore.core.DataStore

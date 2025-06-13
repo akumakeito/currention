@@ -20,14 +20,14 @@ data class FiatEntity(
     var isFavorite: Boolean = false
 ) {
     fun toModel() = FiatCurrency(
-        id,
-        name,
-        shortCode,
-        code,
-        symbol,
-        flag,
-        isPopular,
-        isFavorite
+        id = id,
+        name = name,
+        shortCode = shortCode,
+        code = code,
+        symbol = symbol,
+        flag = flag,
+        isPopular = isPopular,
+        isFavorite = isFavorite
     )
 }
 

@@ -1,4 +1,4 @@
-package com.akumakeito.appsettings
+package com.akumakeito.core
 
 import org.junit.Test
 

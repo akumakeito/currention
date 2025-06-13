@@ -2,7 +2,7 @@ package ru.akumakeito.currention.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.akumakeito.appsettings.AppSettingsRepository
+import com.akumakeito.core.appsettings.AppSettingsRepository
 import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.commonui.presentation.ResultState
 import com.akumakeito.convert.domain.CurrencyRepository

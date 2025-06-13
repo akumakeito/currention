@@ -40,7 +40,7 @@ dependencies {
     implementation(project(":feature:convert"))
     implementation(project(":commonmodels"))
     implementation(project(":commonui"))
-    implementation(project(":appsettings"))
+    implementation(project(":core"))
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.swipe)
 
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso)
 
@@ -64,4 +67,5 @@ dependencies {
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
     implementation(libs.hilt.navigation.compose)
+    testImplementation(kotlin("test"))
 }

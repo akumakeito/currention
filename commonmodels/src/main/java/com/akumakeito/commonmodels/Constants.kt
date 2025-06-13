@@ -18,10 +18,19 @@ val usd = FiatCurrency(
 )
 
 val rub = FiatCurrency(
-    1,
+    2,
     "Российский рубль",
     "RUB",
     "643",
     "P",
     R.drawable.flag_rub
+)
+
+val lari = FiatCurrency(
+    3,
+    "Грузинский лари",
+    "GEL",
+    "981",
+    "L",
+    R.drawable.flag_gel
 )

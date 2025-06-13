@@ -2,13 +2,18 @@ package com.akumakeito.onboarding.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.akumakeito.appsettings.AppSettingsRepository
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.convert.domain.CurrencyRepository
+import com.akumakeito.convert.presentation.search.SearchState
 import com.akumakeito.convert.presentation.search.SearchingInteractor
+import com.akumakeito.core.appsettings.AppSettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,20 +25,33 @@ class OnboardingViewModel @Inject constructor(
     private val searchingInteractor: SearchingInteractor,
 ) : ViewModel() {
 
+    private val _state = MutableStateFlow(
+        OnboardingScreenModel(
+            fiatCurrencyList = emptyList(),
+            searchState = SearchState(),
+            isButtonEnable = false
+        )
+    )
+
+    val state = _state.asStateFlow()
+
     init {
-        getFiatCurrencies()
-    }
-
-    val searchingState = searchingInteractor.searchingState
-
-    val fiatCurrencies = searchingInteractor.fiatCurrencies
-
-    private val _selectedCurrencies = MutableStateFlow<List<FiatCurrency>>(emptyList())
-
-    val isButtonEnable = _selectedCurrencies.map { it.isNotEmpty() }
-
-    fun getFiatCurrencies() = viewModelScope.launch {
-        repository.downloadInitialFiatCurrencyList()
+        combine(
+            searchingInteractor.fiatCurrencies,
+            searchingInteractor.searchingState,
+            repository.getFavoriteCurrencyListFlow()
+        ) { fiatCurrencies, searchState, favoriteCurrencies ->
+            Triple(fiatCurrencies, searchState, favoriteCurrencies)
+        }.distinctUntilChanged()
+            .onEach { (fiatCurrencies, searchState, favoriteCurrencies) ->
+                _state.update {
+                    it.copy(
+                        fiatCurrencyList = fiatCurrencies,
+                        searchState = searchState,
+                        isButtonEnable = favoriteCurrencies.isNotEmpty()
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 
     fun onSearchTextChange(text: String) {
@@ -42,15 +60,6 @@ class OnboardingViewModel @Inject constructor(
 
     fun updateFavoriteCurrency(currency: FiatCurrency) {
         viewModelScope.launch {
-            _selectedCurrencies.update { list ->
-                list.toMutableList().apply {
-                    if (contains(currency)) {
-                        remove(currency)
-                    } else {
-                        add(currency)
-                    }
-                }
-            }
             repository.updateFavoriteCurrency(currency)
         }
     }

@@ -44,9 +44,7 @@ fun ChooseFavoriteCurrencyScreen(
     onDoneClick: () -> Unit
 ) {
     val onboardingViewModel: OnboardingViewModel = hiltViewModel()
-    val fiatCurrencyList by onboardingViewModel.fiatCurrencies.collectAsStateWithLifecycle(emptyList())
-    val searchingState by onboardingViewModel.searchingState.collectAsStateWithLifecycle()
-    val isButtonEnable by onboardingViewModel.isButtonEnable.collectAsStateWithLifecycle(false)
+    val state by onboardingViewModel.state.collectAsStateWithLifecycle()
 
     var selectedIndex by remember { mutableIntStateOf(0) }
     val options = listOf(R.string.fiat_currencies, R.string.crypto_currencies)
@@ -80,7 +78,7 @@ fun ChooseFavoriteCurrencyScreen(
         },
         bottomBar = {
             Button(
-                enabled = isButtonEnable,
+                enabled = state.isButtonEnable,
                 onClick = {
                     onboardingViewModel.onDoneClick()
                     onDoneClick()
@@ -127,8 +125,8 @@ fun ChooseFavoriteCurrencyScreen(
                         0 to {
                             FiatCurrencyList(
                                 onboardingViewModel = onboardingViewModel,
-                                searchingState = searchingState,
-                                fiatCurrencyList = fiatCurrencyList,
+                                searchingState = state.searchState,
+                                fiatCurrencyList = state.fiatCurrencyList,
                                 lazyListState = lazyListState
                             )
                         },

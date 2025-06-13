@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.akumakeito.db.entity.FiatEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -33,14 +34,16 @@ interface CurrencyDao {
     @Query("UPDATE FiatEntity SET name = :name WHERE short_code = :shortCode")
     suspend fun updateCurrencyName(shortCode: String, name: String)
 
-    @Query(
-        "UPDATE fiatentity SET \n" +
-                "isFavorite = CASE WHEN isFavorite THEN 0 ELSE 1 END WHERE id = :id"
-    )
-    suspend fun updateFavoriteCurrency(id: Int)
+    @Update
+    suspend fun updateFavoriteCurrency(fiatEntity: FiatEntity)
 
     @Query(
         "SELECT * FROM FiatEntity WHERE isFavorite = 1"
     )
     suspend fun getFavoriteCurrencies(): List<FiatEntity>
+
+    @Query(
+        "SELECT * FROM FiatEntity WHERE isFavorite = 1"
+    )
+    fun getFavoriteCurrenciesFlow(): Flow<List<FiatEntity>>
 }
