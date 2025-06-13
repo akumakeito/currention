@@ -2,10 +2,10 @@ package ru.akumakeito.currention.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.akumakeito.core.appsettings.AppSettingsRepository
 import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.commonui.presentation.ResultState
 import com.akumakeito.convert.domain.CurrencyRepository
+import com.akumakeito.core.appsettings.AppSettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted

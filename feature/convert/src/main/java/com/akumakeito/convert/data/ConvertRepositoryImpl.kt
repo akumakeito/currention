@@ -4,7 +4,6 @@ import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.dto.ConvertFiatOnDateServerResponse
 import com.akumakeito.convert.domain.ConvertRepository
-import jakarta.inject.Inject
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.TimeZone
@@ -34,5 +33,13 @@ class ConvertRepositoryImpl(private val currencyApi: CurrencyApi) : ConvertRepos
             requestDate.toString(),
             listOf(currencyTo.shortCode)
         )
+    }
+
+    override suspend fun getLatest(
+        base: FiatCurrency,
+        symbols: List<FiatCurrency>
+    ): ConvertFiatOnDateServerResponse {
+        val symbolsList = symbols.map { it.shortCode }
+        return currencyApi.getLatest(base.shortCode)
     }
 }

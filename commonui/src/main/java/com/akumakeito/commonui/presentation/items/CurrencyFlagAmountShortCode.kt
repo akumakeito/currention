@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
@@ -19,10 +18,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.akumakeito.commonmodels.domain.FiatCurrency
 
 
@@ -35,7 +34,8 @@ fun CurrencyFlagAmountShortCode(
     onCurrencyItemDropDownClickListener: (FiatCurrency) -> Unit,
     currencyList: List<FiatCurrency>,
     onSearchTextChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textColor : Color = MaterialTheme.colorScheme.outline
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -76,13 +76,13 @@ fun CurrencyFlagAmountShortCode(
             Text(
                 text = currency.shortCode,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.outline
+                color = textColor
             )
         } else {
             Text(
                 text = "$amount ${currency.shortCode}",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.outline
+                color = textColor
             )
         }
 

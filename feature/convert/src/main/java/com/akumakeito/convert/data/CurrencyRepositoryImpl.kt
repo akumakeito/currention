@@ -1,11 +1,9 @@
 package com.akumakeito.convert.data
 
 import android.content.Context
-import android.util.Log
 import com.akumakeito.commonmodels.domain.CurrencyType
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonmodels.popularCurrencyShortCodeList
-import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.commonui.presentation.ResultState
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.toEntity
@@ -14,8 +12,6 @@ import com.akumakeito.db.dao.CurrencyDao
 import com.akumakeito.db.entity.toModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -28,10 +24,6 @@ class CurrencyRepositoryImpl(
 
     override val fiatCurrencies: Flow<List<FiatCurrency>> = currencyDao.getAllFiat().map {
         it.toModel()
-    }
-
-    override suspend fun getLatest() {
-
     }
 
     override fun downloadInitialFiatCurrencyList() :Flow<ResultState> = flow {

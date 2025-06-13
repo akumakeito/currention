@@ -1,10 +1,8 @@
 package com.akumakeito.rates.data
 
 import android.util.Log
-import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.db.dao.CurrencyPairDao
-import com.akumakeito.db.entity.PairCurrencyEntity
 import com.akumakeito.rates.domain.PairCurrency
 import com.akumakeito.rates.domain.PairCurrencyRepository
 import com.akumakeito.rates.domain.toEntity

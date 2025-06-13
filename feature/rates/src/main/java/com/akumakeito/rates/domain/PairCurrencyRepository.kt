@@ -1,6 +1,5 @@
 package com.akumakeito.rates.domain
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
 import kotlinx.coroutines.flow.StateFlow
 
 interface PairCurrencyRepository {

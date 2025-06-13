@@ -16,4 +16,6 @@ interface ConvertRepository {
         currencyFrom: FiatCurrency,
         currencyTo: FiatCurrency
     ): ConvertFiatOnDateServerResponse
+
+    suspend fun getLatest(base: FiatCurrency, symbols: List<FiatCurrency>): ConvertFiatOnDateServerResponse
 }

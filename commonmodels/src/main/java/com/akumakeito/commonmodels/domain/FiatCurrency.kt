@@ -2,15 +2,15 @@ package com.akumakeito.commonmodels.domain
 
 data class FiatCurrency(
     val id: Int,
-    var name: String,
+    val name: String,
     val shortCode: String,
     val code: String,
     val symbol: String,
-    var flag: Int = 0,
-    var isPopular: Boolean = false,
-    var isFavorite: Boolean = false
+    val flag: Int = 0,
+    val isPopular: Boolean = false,
+    val isFavorite: Boolean = false,
 ) {
-
+    var rate : Double? = null
 //    @SuppressLint("DiscouragedApi")
 //    fun getStringResource( context: Context): String? {
 //        val resourceId =

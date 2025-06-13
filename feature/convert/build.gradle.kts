@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":commonui"))
     implementation(project(":commonmodels"))
     implementation(project(":db"))
+    implementation(project(":core"))
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
