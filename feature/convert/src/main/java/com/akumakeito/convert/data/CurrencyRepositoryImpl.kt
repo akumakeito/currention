@@ -79,4 +79,9 @@ class CurrencyRepositoryImpl(
     override suspend fun getFavoriteCurrencyList(): List<FiatCurrency> {
         return currencyDao.getFavoriteCurrencies().toModel()
     }
+
+    override fun getFavoriteCurrencyListFlow(): Flow<List<FiatCurrency>> = flow {
+        val result = getFavoriteCurrencyList()
+        emit(result)
+    }
 }

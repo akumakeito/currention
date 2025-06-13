@@ -18,4 +18,5 @@ interface CurrencyRepository {
 
     suspend fun getPopularCurrencyList(): List<FiatCurrency>
     suspend fun getFavoriteCurrencyList(): List<FiatCurrency>
+    fun getFavoriteCurrencyListFlow(): Flow<List<FiatCurrency>>
 }

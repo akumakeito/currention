@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,13 +21,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.items.ConvertingCurrencyRow
+import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 import com.akumakeito.convert.presentation.convert.ConvertCurrencyViewModel
 import kotlinx.coroutines.launch
+import ru.akumakeito.currention.ui.items.CustomTopAppBar
 
 
 @Composable
 fun CurrencyConverterScreen(
     paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
 ) {
     val convertCurrencyViewModel: ConvertCurrencyViewModel = hiltViewModel()
 
@@ -39,7 +43,15 @@ fun CurrencyConverterScreen(
     val coroutineScope = rememberCoroutineScope()
 
 
-    Box(modifier = Modifier.padding(paddingValues)) {
+    Scaffold(
+        modifier = modifier.padding(paddingValues),
+        topBar = {
+            CustomTopAppBar(
+                currentScreen = ScreenRoute.ConvertScreenRoute,
+            )
+        }
+    ) {
+    Box(modifier = Modifier.padding(it)) {
         if (uiState.value.isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier
@@ -115,4 +127,4 @@ fun CurrencyConverterScreen(
 //            )
         }
     }
-}
+}}

@@ -1,11 +1,9 @@
 package ru.akumakeito.currention.ui.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,12 +46,8 @@ fun PairsScreen(
     modifier: Modifier = Modifier
 ) {
     val pairViewModel: PairCurrencyViewModel = hiltViewModel()
-    val state = rememberLazyListState()
-
-    val currencyPairs by pairViewModel.currencyPairs.collectAsStateWithLifecycle()
-    val editingPair by pairViewModel.editPairCurrency.collectAsStateWithLifecycle()
-    val currencyList by pairViewModel.favoriteCurrencyList.collectAsStateWithLifecycle()
-    val isEditing by pairViewModel.isEditing.collectAsStateWithLifecycle()
+    val scrollState = rememberLazyListState()
+    val state by pairViewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier.padding(paddingValues),
@@ -68,7 +61,7 @@ fun PairsScreen(
             )
         },
         floatingActionButton = {
-            if (!isEditing) {
+            if (!state.isEditing) {
                 FloatingActionButton(
                     modifier = Modifier
                         .padding(Dimens.x2),
@@ -85,7 +78,7 @@ fun PairsScreen(
             }
         },
         bottomBar = {
-            if (isEditing) {
+            if (state.isEditing) {
                 Button(
                     onClick = { pairViewModel.updatePair() },
                     modifier = Modifier
@@ -106,9 +99,9 @@ fun PairsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            state = state
+            state = scrollState
         ) {
-            items(currencyPairs, key = { it.id }) { item ->
+            items(items = state.pairs, key = { it.id }) { item ->
                 val delete = SwipeAction(
                     onSwipe = { pairViewModel.onSwipeToDelete(item) },
                     icon = {
@@ -160,16 +153,16 @@ fun PairsScreen(
                     CurrencyPairInExchangeRate(
                         pairCurrency = item,
                         onEditStateChange = {
-                            editingPair.id == item.id
+                            state.editingPair.id == item.id
                         },
-                        currencyList = currencyList,
+                        currencyList = state.favoriteCurrencies,
                         onCurrencyFromDropDownClickListener = { selectedCurrency ->
                             pairViewModel.updatePairCurrencyFrom(selectedCurrency)
                         },
                         onCurrencyToDropDownClickListener = { selectedCurrency ->
                             pairViewModel.updatePairCurrencyTo(selectedCurrency)
                         },
-                        editingPair = editingPair,
+                        editingPair = state.editingPair,
                     )
                 }
             }
