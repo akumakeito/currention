@@ -37,17 +37,18 @@ android {
 
 dependencies {
     implementation(project(":commonres"))
+    implementation(project(":core"))
+    implementation(project(":commonui"))
+
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.material3)
     implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.constraintlayout.compose)
     implementation(libs.compose.ui)
     implementation(libs.compose.graphics)
     implementation(libs.compose.tooling.preview)
-    implementation(libs.swipe)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

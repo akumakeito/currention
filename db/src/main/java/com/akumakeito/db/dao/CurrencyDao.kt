@@ -31,8 +31,8 @@ interface CurrencyDao {
     @Query("UPDATE FiatEntity SET isPopular = 1 WHERE short_code = :shortCode")
     suspend fun updateCurrencyPopularityByShortCode(shortCode: String)
 
-    @Query("UPDATE FiatEntity SET name = :name WHERE short_code = :shortCode")
-    suspend fun updateCurrencyName(shortCode: String, name: String)
+    @Query("UPDATE FiatEntity SET name_ru = :nameRu WHERE short_code = :shortCode")
+    suspend fun updateCurrencyName(shortCode: String, nameRu: String)
 
     @Update
     suspend fun updateFavoriteCurrency(fiatEntity: FiatEntity)

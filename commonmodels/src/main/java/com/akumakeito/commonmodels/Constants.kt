@@ -9,28 +9,31 @@ val popularCurrencyShortCodeList =
 val CHOSEN_CURRENCY_KEY = "chosen currency"
 
 val usd = FiatCurrency(
-    1,
-    "Доллар США",
-    "USD",
-    "840",
-    "$",
-    R.drawable.flag_usd
+    id = 1,
+    nameEn = "Доллар США",
+    nameRu = "US Dollar",
+    shortCode = "USD",
+    code = "840",
+    symbol = "$",
+    flag = R.drawable.flag_usd
 )
 
 val rub = FiatCurrency(
-    2,
-    "Российский рубль",
-    "RUB",
-    "643",
-    "P",
-    R.drawable.flag_rub
+    id = 2,
+    nameEn = "Российский рубль",
+    nameRu = "Russian Ruble",
+    shortCode = "RUB",
+    code = "643",
+    symbol = "P",
+    flag = R.drawable.flag_rub
 )
 
 val lari = FiatCurrency(
-    3,
-    "Грузинский лари",
-    "GEL",
-    "981",
-    "L",
-    R.drawable.flag_gel
+    id = 3,
+    nameEn = "Грузинский лари",
+    nameRu = "Georgian Lari",
+    shortCode = "GEL",
+    code = "981",
+    symbol = "L",
+    flag = R.drawable.flag_gel
 )

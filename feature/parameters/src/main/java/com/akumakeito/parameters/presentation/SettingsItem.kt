@@ -17,22 +17,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.akumakeito.commonres.R
+import com.akumakeito.commonui.presentation.Dimens
 
 @Composable
 fun SettingsItem(
     painter: Painter,
     content: String,
     hasSwitch: Boolean,
-    onSwitch: () -> Unit,
     onItemClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    swiched: Boolean = false
 ) {
 
     Row(
         modifier = modifier
             .clickable { onItemClick() }
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(start = 16.dp, end = 24.dp, top = 16.dp, bottom = 16.dp),
+            .padding(vertical = if (hasSwitch) 0.dp else Dimens.x1_5),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -40,7 +40,7 @@ fun SettingsItem(
         Icon(
             painter = painter,
             contentDescription = content,
-            modifier = Modifier.padding(end = 16.dp),
+            modifier = Modifier.padding(end = Dimens.x2),
             tint = MaterialTheme.colorScheme.outline
         )
 
@@ -52,7 +52,7 @@ fun SettingsItem(
         )
 
         if (hasSwitch) {
-            Switch(checked = false, onCheckedChange = { onSwitch() })
+            Switch(checked = swiched, onCheckedChange = { onItemClick() })
         }
     }
 }
@@ -64,7 +64,6 @@ fun SettingsItemPreview() {
         painter = painterResource(id = R.drawable.ic_switch_theme),
         content = "Темная тема",
         hasSwitch = true,
-        onSwitch = {},
         onItemClick = {})
 
 }

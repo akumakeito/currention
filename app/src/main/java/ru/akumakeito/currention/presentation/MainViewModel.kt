@@ -33,4 +33,24 @@ class MainViewModel @Inject constructor(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
         )
+
+    private val isDarkTheme = appSettingsRepository.isDarkTheme.shareIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+    )
+
+    private val isSystemTheme = appSettingsRepository.isSystemTheme.shareIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+    )
+
+    val isDark = combine(
+        isDarkTheme,
+        isSystemTheme
+    ) { isDarkTheme, isSystemTheme ->
+        isDarkTheme || ( isSystemTheme && isDarkTheme)
+    }.shareIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+    )
 }

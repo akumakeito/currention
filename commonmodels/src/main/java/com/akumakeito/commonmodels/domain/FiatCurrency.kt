@@ -2,7 +2,8 @@ package com.akumakeito.commonmodels.domain
 
 data class FiatCurrency(
     val id: Int,
-    val name: String,
+    val nameEn: String,
+    val nameRu: String,
     val shortCode: String,
     val code: String,
     val symbol: String,

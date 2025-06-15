@@ -6,11 +6,12 @@ import com.akumakeito.db.entity.FiatEntity
 
 
 fun FiatResponse.fromResponse() = FiatEntity(
-    id,
-    name,
-    shortCode,
-    code,
-    symbol,
+    id = id,
+    nameRu = "",
+    nameEn = name,
+    shortCode = shortCode,
+    code = code,
+    symbol = symbol,
 )
 
 
@@ -18,7 +19,8 @@ fun List<FiatResponse>.toEntity(): List<FiatEntity> = map { it.fromResponse() }
 
 fun FiatCurrency.toEntity() = FiatEntity(
     id = id,
-    name = name,
+    nameRu = nameRu,
+    nameEn = nameEn,
     shortCode = shortCode,
     code = code,
     symbol = symbol,

@@ -10,7 +10,10 @@ import com.akumakeito.commonres.R
 data class FiatEntity(
     @PrimaryKey
     val id: Int,
-    val name: String,
+    @ColumnInfo(name = "name_ru")
+    val nameRu: String,
+    @ColumnInfo(name = "name_en")
+    val nameEn: String,
     @ColumnInfo(name = "short_code")
     val shortCode: String,
     val code: String,
@@ -21,7 +24,8 @@ data class FiatEntity(
 ) {
     fun toModel() = FiatCurrency(
         id = id,
-        name = name,
+        nameRu = nameRu,
+        nameEn = nameEn,
         shortCode = shortCode,
         code = code,
         symbol = symbol,

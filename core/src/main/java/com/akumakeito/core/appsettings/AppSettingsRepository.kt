@@ -9,14 +9,28 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AppSettingsRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     companion object {
         const val FIRST_START_KEY = "first_start"
         const val LAST_SELECTED_BASE_CURRENCY = "last_selected_base_currency"
+        const val DARK_THEME = "dark_theme"
+        const val SYSTEM_THEME = "system_theme"
     }
+
+    val isDarkTheme: Flow<Boolean>
+        get() = dataStore.data.map { preferences ->
+            preferences[booleanPreferencesKey(DARK_THEME)] ?: false
+        }
+
+    val isSystemTheme: Flow<Boolean>
+        get() = dataStore.data.map { preferences ->
+            preferences[booleanPreferencesKey(SYSTEM_THEME)] ?: true
+        }
 
     suspend fun setFirstStart(value: Boolean) {
         dataStore.edit { preferences ->
@@ -39,6 +53,30 @@ class AppSettingsRepository @Inject constructor(
     suspend fun getLastSelectedBaseCurrency(): String {
         return dataStore.data.map { preferences ->
             preferences[stringPreferencesKey(LAST_SELECTED_BASE_CURRENCY)] ?: "USD"
+        }.first()
+    }
+
+    suspend fun setDarkTheme(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(DARK_THEME)] = value
+        }
+    }
+
+    suspend fun getDarkTheme(): Boolean? {
+        return dataStore.data.map { preferences ->
+            preferences[booleanPreferencesKey(DARK_THEME)]
+        }.first()
+    }
+
+    suspend fun setSystemTheme(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(SYSTEM_THEME)] = value
+        }
+    }
+
+    suspend fun getSystemTheme(): Boolean? {
+        return dataStore.data.map { preferences ->
+            preferences[booleanPreferencesKey(SYSTEM_THEME)]
         }.first()
     }
 }
