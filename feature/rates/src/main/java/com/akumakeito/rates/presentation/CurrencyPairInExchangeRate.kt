@@ -82,7 +82,7 @@ fun CurrencyPairInExchangeRate(
         )
 
         Image(
-            painter = painterResource(id = R.drawable.equals),
+            painter = painterResource(id = R.drawable.ic_equals),
             contentDescription = stringResource(R.string.equals),
             modifier = Modifier
                 .constrainAs(equalSign) {

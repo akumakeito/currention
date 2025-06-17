@@ -14,6 +14,7 @@ fun AppNavGraph(
     settingsListContent: @Composable () -> Unit,
     changeFavCurrencyScreenContent: @Composable () -> Unit,
     startingScreenContent: @Composable () -> Unit,
+    errorScreenContent: @Composable () -> Unit
 ) {
 
     NavHost(
@@ -50,6 +51,9 @@ fun AppNavGraph(
 
         composable(ScreenRoute.StartingScreenRoute.route) {
             startingScreenContent()
+        }
+        composable(ScreenRoute.ErrorScreenRoute.route) {
+            errorScreenContent()
         }
     }
 }

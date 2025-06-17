@@ -1,10 +1,10 @@
 package com.akumakeito.convert.data
 
 import android.content.Context
+import android.util.Log
 import com.akumakeito.commonmodels.domain.CurrencyType
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonmodels.popularCurrencyShortCodeList
-import com.akumakeito.commonui.presentation.ResultState
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.toEntity
 import com.akumakeito.convert.domain.CurrencyRepository
@@ -26,9 +26,11 @@ class CurrencyRepositoryImpl(
         it.toModel()
     }
 
-    override fun downloadInitialFiatCurrencyList() :Flow<ResultState> = flow {
-        emit(ResultState.Loading)
+    override fun downloadInitialFiatCurrencyList(): Flow<Result<Unit>> = flow {
+        Log.d("CrashFix", "downloadInitialFiatCurrencyList started")
         if (currencyDao.isEmpty()) {
+            Log.d("CrashFix", "currencyDao.isEmpty(): ${currencyDao.isEmpty()}")
+
             try {
                 val result = currencyApi.getCurrencyList(CurrencyType.FIAT.name.lowercase())
 
@@ -44,18 +46,22 @@ class CurrencyRepositoryImpl(
                 fiatCurrencies.map { list ->
                     list.map {
                         val stringId = "cur${it.shortCode.lowercase()}"
-                        val currencyNameId = res.getIdentifier(stringId, "strings", context.packageName)
+                        val currencyNameId =
+                            res.getIdentifier(stringId, "string", context.packageName)
                         currencyDao.updateCurrencyName(it.shortCode, res.getString(currencyNameId))
                     }
                 }
-                emit(ResultState.Success)
-
+                Log.d("CrashFix", "downloadInitialFiatCurrencyList success")
+                emit(Result.success(Unit))
             } catch (e: Exception) {
                 e.printStackTrace()
-                false
+                Log.d("CrashFix", "downloadInitialFiatCurrencyList catch")
+                emit(Result.failure<Unit>(e))
             }
+        } else {
+            Log.d("CrashFix", "downloadInitialFiatCurrencyList else")
+            emit(Result.success(Unit))
         }
-        emit(ResultState.Success)
     }
 
     override suspend fun deleteAllFiat() {
@@ -75,7 +81,8 @@ class CurrencyRepositoryImpl(
         return currencyDao.getFavoriteCurrencies().toModel()
     }
 
-    override fun getFavoriteCurrencyListFlow(): Flow<List<FiatCurrency>> =  currencyDao.getFavoriteCurrenciesFlow().map {
+    override fun getFavoriteCurrencyListFlow(): Flow<List<FiatCurrency>> =
+        currencyDao.getFavoriteCurrenciesFlow().map {
             it.toModel()
         }
 }

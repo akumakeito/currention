@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.akumakeito.commonui.presentation.ErrorScreen
 import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.commonui.presentation.StartingScreen
 import com.akumakeito.commonui.presentation.navigation.AppNavGraph
@@ -60,13 +61,15 @@ class MainActivity : ComponentActivity() {
 
             val startDestination = when (launchState) {
                 LaunchState.Main -> ScreenRoute.PairScreenRoute.route
-                LaunchState.OnBoarding -> ScreenRoute.ChangeFavoriteCurrencyScreenRoute.route
+                LaunchState.OnBoarding -> ChangeFavoriteCurrencyScreenRoute.route
                 LaunchState.Starting -> ScreenRoute.StartingScreenRoute.route
+                LaunchState.Error -> ScreenRoute.ErrorScreenRoute.route
             }
 
             val hideBars = listOf(
                 ChangeFavoriteCurrencyScreenRoute.route,
-                ScreenRoute.StartingScreenRoute.route
+                ScreenRoute.StartingScreenRoute.route,
+                ScreenRoute.ErrorScreenRoute.route
             )
 
             CurrentionTheme(
@@ -147,6 +150,9 @@ class MainActivity : ComponentActivity() {
                             },
                             startingScreenContent = {
                                 StartingScreen()
+                            },
+                            errorScreenContent = {
+                                ErrorScreen()
                             }
                         )
                     }

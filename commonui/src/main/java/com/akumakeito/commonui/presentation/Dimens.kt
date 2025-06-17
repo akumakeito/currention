@@ -28,7 +28,7 @@ object Dimens {
      * 32 dp
      */
     val IconSizeHuge: Dp
-        get() = 32.dp
+        get() = 100.dp
 
     /**
      * 2 dp

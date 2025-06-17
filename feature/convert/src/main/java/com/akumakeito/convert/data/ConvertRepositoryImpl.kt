@@ -39,7 +39,12 @@ class ConvertRepositoryImpl(private val currencyApi: CurrencyApi) : ConvertRepos
         base: FiatCurrency,
         symbols: List<FiatCurrency>
     ): ConvertFiatOnDateServerResponse {
-        val symbolsList = symbols.map { it.shortCode }
-        return currencyApi.getLatest(base.shortCode)
+        val symbolsString = StringBuilder()
+
+        symbols.forEach {
+            symbolsString.append(it.shortCode)
+            symbolsString.append(",")
+        }
+        return currencyApi.getLatest(base.shortCode, symbolsString.toString())
     }
 }

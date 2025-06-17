@@ -13,6 +13,7 @@ sealed class ScreenRoute(
     object StartingScreenRoute : ScreenRoute(STARTING_ROUTE, R.string.app_name)
     object ChangeFavoriteCurrencyScreenRoute :
         ScreenRoute(CHANGE_FAVORITE_CURRENCY_ROUTE, R.string.favorite_currencies)
+    object ErrorScreenRoute : ScreenRoute(ERROR_ROUTE, R.string.error)
 
 
     companion object {
@@ -22,6 +23,7 @@ sealed class ScreenRoute(
         const val SETTINGS_LIST_ROUTE = "settings_list"
         const val CHANGE_FAVORITE_CURRENCY_ROUTE = "change_favorite_currency"
         const val STARTING_ROUTE = "starting"
+        const val ERROR_ROUTE = "error"
 
         fun getScreenByRoute(route: String): ScreenRoute {
             return when (route) {
@@ -31,6 +33,7 @@ sealed class ScreenRoute(
                 CHANGE_FAVORITE_CURRENCY_ROUTE -> ChangeFavoriteCurrencyScreenRoute
                 SETTINGS_LIST_ROUTE -> SettingsListScreenRoute
                 STARTING_ROUTE -> StartingScreenRoute
+                ERROR_ROUTE -> ErrorScreenRoute
                 else -> PairScreenRoute
             }
         }

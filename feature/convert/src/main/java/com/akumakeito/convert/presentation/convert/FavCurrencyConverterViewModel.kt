@@ -37,31 +37,30 @@ class FavCurrencyConverterViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val favorites = currencyRepository.getFavoriteCurrencyList()
             val lastSelectedBaseCurrencyShortCode =
                 appSettingsRepository.getLastSelectedBaseCurrency()
-            val fromCurrency =
-                favorites.find { it.shortCode == lastSelectedBaseCurrencyShortCode } ?: usd
 
-            _state.update {
-                it.copy(
-                    from = fromCurrency,
-                    favCurrency = favorites,
-                    isLoading = false
-                )
+            currencyRepository.getFavoriteCurrencyListFlow().collect { favList ->
+                _state.update { model ->
+                    model.copy(
+                        from = favList.find { it.shortCode == lastSelectedBaseCurrencyShortCode }
+                            ?: usd,
+                        favCurrency = favList,
+                        isLoading = false
+                    )
+                }
             }
-
-            _state
-                .onEach { model ->
-                    val newList = favorites.filterNot { it == model.from }
-                    _state.update {
-                        it.copy(
-                            convertedToFavorites = newList,
-                            isButtonEnable = it.amount != "0.0"
-                        )
-                    }
-                }.launchIn(viewModelScope)
         }
+        _state
+            .onEach { model ->
+                val newList = model.favCurrency.filterNot { it == model.from }
+                _state.update {
+                    it.copy(
+                        convertedToFavorites = newList,
+                        isButtonEnable = it.amount != "0.0"
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 
     fun selectBaseCurrency(currency: FiatCurrency) = viewModelScope.launch {
@@ -89,7 +88,6 @@ class FavCurrencyConverterViewModel @Inject constructor(
             )
         }
     }
-
 
     fun onBackspaceClick() {
         _state.update {
