@@ -13,10 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.akumakeito.commonui.presentation.navigation.ScreenRoute
+import kotlinx.serialization.Serializable
 
 @Composable
 fun StartingScreen() {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -26,7 +27,7 @@ fun StartingScreen() {
             .padding(Dimens.x5),
         verticalArrangement = Arrangement.spacedBy(
             space = Dimens.x1,
-            alignment = Alignment.CenterVertically // или Center, если хочешь строго по центру
+            alignment = Alignment.CenterVertically
         ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

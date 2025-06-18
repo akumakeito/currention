@@ -31,13 +31,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.navigation.ScreenRoute
-import com.akumakeito.rates.R
+import com.akumakeito.commonres.R
 import com.akumakeito.rates.presentation.PairCurrencyViewModel
+import kotlinx.serialization.Serializable
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.ui.items.CustomTopAppBar
 import com.akumakeito.commonres.R as CommonRes
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +56,7 @@ fun PairsScreen(
         modifier = modifier.padding(paddingValues),
         topBar = {
             CustomTopAppBar(
-                currentScreen = ScreenRoute.PairScreenRoute,
+                screenTitle = R.string.currency_rates,
                 iconResId = CommonRes.drawable.ic_update_rates,
                 onActionClick = {
                     pairViewModel.updateAllPairsRates()
@@ -72,7 +75,7 @@ fun PairsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add_new_pair)
+                        contentDescription = "add new pair"
                     )
                 }
             }

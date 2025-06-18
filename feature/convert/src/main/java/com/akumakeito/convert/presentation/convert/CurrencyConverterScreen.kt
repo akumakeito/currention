@@ -8,8 +8,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.navigation.ScreenRoute
+import kotlinx.serialization.Serializable
 import ru.akumakeito.currention.ui.items.CustomTopAppBar
+
 
 @Composable
 fun CurrencyConverterScreen(
@@ -22,7 +25,7 @@ fun CurrencyConverterScreen(
         modifier = modifier.padding(paddingValues),
         topBar = {
             CustomTopAppBar(
-                currentScreen = ScreenRoute.ConvertScreenRoute,
+                screenTitle = R.string.converter,
             )
         }
     ) {

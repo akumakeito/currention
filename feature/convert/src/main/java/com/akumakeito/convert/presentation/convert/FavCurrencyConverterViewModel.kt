@@ -6,7 +6,7 @@ import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonmodels.usd
 import com.akumakeito.convert.domain.ConvertBaseCurrencyToFavCurrencyUseCase
 import com.akumakeito.convert.domain.CurrencyRepository
-import com.akumakeito.convert.presentation.FavCurrencyConvertScreenModel
+import com.akumakeito.convert.presentation.convert.FavCurrencyConvertScreenModel
 import com.akumakeito.core.appsettings.AppSettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,8 +1,11 @@
 package com.akumakeito.onboarding.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.commonui.presentation.navigation.SelectFavoriteCurrencyScreenRoute
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.convert.presentation.search.SearchState
 import com.akumakeito.convert.presentation.search.SearchingInteractor
@@ -19,17 +22,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(
+class SelectFavCurrencyViewModel @Inject constructor(
     private val repository: CurrencyRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val searchingInteractor: SearchingInteractor,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
+    val route = savedStateHandle.toRoute<SelectFavoriteCurrencyScreenRoute>()
+
     private val _state = MutableStateFlow(
-        OnboardingScreenModel(
+        SelectFavCurrencyScreenModel(
             fiatCurrencyList = emptyList(),
             searchState = SearchState(),
-            isButtonEnable = false
+            isButtonEnable = false,
+            screenFrom = route.fromScreen
         )
     )
 

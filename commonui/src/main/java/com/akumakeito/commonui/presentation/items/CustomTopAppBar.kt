@@ -19,7 +19,7 @@ import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
-    currentScreen: ScreenRoute,
+    screenTitle: Int,
     iconResId: Int? = null,
     onActionClick : () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -28,7 +28,7 @@ fun CustomTopAppBar(
         modifier = modifier.padding(start = Dimens.x1, end = Dimens.x1),
         title = {
             Text(
-                text = stringResource(id = currentScreen.titleResId),
+                text = stringResource(id = screenTitle),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )

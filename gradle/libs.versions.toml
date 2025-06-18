@@ -1,4 +1,5 @@
 [versions]
+accompanistNavigationAnimation = "0.34.0"
 compose-bom = "2025.05.00"
 datastore-preferences = "1.1.7"
 kotlinx-datetime = "0.4.1"

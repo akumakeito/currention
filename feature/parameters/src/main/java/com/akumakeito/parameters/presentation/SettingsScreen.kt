@@ -17,10 +17,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.Dimens
-import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 import com.akumakeito.parameters.presentation.SettingsItem
 import com.akumakeito.parameters.presentation.SettingsViewModel
 import ru.akumakeito.currention.ui.items.CustomTopAppBar
+
 
 @Composable
 fun SettingsScreen(
@@ -38,7 +38,7 @@ fun SettingsScreen(
             .padding(paddingValues),
         topBar = {
             CustomTopAppBar(
-                currentScreen = ScreenRoute.SettingsScreenRoute
+                screenTitle = R.string.settings
             )
         }
     ) { innerPadding ->

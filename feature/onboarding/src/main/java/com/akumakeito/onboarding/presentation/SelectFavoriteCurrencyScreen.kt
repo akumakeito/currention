@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,17 +35,20 @@ import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.items.SegmentedButtonSingleSelect
 import com.akumakeito.commonui.presentation.items.SpacerHeight
+import com.akumakeito.commonui.presentation.navigation.Screen
 import com.akumakeito.onboarding.presentation.CryptoCurrencyListScreen
 import com.akumakeito.onboarding.presentation.FiatCurrencyList
-import com.akumakeito.onboarding.presentation.OnboardingViewModel
+import com.akumakeito.onboarding.presentation.SelectFavCurrencyViewModel
 import kotlinx.coroutines.launch
 
+
 @Composable
-fun ChooseFavoriteCurrencyScreen(
-    onDoneClick: () -> Unit
+fun SelectFavoriteCurrencyScreen(
+    onDoneClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val onboardingViewModel: OnboardingViewModel = hiltViewModel()
-    val state by onboardingViewModel.state.collectAsStateWithLifecycle()
+    val selectFavCurrencyViewModel: SelectFavCurrencyViewModel = hiltViewModel()
+    val state by selectFavCurrencyViewModel.state.collectAsStateWithLifecycle()
 
     var selectedIndex by remember { mutableIntStateOf(0) }
     val options = listOf(R.string.fiat_currencies, R.string.crypto_currencies)
@@ -80,22 +84,27 @@ fun ChooseFavoriteCurrencyScreen(
             Button(
                 enabled = state.isButtonEnable,
                 onClick = {
-                    onboardingViewModel.onDoneClick()
+                    selectFavCurrencyViewModel.onDoneClick()
                     onDoneClick()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Dimens.x2)
+                    .padding(Dimens.x1)
 
             ) {
                 Text(
-                    text = stringResource(R.string.next),
+                    text = stringResource(
+                        when (state.screenFrom) {
+                            Screen.SETTINGS -> R.string.save
+                            Screen.STARTING -> R.string.next
+                        }
+                    ),
                     fontWeight = FontWeight.Bold
                 )
             }
         }
-    ) { paddingValues ->
-        Box(Modifier.padding(paddingValues)) {
+    ) { innerPadding ->
+        Box(Modifier.padding(innerPadding)) {
 
             Column(
                 modifier = Modifier
@@ -106,11 +115,16 @@ fun ChooseFavoriteCurrencyScreen(
                 SpacerHeight(height = 24)
 
                 Text(
-                    text = stringResource(R.string.choose_currencies),
+                    text = stringResource(
+                        when (state.screenFrom) {
+                            Screen.SETTINGS -> R.string.change_fav_cur
+                            Screen.STARTING -> R.string.choose_currencies
+                        }
+                    ),
                     modifier = Modifier
                         .wrapContentHeight(),
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold
                 )
 
@@ -124,7 +138,7 @@ fun ChooseFavoriteCurrencyScreen(
                     contents = mapOf(
                         0 to {
                             FiatCurrencyList(
-                                onboardingViewModel = onboardingViewModel,
+                                selectFavCurrencyViewModel = selectFavCurrencyViewModel,
                                 searchingState = state.searchState,
                                 fiatCurrencyList = state.fiatCurrencyList,
                                 lazyListState = lazyListState

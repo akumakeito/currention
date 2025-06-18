@@ -1,10 +1,12 @@
 package com.akumakeito.onboarding.presentation
 
 import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.commonui.presentation.navigation.Screen
 import com.akumakeito.convert.presentation.search.SearchState
 
-data class OnboardingScreenModel(
+data class SelectFavCurrencyScreenModel(
     val fiatCurrencyList: List<FiatCurrency>,
     val searchState: SearchState,
     val isButtonEnable : Boolean,
+    val screenFrom : Screen,
 )

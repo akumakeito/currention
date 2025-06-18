@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 class NavigationState(
     val navHostController: NavHostController
 ) {
-    fun navigateTo(route: String) {
+    fun navigateTo(route: ScreenRoute) {
         navHostController.navigate(route) {
             popUpTo(navHostController.graph.startDestinationId) {
                 saveState = true
@@ -16,6 +16,10 @@ class NavigationState(
             launchSingleTop = true
             restoreState = true
         }
+    }
+
+    fun back() {
+        navHostController.popBackStack()
     }
 }
 

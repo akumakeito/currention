@@ -11,19 +11,19 @@ sealed class NavigationItem(
 
     object PairRates : NavigationItem(
         titleResId = R.string.currency_rates,
-        screenRoute = ScreenRoute.PairScreenRoute,
+        screenRoute = PairsScreenRoute,
         iconResId = R.drawable.ic_currency_rates
     )
 
     object Convert : NavigationItem(
         titleResId = R.string.converter,
-        screenRoute = ScreenRoute.ConvertScreenRoute,
+        screenRoute = CurrencyConverterScreenRoute,
         iconResId = R.drawable.ic_converter
     )
 
     object Settings : NavigationItem(
         titleResId = R.string.settings,
-        screenRoute = ScreenRoute.SettingsScreenRoute,
+        screenRoute = ParametersScreenRoute,
         iconResId = R.drawable.ic_settings
     )
 }

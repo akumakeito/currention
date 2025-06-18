@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.akumakeito.commonres.R
+
 
 @Composable
 fun ErrorScreen() {
@@ -46,10 +46,4 @@ fun ErrorScreen() {
             textAlign = TextAlign.Center
         )
     }
-}
-
-@Preview
-@Composable
-fun ErrorScreenPreview() {
-    ErrorScreen()
 }

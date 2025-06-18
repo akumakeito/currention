@@ -1,4 +1,4 @@
-package com.akumakeito.convert.presentation
+package com.akumakeito.convert.presentation.convert
 
 import com.akumakeito.commonmodels.domain.FiatCurrency
 

@@ -29,7 +29,7 @@ import com.akumakeito.convert.presentation.search.SearchState
 
 @Composable
 fun FiatCurrencyList(
-    onboardingViewModel: OnboardingViewModel,
+    selectFavCurrencyViewModel: SelectFavCurrencyViewModel,
     searchingState: SearchState,
     fiatCurrencyList: List<FiatCurrency>,
     lazyListState: LazyListState,
@@ -42,7 +42,7 @@ fun FiatCurrencyList(
 
         OutlinedTextField(
             value = searchingState.searchText,
-            onValueChange = onboardingViewModel::onSearchTextChange,
+            onValueChange = selectFavCurrencyViewModel::onSearchTextChange,
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text(stringResource(R.string.enter_currency)) },
             leadingIcon = {
@@ -52,7 +52,7 @@ fun FiatCurrencyList(
                 )
             },
             trailingIcon = {
-                IconButton(onClick = { onboardingViewModel.onSearchTextChange("") }) {
+                IconButton(onClick = { selectFavCurrencyViewModel.onSearchTextChange("") }) {
                     Icon(Icons.Default.Clear, contentDescription = "Clear")
                 }
             },
@@ -84,7 +84,7 @@ fun FiatCurrencyList(
                 CurrencyCardToChooseFavorite(
                     currency = item,
                     onCheckboxClickListener = {
-                        onboardingViewModel.updateFavoriteCurrency(item)
+                        selectFavCurrencyViewModel.updateFavoriteCurrency(item)
                     },
                 )
             }

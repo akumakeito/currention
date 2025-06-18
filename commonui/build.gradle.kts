@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -49,6 +50,9 @@ dependencies {
     implementation(libs.compose.graphics)
     implementation(libs.compose.tooling.preview)
     implementation(libs.swipe)
+
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

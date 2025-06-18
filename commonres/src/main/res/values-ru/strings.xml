@@ -187,5 +187,6 @@
     <string name="change_fav_cur">Изменить список избранных валют</string>
     <string name="change_language">Сменить язык</string>
     <string name="app_info">О приложении</string>
+    <string name="save">Сохранить</string>
     <string name="error">Что-то пошло не так.\nПожалуйста, проверьте соединение с интернетом\nили попробуйте снова позже</string>
 </resources>

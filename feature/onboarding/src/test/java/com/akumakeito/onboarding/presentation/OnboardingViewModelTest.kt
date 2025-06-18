@@ -25,7 +25,7 @@ class OnboardingViewModelTest {
     val mainCoroutineRule = MainCoroutineRule()
 
     @MockK
-    lateinit var viewModel: OnboardingViewModel
+    lateinit var viewModel: SelectFavCurrencyViewModel
 
     @MockK
     lateinit var repository: CurrencyRepository
@@ -38,7 +38,7 @@ class OnboardingViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = OnboardingViewModel(
+        viewModel = SelectFavCurrencyViewModel(
             appSettingsRepository = appSettingsRepository,
             searchingInteractor = searchingInteractor,
             repository = repository,
