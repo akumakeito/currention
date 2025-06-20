@@ -3,6 +3,7 @@ package com.akumakeito.db.di
 import android.content.Context
 import androidx.room.Room
 import com.akumakeito.db.AppDb
+import com.akumakeito.db.Converters
 import com.akumakeito.db.dao.CurrencyDao
 import com.akumakeito.db.dao.CurrencyPairDao
 import dagger.Module
@@ -19,12 +20,14 @@ object DbModule {
     @Provides
     @Singleton
     fun provideDb(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        converters: Converters
     ): AppDb = Room.databaseBuilder(
         context,
         AppDb::class.java,
         "app.db"
     )
+        .addTypeConverter(converters)
         .fallbackToDestructiveMigration(false)
         .build()
 

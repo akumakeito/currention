@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -16,10 +17,11 @@ class AppSettingsRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     companion object {
-        const val FIRST_START_KEY = "first_start"
-        const val LAST_SELECTED_BASE_CURRENCY = "last_selected_base_currency"
-        const val DARK_THEME = "dark_theme"
-        const val SYSTEM_THEME = "system_theme"
+        private const val FIRST_START_KEY = "first_start"
+        private const val LAST_SELECTED_BASE_CURRENCY = "last_selected_base_currency"
+        private const val DARK_THEME = "dark_theme"
+        private const val SYSTEM_THEME = "system_theme"
+        private const val LAST_RATES_UPDATE = "last_rates_update"
     }
 
     val isDarkTheme: Flow<Boolean>
@@ -78,5 +80,17 @@ class AppSettingsRepository @Inject constructor(
         return dataStore.data.map { preferences ->
             preferences[booleanPreferencesKey(SYSTEM_THEME)]
         }.first()
+    }
+
+    suspend fun setLastRatesUpdate(shortCode: String,timeMillis : Long) {
+        dataStore.edit {prefs ->
+            prefs[longPreferencesKey("${shortCode}_$LAST_RATES_UPDATE")] = timeMillis
+        }
+    }
+
+    fun getLastRatesUpdate(shortCode: String) : Flow<Long> {
+        return dataStore.data.map { prefs ->
+            prefs[longPreferencesKey("${shortCode}_$LAST_RATES_UPDATE")] ?: 0L
+        }
     }
 }

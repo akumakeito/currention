@@ -22,4 +22,18 @@ class Converters @Inject constructor(val gson: Gson) {
         return gson.fromJson(json, type)
     }
 
+    @TypeConverter
+    fun fromMap(map: Map<String, Double>): String = gson.toJson(map)
+
+    @TypeConverter
+    fun fromStringToMap(value: String?): Map<String, Double> {
+        return if (value.isNullOrEmpty()) {
+            emptyMap()
+        } else {
+
+            val type = object : TypeToken<Map<String, Double>>() {}.type
+            return gson.fromJson(value, type)
+        }
+    }
+
 }

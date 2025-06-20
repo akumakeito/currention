@@ -37,10 +37,7 @@ fun DropDownCurrencyList(
 
     var expanded by remember { mutableStateOf(false) }
 
-    Log.d("DropDownCurrencyList", "currencyList: $currencyList")
-
     val height = currencyList.size * 48
-
 
     Column(
         modifier = Modifier
@@ -53,7 +50,7 @@ fun DropDownCurrencyList(
             modifier = Modifier.weight(1f),
             state = state
         ) {
-            items(currencyList, key = { it.id }) { currency ->
+            items(currencyList, key = { it.shortCode }) { currency ->
                 DropdownMenuItem(
                     text = { Text(text = currency.shortCode) },
                     onClick = {

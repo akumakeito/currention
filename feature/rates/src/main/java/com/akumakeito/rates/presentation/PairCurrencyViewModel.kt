@@ -48,18 +48,17 @@ class PairCurrencyViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
-        try {
-            updateAllPairsRates()
-        } catch (networkException: IOException) {
-            _state.update {
-                it.copy(isError = ErrorType.NETWORK)
-            }
-        }
+        updateAllPairsRates()
     }
 
     fun addNewCurrencyPair() = viewModelScope.launch {
-        val newAddedPair = pairCurrencyRepository.addNewCurrencyPair(newPair)
-        editPair(newAddedPair)
+        _state.update {
+            it.copy(
+                pairs = it.pairs + newPair,
+                editingPair = newPair,
+                isEditing = true
+            )
+        }
     }
 
     private fun editPair(pairCurrency: PairCurrency) {
@@ -72,27 +71,24 @@ class PairCurrencyViewModel @Inject constructor(
     }
 
     fun updatePair() = viewModelScope.launch {
-        pairCurrencyRepository.updateCurrencyPair(_state.value.editingPair)
+        val result = pairCurrencyRepository.updateCurrencyPair(_state.value.editingPair)
         _state.update {
-            it.copy(
-                editingPair = newPair,
-                isEditing = false
-            )
+            when {
+                result.isSuccess -> it.copy(
+                    editingPair = newPair,
+                    isEditing = false
+                )
+                else -> it.copy(isError = ErrorType.SERVER)
+            }
         }
     }
-
-    private fun updatePairRates(pairCurrency: PairCurrency) =
-        viewModelScope.launch {
-            pairCurrencyRepository.updateCurrencyPair(pairCurrency)
-        }
 
     fun updateAllPairsRates() = viewModelScope.launch {
         _state.update {
             it.copy(isLoading = true)
             it.pairs.forEach { pair ->
-                updatePairRates(pair)
+                pairCurrencyRepository.updateCurrencyPair(pair)
             }
-
             it.copy(isLoading = false)
         }
     }

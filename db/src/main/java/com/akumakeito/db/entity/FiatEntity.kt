@@ -9,21 +9,20 @@ import com.akumakeito.commonres.R
 @Entity
 data class FiatEntity(
     @PrimaryKey
-    val id: Int,
+    @ColumnInfo(name = "short_code")
+    val shortCode: String,
     @ColumnInfo(name = "name_ru")
     val nameRu: String,
     @ColumnInfo(name = "name_en")
     val nameEn: String,
-    @ColumnInfo(name = "short_code")
-    val shortCode: String,
     val code: String,
     val symbol: String,
     var flag: Int = R.drawable.flag_currention,
     var isPopular: Boolean = false,
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    var rates : Map<String, Double>? = null
 ) {
     fun toModel() = FiatCurrency(
-        id = id,
         nameRu = nameRu,
         nameEn = nameEn,
         shortCode = shortCode,
@@ -32,7 +31,9 @@ data class FiatEntity(
         flag = flag,
         isPopular = isPopular,
         isFavorite = isFavorite
-    )
+    ).apply {
+        rates = this@FiatEntity.rates ?: emptyMap()
+    }
 }
 
 fun List<FiatEntity>.toModel(): List<FiatCurrency> = map(FiatEntity::toModel)

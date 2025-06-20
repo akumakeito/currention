@@ -9,7 +9,6 @@ val popularCurrencyShortCodeList =
 val CHOSEN_CURRENCY_KEY = "chosen currency"
 
 val usd = FiatCurrency(
-    id = 1,
     nameEn = "Доллар США",
     nameRu = "US Dollar",
     shortCode = "USD",
@@ -19,7 +18,6 @@ val usd = FiatCurrency(
 )
 
 val rub = FiatCurrency(
-    id = 2,
     nameEn = "Российский рубль",
     nameRu = "Russian Ruble",
     shortCode = "RUB",
@@ -29,7 +27,6 @@ val rub = FiatCurrency(
 )
 
 val lari = FiatCurrency(
-    id = 3,
     nameEn = "Грузинский лари",
     nameRu = "Georgian Lari",
     shortCode = "GEL",

@@ -1,4 +1,4 @@
-package com.akumakeito.onboarding
+package com.akumakeito.selectfavcurrency
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

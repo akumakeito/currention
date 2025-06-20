@@ -1,6 +1,8 @@
 package com.akumakeito.rates.data
 
-import android.util.Log
+import android.net.http.HttpException
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.db.dao.CurrencyPairDao
 import com.akumakeito.rates.domain.PairCurrency
@@ -13,6 +15,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.io.IOException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class PairCurrencyRepositoryImpl @Inject constructor(
@@ -25,39 +29,40 @@ class PairCurrencyRepositoryImpl @Inject constructor(
         it.toModel()
     }.stateIn(scope, SharingStarted.Lazily, emptyList())
 
-    override suspend fun updateCurrencyPair(pairCurrency: PairCurrency) {
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    override suspend fun updateCurrencyPair(pairCurrency: PairCurrency): Result<Unit> {
+        return try {
+            val newRates =
+                convertRepository.getLatest(
+                    base = pairCurrency.fromCurrency,
+                ).getOrThrow()[pairCurrency.toCurrency.shortCode]
 
-        var oldPair = getPairById(pairCurrency.id)
+            val previousRate = convertRepository.getCurrencyRatesOnPreviousDate(
+                pairCurrency.fromCurrency,
+            ).getOrThrow()[pairCurrency.toCurrency.shortCode]
 
-        val newRates = convertRepository.convert(pairCurrency.fromCurrency, pairCurrency.toCurrency, 1.0)
+            val updatedPair = pairCurrency.copy(
+                toCurrencyLastRate = previousRate!!,
+                toCurrencyNewRate = newRates!!
+            )
 
-        if (isFromToCurrenciesSame(pairCurrency, oldPair)) {
-            oldPair = updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency)
+            val updatedPairWithRate =
+                updatedPair.copy(rateCurrency = updatedPair.getRateInPerc())
+
+            pairCurrencyDao.updateCurrencyPair(updatedPairWithRate.toEntity())
+
+            Result.success(Unit)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Result.failure<Unit>(e)
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            Result.failure<Unit>(e)
         }
-
-        var updatedPair =
-            if (oldPair.toCurrencyLastRate == 0.0 || pairCurrency.toCurrencyLastRate == 0.0) {
-                val previousRate = convertRepository.getCurrencyRateOnPreviousDate(
-                    pairCurrency.fromCurrency,
-                    pairCurrency.toCurrency
-                ).rates[pairCurrency.toCurrency.shortCode]
-
-                Log.d("PairCurrencyRepositoryImpl", "previousRate: $previousRate")
-                pairCurrency.copy(
-                    toCurrencyLastRate = previousRate ?: 0.0,
-                    toCurrencyNewRate = newRates.value
-                )
-            } else if (newRates.value == pairCurrency.toCurrencyNewRate) {
-                pairCurrency
-            } else {
-                pairCurrency.copy(
-                    toCurrencyLastRate = pairCurrency.toCurrencyNewRate,
-                    toCurrencyNewRate = newRates.value
-                )
-            }
-
-        val updatedPairWithRate = updatedPair.copy(rateCurrency = updatedPair.getRateInPerc())
-        pairCurrencyDao.updateCurrencyPair(updatedPairWithRate.toEntity())
+        catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure<Unit>(e)
+        }
     }
 
     override suspend fun updateCurrencyPairWithNewCurrencyFromOrTo(pairCurrency: PairCurrency): PairCurrency {
@@ -68,27 +73,12 @@ class PairCurrencyRepositoryImpl @Inject constructor(
         return updatedPair
     }
 
-
-    override suspend fun isFromToCurrenciesSame(
-        pairCurrency: PairCurrency,
-        updatedPairCurrency: PairCurrency
-    ): Boolean =
-        updatedPairCurrency.fromCurrency.shortCode.lowercase() != pairCurrency.fromCurrency.shortCode.lowercase()
-                || updatedPairCurrency.toCurrency.shortCode.lowercase() != pairCurrency.toCurrency.shortCode.lowercase()
-
-
-    override suspend fun getPairById(id: Int): PairCurrency {
-        val pair = pairCurrencyDao.getPairById(id)
-        return pair.toModel()
+    override suspend fun getPairById(id: Int): PairCurrency? {
+        val pair = pairCurrencyDao.getPairByShortCode(id)
+        return pair?.toModel()
     }
 
     override suspend fun deletePairById(id: Int) {
         pairCurrencyDao.deletePairById(id)
-    }
-
-    override suspend fun addNewCurrencyPair(pairCurrency: PairCurrency): PairCurrency {
-        pairCurrencyDao.addNewCurrencyPair(pairCurrency.toEntity())
-        val newPair = pairCurrencyDao.getLastInsertedPair()
-        return newPair.toModel()
     }
 }

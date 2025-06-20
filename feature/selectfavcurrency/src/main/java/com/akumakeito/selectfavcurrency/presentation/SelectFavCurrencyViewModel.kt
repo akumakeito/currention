@@ -1,4 +1,4 @@
-package com.akumakeito.onboarding.presentation
+package com.akumakeito.selectfavcurrency.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,6 +10,7 @@ import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.convert.presentation.search.SearchState
 import com.akumakeito.convert.presentation.search.SearchingInteractor
 import com.akumakeito.core.appsettings.AppSettingsRepository
+import com.akumakeito.selectfavcurrency.domain.UpdateFavoriteCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +27,7 @@ class SelectFavCurrencyViewModel @Inject constructor(
     private val repository: CurrencyRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val searchingInteractor: SearchingInteractor,
+    private val updateFavoriteCurrencyUseCase: UpdateFavoriteCurrencyUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -73,5 +75,6 @@ class SelectFavCurrencyViewModel @Inject constructor(
 
     fun onDoneClick() = viewModelScope.launch {
         appSettingsRepository.setFirstStart(false)
+        updateFavoriteCurrencyUseCase()
     }
 }

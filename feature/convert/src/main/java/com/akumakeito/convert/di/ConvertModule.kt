@@ -8,6 +8,7 @@ import com.akumakeito.convert.data.FlagInteractor
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.convert.domain.CurrencyRepository
+import com.akumakeito.core.appsettings.AppSettingsRepository
 import com.akumakeito.db.dao.CurrencyDao
 import dagger.Module
 import dagger.Provides
@@ -31,7 +32,13 @@ class ConvertModule {
     @Singleton
     fun provideConvertRepository(
         currencyApi: CurrencyApi,
-    ): ConvertRepository = ConvertRepositoryImpl(currencyApi)
+        appSettingsRepository: AppSettingsRepository,
+        currencyDao: CurrencyDao
+    ): ConvertRepository = ConvertRepositoryImpl(
+        currencyApi,
+        appSettingsRepository,
+        currencyDao
+    )
 
     @Provides
     @Singleton

@@ -1,7 +1,9 @@
 package com.akumakeito.convert.data
 
 import android.content.Context
-import android.util.Log
+import android.net.http.HttpException
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import com.akumakeito.commonmodels.domain.CurrencyType
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonmodels.popularCurrencyShortCodeList
@@ -14,6 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 
 class CurrencyRepositoryImpl(
     private val currencyApi: CurrencyApi,
@@ -26,11 +29,9 @@ class CurrencyRepositoryImpl(
         it.toModel()
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun downloadInitialFiatCurrencyList(): Flow<Result<Unit>> = flow {
-        Log.d("CrashFix", "downloadInitialFiatCurrencyList started")
         if (currencyDao.isEmpty()) {
-            Log.d("CrashFix", "currencyDao.isEmpty(): ${currencyDao.isEmpty()}")
-
             try {
                 val result = currencyApi.getCurrencyList(CurrencyType.FIAT.name.lowercase())
 
@@ -51,15 +52,18 @@ class CurrencyRepositoryImpl(
                         currencyDao.updateCurrencyName(it.shortCode, res.getString(currencyNameId))
                     }
                 }
-                Log.d("CrashFix", "downloadInitialFiatCurrencyList success")
                 emit(Result.success(Unit))
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Result.failure<Unit>(e))
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                emit(Result.failure<Unit>(e))
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("CrashFix", "downloadInitialFiatCurrencyList catch")
                 emit(Result.failure<Unit>(e))
             }
         } else {
-            Log.d("CrashFix", "downloadInitialFiatCurrencyList else")
             emit(Result.success(Unit))
         }
     }

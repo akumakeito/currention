@@ -10,12 +10,16 @@ interface ConvertRepository {
         currencyFrom: FiatCurrency,
         currencyTo: FiatCurrency,
         amount: Double
-    ): ConvertFiatServerResponse
+    ): Result<ConvertFiatServerResponse>
 
-    suspend fun getCurrencyRateOnPreviousDate(
+    suspend fun getCurrencyRatesOnPreviousDate(
         currencyFrom: FiatCurrency,
-        currencyTo: FiatCurrency
-    ): ConvertFiatOnDateServerResponse
+    ): Result<Map<String, Double>>
 
-    suspend fun getLatest(base: FiatCurrency, symbols: List<FiatCurrency>): ConvertFiatOnDateServerResponse
+    suspend fun getLatest(base: FiatCurrency): Result<Map<String, Double>>
+
+    suspend fun updateRates(
+        base: FiatCurrency,
+        time: Long? = null,
+    ): Result<Map<String, Double>>
 }

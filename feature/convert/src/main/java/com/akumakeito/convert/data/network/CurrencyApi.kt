@@ -14,12 +14,12 @@ interface CurrencyApi {
     @GET("latest")
     suspend fun getLatest(
         @Query("base") currencyFromShortCode: String,
-        @Query("symbols") currencyToShortCodeList: String
+        @Query("symbols") currenciesToShortCodesString: String
     ): ConvertFiatOnDateServerResponse
 
 
     @GET("convert")
-    suspend fun getPairRates(
+    suspend fun convert(
         @Query("from") currencyFromShortCode: String,
         @Query("to") currencyToShortCode: String,
         @Query("amount") amount: Double
@@ -29,7 +29,7 @@ interface CurrencyApi {
     suspend fun getCurrencyRateOnDate(
         @Query("base") currencyFromShortCode: String,
         @Query("date") date: String,
-        @Query("symbols") currencyToShortCode: List<String>
+        @Query("symbols") currenciesToShortCodesString: String,
     ): ConvertFiatOnDateServerResponse
 
 }

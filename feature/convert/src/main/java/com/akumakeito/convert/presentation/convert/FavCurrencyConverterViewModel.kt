@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonmodels.usd
+import com.akumakeito.commonui.presentation.ErrorType
 import com.akumakeito.convert.domain.ConvertBaseCurrencyToFavCurrencyUseCase
+import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.convert.presentation.convert.FavCurrencyConvertScreenModel
 import com.akumakeito.core.appsettings.AppSettingsRepository
@@ -82,10 +84,17 @@ class FavCurrencyConverterViewModel @Inject constructor(
             amountString = _state.value.amount
         )
         _state.update {
-            it.copy(
-                convertedToFavorites = result,
-                isLoading = false
-            )
+            when {
+                result.isSuccess -> it.copy(
+                    convertedToFavorites = result.getOrThrow(),
+                    isLoading = false
+                )
+                else -> it.copy(
+                    isError = ErrorType.SERVER,
+                    isLoading = false
+                )
+            }
+
         }
     }
 

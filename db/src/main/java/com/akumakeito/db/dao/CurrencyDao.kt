@@ -46,4 +46,14 @@ interface CurrencyDao {
         "SELECT * FROM FiatEntity WHERE isFavorite = 1"
     )
     fun getFavoriteCurrenciesFlow(): Flow<List<FiatEntity>>
+
+    @Query(
+        "SELECT * FROM FiatEntity WHERE short_code = :shortCode"
+    )
+    suspend fun getCurrencyByShortCode(shortCode: String): FiatEntity
+
+    @Query(
+        "UPDATE FiatEntity SET rates = :rates WHERE short_code = :shortCode"
+    )
+    suspend fun updateCurrencyRates(shortCode: String, rates: String)
 }

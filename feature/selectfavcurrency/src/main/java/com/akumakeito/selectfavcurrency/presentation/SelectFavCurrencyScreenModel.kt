@@ -1,4 +1,4 @@
-package com.akumakeito.onboarding.presentation
+package com.akumakeito.selectfavcurrency.presentation
 
 import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.navigation.Screen

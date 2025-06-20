@@ -14,7 +14,7 @@ interface CurrencyPairDao {
     fun getAllPairs(): Flow<List<PairCurrencyEntity>>
 
     @Query("SELECT * FROM pair_currency WHERE id = :id")
-    suspend fun getPairById(id: Int): PairCurrencyEntity
+    suspend fun getPairByShortCode(id: Int): PairCurrencyEntity?
 
     @Query("DELETE FROM pair_currency WHERE id = :id")
     suspend fun deletePairById(id: Int)

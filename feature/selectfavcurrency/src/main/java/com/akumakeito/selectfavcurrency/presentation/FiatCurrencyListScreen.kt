@@ -1,4 +1,4 @@
-package com.akumakeito.onboarding.presentation
+package com.akumakeito.selectfavcurrency.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -80,7 +80,7 @@ fun FiatCurrencyList(
             contentPadding = PaddingValues(vertical = Dimens.x2, horizontal = Dimens.x2),
         ) {
 
-            items(items = fiatCurrencyList, key = { it.id }) { item ->
+            items(items = fiatCurrencyList, key = { it.shortCode }) { item ->
                 CurrencyCardToChooseFavorite(
                     currency = item,
                     onCheckboxClickListener = {

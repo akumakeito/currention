@@ -1,206 +1,206 @@
-package com.akumakeito.convert.presentation.convert
-
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.akumakeito.commonmodels.domain.FiatCurrency
-import com.akumakeito.commonmodels.rub
-import com.akumakeito.commonmodels.usd
-import com.akumakeito.commonui.presentation.ErrorType
-import com.akumakeito.commonui.presentation.StateModel
-import com.akumakeito.commonui.presentation.util.format
-import com.akumakeito.convert.domain.ConvertRepository
-import com.akumakeito.convert.domain.ConvertingPairCurrency
-import com.akumakeito.convert.presentation.search.SearchingInteractor
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import java.io.IOException
-import javax.inject.Inject
-
-@HiltViewModel
-class UsualConverterViewModel @Inject constructor(
-    private val convertRepository: ConvertRepository,
-    private val searchingInteractor: SearchingInteractor,
-) : ViewModel() {
-
-    val defaultConvertingCurrency = ConvertingPairCurrency(
-        firstCurrency = usd,
-        secondCurrency = rub,
-        rateFromFirstToSecond = 0.0,
-        rateFromSecondToFirst = 0.0,
-        amount = 0.0,
-        convertedAmount = 0.0
-    )
-
-    private val _convertingCurrencyState = MutableStateFlow(defaultConvertingCurrency)
-    val convertingCurrencyState = _convertingCurrencyState.asStateFlow()
-
-    val fiatCurrencyList = searchingInteractor.fiatCurrencies
-
-    private val sum = MutableStateFlow("")
-
-    private val _uiState = MutableStateFlow(StateModel())
-    val uiState = _uiState.asStateFlow()
-
-    init {
-        try {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
-            convertForOne(
-                _convertingCurrencyState.value.firstCurrency,
-                _convertingCurrencyState.value.secondCurrency,
-            )
-            convertForOne(
-                _convertingCurrencyState.value.secondCurrency,
-                _convertingCurrencyState.value.firstCurrency,
-
-                )
-
-            _uiState.update {
-                StateModel()
-            }
-        } catch (networkException: IOException) {
-            _uiState.update {
-                it.copy(isError = ErrorType.NETWORK)
-            }
-        }
-
-
-    }
-
-    fun clearAmount() {
-        sum.value = ""
-        _convertingCurrencyState.value =
-            _convertingCurrencyState.value.copy(amount = null, convertedAmount = 0.0)
-    }
-
-    fun changeAmount(amount: String) {
-        sum.value = amount
-
-        Log.d("CurrencyConverterScreen", "changeAmount: ${_convertingCurrencyState.value.amount}")
-
-    }
-
-    fun onSearchTextChange(text: String) {
-        searchingInteractor.onSearchTextChange(text)
-    }
-
-    fun convert() {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
-
-            _convertingCurrencyState.update {
-                it.copy(amount = parseAmount(sum.value))
-            }
-            val result =
-                convertRepository.convert(
-                    _convertingCurrencyState.value.firstCurrency,
-                    _convertingCurrencyState.value.secondCurrency,
-                    _convertingCurrencyState.value.amount ?: 0.0
-                )
-
-            val convertedAmount = result.value.format(2)
-
-
-            _convertingCurrencyState.update {
-                it.copy(
-                    convertedAmount = convertedAmount.toDouble()
-                )
-            }
-
-            _uiState.update {
-                it.copy(isLoading = false)
-            }
-
-        }
-    }
-
-
-    private fun convertForOne(
-        currencyFrom: FiatCurrency,
-        currencyTo: FiatCurrency,
-    ) {
-        viewModelScope.launch {
-            val result =
-                convertRepository.convert(currencyFrom, currencyTo, 1.0)
-            _convertingCurrencyState.update {
-                if (result.from == it.firstCurrency.shortCode) {
-                    it.copy(
-                        rateFromFirstToSecond = result.value,
-                    )
-                } else {
-                    it.copy(
-                        rateFromSecondToFirst = result.value,
-                    )
-                }
-            }
-        }
-    }
-
-    private fun parseAmount(input: String): Double? {
-        return try {
-            var sanitizedInput = if (input.contains(",")) input.replace(",", ".") else input
-            Log.d("CurrencyConverterScreen", "sanitizedInput: $sanitizedInput")
-            sanitizedInput = sanitizedInput.replace("..", ".")
-            Log.d("CurrencyConverterScreen", "sanitizedInput after regex: $sanitizedInput")
-
-            sanitizedInput.toDoubleOrNull()
-        } catch (e: NumberFormatException) {
-            null // Возвращаем null в случае ошибки
-        }
-    }
-
-    private fun updateRateForOne() {
-        convertForOne(
-            _convertingCurrencyState.value.firstCurrency,
-            _convertingCurrencyState.value.secondCurrency,
-        )
-        convertForOne(
-            _convertingCurrencyState.value.secondCurrency,
-            _convertingCurrencyState.value.firstCurrency,
-
-            )
-    }
-
-    fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
-        _convertingCurrencyState.update {
-            it.copy(firstCurrency = fromCurrency)
-        }
-
-        updateAndConvert()
-    }
-
-    fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
-        _convertingCurrencyState.update {
-            it.copy(secondCurrency = toCurrency)
-        }
-
-        updateAndConvert()
-    }
-
-    private fun updateAndConvert() {
-        updateRateForOne()
-        convert()
-    }
-
-    fun reversePairCurrency() {
-        val currentCurrencyFrom = _convertingCurrencyState.value.firstCurrency
-        val currentCurrencyTo = _convertingCurrencyState.value.secondCurrency
-
-        _convertingCurrencyState.update {
-            it.copy(
-                firstCurrency = currentCurrencyTo,
-                secondCurrency = currentCurrencyFrom
-            )
-        }
-
-        updateAndConvert()
-    }
-
-}
+//package com.akumakeito.convert.presentation.convert
+//
+//import android.util.Log
+//import androidx.lifecycle.ViewModel
+//import androidx.lifecycle.viewModelScope
+//import com.akumakeito.commonmodels.domain.FiatCurrency
+//import com.akumakeito.commonmodels.rub
+//import com.akumakeito.commonmodels.usd
+//import com.akumakeito.commonui.presentation.ErrorType
+//import com.akumakeito.commonui.presentation.StateModel
+//import com.akumakeito.commonui.presentation.util.format
+//import com.akumakeito.convert.domain.ConvertRepository
+//import com.akumakeito.convert.domain.ConvertingPairCurrency
+//import com.akumakeito.convert.presentation.search.SearchingInteractor
+//import dagger.hilt.android.lifecycle.HiltViewModel
+//import kotlinx.coroutines.flow.MutableStateFlow
+//import kotlinx.coroutines.flow.asStateFlow
+//import kotlinx.coroutines.flow.update
+//import kotlinx.coroutines.launch
+//import java.io.IOException
+//import javax.inject.Inject
+//
+//@HiltViewModel
+//class UsualConverterViewModel @Inject constructor(
+//    private val convertRepository: ConvertRepository,
+//    private val searchingInteractor: SearchingInteractor,
+//) : ViewModel() {
+//
+//    val defaultConvertingCurrency = ConvertingPairCurrency(
+//        firstCurrency = usd,
+//        secondCurrency = rub,
+//        rateFromFirstToSecond = 0.0,
+//        rateFromSecondToFirst = 0.0,
+//        amount = 0.0,
+//        convertedAmount = 0.0
+//    )
+//
+//    private val _convertingCurrencyState = MutableStateFlow(defaultConvertingCurrency)
+//    val convertingCurrencyState = _convertingCurrencyState.asStateFlow()
+//
+//    val fiatCurrencyList = searchingInteractor.fiatCurrencies
+//
+//    private val sum = MutableStateFlow("")
+//
+//    private val _uiState = MutableStateFlow(StateModel())
+//    val uiState = _uiState.asStateFlow()
+//
+//    init {
+//        try {
+//            _uiState.update {
+//                it.copy(isLoading = true)
+//            }
+//            convertForOne(
+//                _convertingCurrencyState.value.firstCurrency,
+//                _convertingCurrencyState.value.secondCurrency,
+//            )
+//            convertForOne(
+//                _convertingCurrencyState.value.secondCurrency,
+//                _convertingCurrencyState.value.firstCurrency,
+//
+//                )
+//
+//            _uiState.update {
+//                StateModel()
+//            }
+//        } catch (networkException: IOException) {
+//            _uiState.update {
+//                it.copy(isError = ErrorType.NETWORK)
+//            }
+//        }
+//
+//
+//    }
+//
+//    fun clearAmount() {
+//        sum.value = ""
+//        _convertingCurrencyState.value =
+//            _convertingCurrencyState.value.copy(amount = null, convertedAmount = 0.0)
+//    }
+//
+//    fun changeAmount(amount: String) {
+//        sum.value = amount
+//
+//        Log.d("CurrencyConverterScreen", "changeAmount: ${_convertingCurrencyState.value.amount}")
+//
+//    }
+//
+//    fun onSearchTextChange(text: String) {
+//        searchingInteractor.onSearchTextChange(text)
+//    }
+//
+//    fun convert() {
+//        viewModelScope.launch {
+//            _uiState.update {
+//                it.copy(isLoading = true)
+//            }
+//
+//            _convertingCurrencyState.update {
+//                it.copy(amount = parseAmount(sum.value))
+//            }
+//            val result =
+//                convertRepository.convert(
+//                    _convertingCurrencyState.value.firstCurrency,
+//                    _convertingCurrencyState.value.secondCurrency,
+//                    _convertingCurrencyState.value.amount ?: 0.0
+//                )
+//
+//            val convertedAmount = result.getOrNull()
+//
+//
+//            _convertingCurrencyState.update {
+//                it.copy(
+//                    convertedAmount = convertedAmount.toDouble()
+//                )
+//            }
+//
+//            _uiState.update {
+//                it.copy(isLoading = false)
+//            }
+//
+//        }
+//    }
+//
+//
+//    private fun convertForOne(
+//        currencyFrom: FiatCurrency,
+//        currencyTo: FiatCurrency,
+//    ) {
+//        viewModelScope.launch {
+//            val result =
+//                convertRepository.convert(currencyFrom, currencyTo, 1.0)
+//            _convertingCurrencyState.update {
+//                if (result.from == it.firstCurrency.shortCode) {
+//                    it.copy(
+//                        rateFromFirstToSecond = result.value,
+//                    )
+//                } else {
+//                    it.copy(
+//                        rateFromSecondToFirst = result.value,
+//                    )
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun parseAmount(input: String): Double? {
+//        return try {
+//            var sanitizedInput = if (input.contains(",")) input.replace(",", ".") else input
+//            Log.d("CurrencyConverterScreen", "sanitizedInput: $sanitizedInput")
+//            sanitizedInput = sanitizedInput.replace("..", ".")
+//            Log.d("CurrencyConverterScreen", "sanitizedInput after regex: $sanitizedInput")
+//
+//            sanitizedInput.toDoubleOrNull()
+//        } catch (e: NumberFormatException) {
+//            null // Возвращаем null в случае ошибки
+//        }
+//    }
+//
+//    private fun updateRateForOne() {
+//        convertForOne(
+//            _convertingCurrencyState.value.firstCurrency,
+//            _convertingCurrencyState.value.secondCurrency,
+//        )
+//        convertForOne(
+//            _convertingCurrencyState.value.secondCurrency,
+//            _convertingCurrencyState.value.firstCurrency,
+//
+//            )
+//    }
+//
+//    fun updatePairCurrencyFrom(fromCurrency: FiatCurrency) {
+//        _convertingCurrencyState.update {
+//            it.copy(firstCurrency = fromCurrency)
+//        }
+//
+//        updateAndConvert()
+//    }
+//
+//    fun updatePairCurrencyTo(toCurrency: FiatCurrency) {
+//        _convertingCurrencyState.update {
+//            it.copy(secondCurrency = toCurrency)
+//        }
+//
+//        updateAndConvert()
+//    }
+//
+//    private fun updateAndConvert() {
+//        updateRateForOne()
+//        convert()
+//    }
+//
+//    fun reversePairCurrency() {
+//        val currentCurrencyFrom = _convertingCurrencyState.value.firstCurrency
+//        val currentCurrencyTo = _convertingCurrencyState.value.secondCurrency
+//
+//        _convertingCurrencyState.update {
+//            it.copy(
+//                firstCurrency = currentCurrencyTo,
+//                secondCurrency = currentCurrencyFrom
+//            )
+//        }
+//
+//        updateAndConvert()
+//    }
+//
+//}

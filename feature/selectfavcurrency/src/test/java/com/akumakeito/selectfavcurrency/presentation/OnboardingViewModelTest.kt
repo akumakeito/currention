@@ -1,4 +1,4 @@
-package com.akumakeito.onboarding.presentation
+package com.akumakeito.selectfavcurrency.presentation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.akumakeito.convert.domain.CurrencyRepository

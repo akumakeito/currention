@@ -41,10 +41,9 @@ fun FlagShortCodeAmount(
                 CircularProgressIndicator()
             } else {
                 Text(
-                    text = currency.rate?.let { it.format(2) } ?: "0.0",
+                    text = currency.currentRate?.format(2) ?: "0.0",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.outline
-
                 )
             }
         }

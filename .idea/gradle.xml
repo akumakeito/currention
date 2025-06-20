@@ -18,9 +18,9 @@
             <option value="$PROJECT_DIR$/db" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/convert" />
-            <option value="$PROJECT_DIR$/feature/onboarding" />
             <option value="$PROJECT_DIR$/feature/parameters" />
             <option value="$PROJECT_DIR$/feature/rates" />
+            <option value="$PROJECT_DIR$/feature/selectfavcurrency" />
           </set>
         </option>
       </GradleProjectSettings>

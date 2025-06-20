@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,9 +35,9 @@ import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.items.SegmentedButtonSingleSelect
 import com.akumakeito.commonui.presentation.items.SpacerHeight
 import com.akumakeito.commonui.presentation.navigation.Screen
-import com.akumakeito.onboarding.presentation.CryptoCurrencyListScreen
-import com.akumakeito.onboarding.presentation.FiatCurrencyList
-import com.akumakeito.onboarding.presentation.SelectFavCurrencyViewModel
+import com.akumakeito.selectfavcurrency.presentation.CryptoCurrencyListScreen
+import com.akumakeito.selectfavcurrency.presentation.FiatCurrencyList
+import com.akumakeito.selectfavcurrency.presentation.SelectFavCurrencyViewModel
 import kotlinx.coroutines.launch
 
 

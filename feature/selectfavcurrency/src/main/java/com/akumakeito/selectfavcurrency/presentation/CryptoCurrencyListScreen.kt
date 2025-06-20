@@ -1,4 +1,4 @@
-package com.akumakeito.onboarding.presentation
+package com.akumakeito.selectfavcurrency.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

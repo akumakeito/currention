@@ -61,7 +61,7 @@ dependencies {
     implementation(project(":feature:parameters"))
     implementation(project(":feature:convert"))
     implementation(project(":feature:rates"))
-    implementation(project(":feature:onboarding"))
+    implementation(project(":feature:selectfavcurrency"))
     implementation(project(":commonres"))
     implementation(project(":commonui"))
     implementation(project(":commonmodels"))

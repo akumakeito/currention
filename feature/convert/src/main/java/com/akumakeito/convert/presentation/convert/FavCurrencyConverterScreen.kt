@@ -103,7 +103,7 @@ fun FavCurrencyConverterScreen(
                 for (item in state.convertedToFavorites) {
                     FlagShortCodeAmount(
                         isLoading = state.isLoading,
-                        currency = item,
+                        currency = item
                     )
                 }
             }

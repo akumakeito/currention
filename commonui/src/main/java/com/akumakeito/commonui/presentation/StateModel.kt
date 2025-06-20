@@ -15,5 +15,6 @@ sealed class LaunchState {
 
 enum class ErrorType {
     NETWORK,
-    SERVER
+    SERVER,
+    UNKNOWN
 }

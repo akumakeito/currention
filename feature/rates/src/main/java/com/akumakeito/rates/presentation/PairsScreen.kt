@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -29,17 +31,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.akumakeito.commonui.presentation.Dimens
-import com.akumakeito.commonui.presentation.navigation.ScreenRoute
 import com.akumakeito.commonres.R
+import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.rates.presentation.PairCurrencyViewModel
-import kotlinx.serialization.Serializable
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 import ru.akumakeito.currention.ui.items.CurrencyPairInExchangeRate
 import ru.akumakeito.currention.ui.items.CustomTopAppBar
 import com.akumakeito.commonres.R as CommonRes
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,10 +88,19 @@ fun PairsScreen(
                         .navigationBarsPadding()
                         .padding(Dimens.x2),
                 ) {
-                    Text(
-                        text = stringResource(CommonRes.string.done),
-                        fontWeight = FontWeight.Bold
-                    )
+                    if (state.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(Dimens.IconSizeSmall),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeCap = androidx.compose.ui.graphics.StrokeCap.Round,
+                            strokeWidth = 1.dp
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(CommonRes.string.done),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

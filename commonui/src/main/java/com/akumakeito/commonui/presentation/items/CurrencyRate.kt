@@ -13,7 +13,7 @@ fun CurrencyRate(rate: Float, modifier: Modifier = Modifier) {
     when {
         rate > 0 -> Text(
             modifier = modifier,
-            text = String.format("+%.2f%%", rate),
+            text = String.format("+%.3f%%", rate),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.End
@@ -21,7 +21,7 @@ fun CurrencyRate(rate: Float, modifier: Modifier = Modifier) {
 
         rate < 0 -> Text(
             modifier = modifier,
-            text = String.format("%.2f%%", rate),
+            text = String.format("%.3f%%", rate),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.End
@@ -32,7 +32,7 @@ fun CurrencyRate(rate: Float, modifier: Modifier = Modifier) {
             modifier = modifier,
             text = String.format("%.2f%%", rate),
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.outline,
             textAlign = TextAlign.End
         )
     }

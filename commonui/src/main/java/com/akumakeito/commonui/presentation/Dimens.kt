@@ -21,7 +21,7 @@ object Dimens {
     /**
      * 24 dp
      */
-    val IconSizeLarge: Dp
+    val IconSizeSmall: Dp
         get() = 24.dp
 
     /**
