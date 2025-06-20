@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -35,7 +35,7 @@ fun CurrencyFlagAmountShortCode(
     currencyList: List<FiatCurrency>,
     onSearchTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    textColor : Color = MaterialTheme.colorScheme.outline
+    textColor: Color = MaterialTheme.colorScheme.outline
 ) {
 
     var expanded by remember { mutableStateOf(false) }

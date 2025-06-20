@@ -1,5 +1,7 @@
 package ru.akumakeito.currention.ui.screens
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +43,7 @@ import ru.akumakeito.currention.ui.items.CustomTopAppBar
 import com.akumakeito.commonres.R as CommonRes
 
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PairsScreen(
@@ -177,6 +180,7 @@ fun PairsScreen(
                     )
                 }
             }
+
         }
     }
 }

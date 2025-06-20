@@ -1,6 +1,6 @@
 package com.akumakeito.convert.data.network
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.convert.data.network.dto.FiatResponse
 import com.akumakeito.db.entity.FiatEntity
 

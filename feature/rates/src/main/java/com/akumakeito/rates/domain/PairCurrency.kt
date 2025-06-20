@@ -1,6 +1,6 @@
 package com.akumakeito.rates.domain
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 
 data class PairCurrency(
     val id: Int,

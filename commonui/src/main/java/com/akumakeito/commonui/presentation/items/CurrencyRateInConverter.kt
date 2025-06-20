@@ -14,9 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
-import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.util.formatWithRange
+import com.akumakeito.core.models.domain.FiatCurrency
 
 @Composable
 fun CurrencyRateInConverter(

@@ -3,7 +3,7 @@ package com.akumakeito.db.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 
 @Entity(tableName = "pair_currency")
 data class PairCurrencyEntity(

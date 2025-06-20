@@ -2,7 +2,7 @@ package com.akumakeito.commonui.presentation.items
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 
 @Composable
 fun FlagWithShortCode(fiatCurrency: FiatCurrency) {

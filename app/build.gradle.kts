@@ -64,7 +64,6 @@ dependencies {
     implementation(project(":feature:selectfavcurrency"))
     implementation(project(":commonres"))
     implementation(project(":commonui"))
-    implementation(project(":commonmodels"))
     implementation(project(":core"))
 
     implementation(libs.core.ktx)

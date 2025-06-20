@@ -19,8 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.akumakeito.commonmodels.domain.FiatCurrency
-import com.akumakeito.commonres.R
+import com.akumakeito.core.models.domain.FiatCurrency
 
 @Composable
 fun CurrencyCardToChooseFavorite(

@@ -2,7 +2,7 @@ package com.akumakeito.db
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import javax.inject.Inject

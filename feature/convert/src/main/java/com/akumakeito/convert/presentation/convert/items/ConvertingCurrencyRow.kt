@@ -12,7 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.items.CurrencyFlagAmountShortCode
 import com.akumakeito.commonui.presentation.items.CurrencyRateInConverter
 

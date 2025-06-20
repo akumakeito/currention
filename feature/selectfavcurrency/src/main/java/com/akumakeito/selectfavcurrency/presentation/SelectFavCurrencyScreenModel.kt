@@ -1,6 +1,6 @@
 package com.akumakeito.selectfavcurrency.presentation
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.navigation.Screen
 import com.akumakeito.convert.presentation.search.SearchState
 

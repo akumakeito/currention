@@ -2,8 +2,9 @@ package com.akumakeito.convert.data
 
 import android.net.http.HttpException
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresExtension
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.dto.ConvertFiatServerResponse
 import com.akumakeito.convert.domain.ConvertRepository
@@ -120,6 +121,7 @@ class ConvertRepositoryImpl(
             val symbolsString = getFavoritesShortCodesString()
 
             val result = currencyApi.getLatest(base.shortCode, symbolsString.toString()).rates
+            Log.d("PairCurrencyViewModel", "updateRates: $result")
             currencyDao.updateCurrencyRates(base.shortCode, result.toString())
 
             appSettingsRepository.setLastRatesUpdate(base.shortCode, currentTime)

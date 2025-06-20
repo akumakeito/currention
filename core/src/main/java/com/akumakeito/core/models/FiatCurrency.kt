@@ -1,4 +1,4 @@
-package com.akumakeito.commonmodels.domain
+package com.akumakeito.core.models.domain
 
 data class FiatCurrency(
     val nameEn: String,

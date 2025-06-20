@@ -3,8 +3,8 @@ package com.akumakeito.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonres.R
+import com.akumakeito.core.models.domain.FiatCurrency
 
 @Entity
 data class FiatEntity(
@@ -20,7 +20,7 @@ data class FiatEntity(
     var flag: Int = R.drawable.flag_currention,
     var isPopular: Boolean = false,
     var isFavorite: Boolean = false,
-    var rates : Map<String, Double>? = null
+    var rates: Map<String, Double>? = null
 ) {
     fun toModel() = FiatCurrency(
         nameRu = nameRu,

@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":commonres"))
+
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)

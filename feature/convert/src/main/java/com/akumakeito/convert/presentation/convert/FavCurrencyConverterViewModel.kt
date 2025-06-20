@@ -1,15 +1,16 @@
 package com.akumakeito.convert.presentation.convert
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.akumakeito.commonmodels.domain.FiatCurrency
-import com.akumakeito.commonmodels.usd
-import com.akumakeito.commonui.presentation.ErrorType
 import com.akumakeito.convert.domain.ConvertBaseCurrencyToFavCurrencyUseCase
-import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.convert.domain.CurrencyRepository
-import com.akumakeito.convert.presentation.convert.FavCurrencyConvertScreenModel
 import com.akumakeito.core.appsettings.AppSettingsRepository
+import com.akumakeito.core.models.ErrorType
+import com.akumakeito.core.models.domain.FiatCurrency
+import com.akumakeito.core.models.usd
+import com.akumakeito.core.util.getErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,16 +43,16 @@ class FavCurrencyConverterViewModel @Inject constructor(
             val lastSelectedBaseCurrencyShortCode =
                 appSettingsRepository.getLastSelectedBaseCurrency()
 
-            currencyRepository.getFavoriteCurrencyListFlow().collect { favList ->
+            currencyRepository.getFavoriteCurrencyListFlow().onEach { favList ->
                 _state.update { model ->
                     model.copy(
                         from = favList.find { it.shortCode == lastSelectedBaseCurrencyShortCode }
-                            ?: usd,
+                            ?: favList.first(),
                         favCurrency = favList,
                         isLoading = false
                     )
                 }
-            }
+            }.launchIn(viewModelScope)
         }
         _state
             .onEach { model ->
@@ -74,6 +75,7 @@ class FavCurrencyConverterViewModel @Inject constructor(
         appSettingsRepository.setLastSelectedBaseCurrency(currency.shortCode)
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun convert() = viewModelScope.launch {
         _state.update {
             it.copy(isLoading = true)
@@ -89,12 +91,15 @@ class FavCurrencyConverterViewModel @Inject constructor(
                     convertedToFavorites = result.getOrThrow(),
                     isLoading = false
                 )
-                else -> it.copy(
-                    isError = ErrorType.SERVER,
-                    isLoading = false
-                )
-            }
 
+                else -> {
+                    val errorType = getErrorType(result.exceptionOrNull())
+                    it.copy(
+                        isError = errorType,
+                        isLoading = false
+                    )
+                }
+            }
         }
     }
 

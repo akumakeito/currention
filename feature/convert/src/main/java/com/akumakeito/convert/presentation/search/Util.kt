@@ -1,6 +1,6 @@
 package com.akumakeito.convert.presentation.search
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 
 fun FiatCurrency.doesMatchSearchQuery(query: String): Boolean {
 

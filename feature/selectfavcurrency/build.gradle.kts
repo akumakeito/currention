@@ -38,7 +38,6 @@ android {
 dependencies {
     implementation(project(":commonres"))
     implementation(project(":feature:convert"))
-    implementation(project(":commonmodels"))
     implementation(project(":commonui"))
     implementation(project(":core"))
 

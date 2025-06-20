@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.http.HttpException
 import android.os.Build
 import androidx.annotation.RequiresExtension
-import com.akumakeito.commonmodels.domain.CurrencyType
-import com.akumakeito.commonmodels.domain.FiatCurrency
-import com.akumakeito.commonmodels.popularCurrencyShortCodeList
+import com.akumakeito.core.models.domain.CurrencyType
+import com.akumakeito.core.models.domain.FiatCurrency
+import com.akumakeito.core.models.popularCurrencyShortCodeList
 import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.toEntity
 import com.akumakeito.convert.domain.CurrencyRepository

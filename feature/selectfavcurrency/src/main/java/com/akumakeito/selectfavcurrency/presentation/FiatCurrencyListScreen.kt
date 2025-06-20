@@ -19,7 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.items.CurrencyCardToChooseFavorite

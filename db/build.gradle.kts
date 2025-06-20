@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":commonmodels"))
+    implementation(project(":core"))
     implementation(project(":commonres"))
 
     implementation(libs.room.runtime)

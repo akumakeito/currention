@@ -1,12 +1,10 @@
-package com.akumakeito.commonmodels
+package com.akumakeito.core.models
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonres.R
+import com.akumakeito.core.models.domain.FiatCurrency
 
 val popularCurrencyShortCodeList =
     listOf("USD", "EUR", "RUB", "CNY", "JPY", "GBP", "GEL", "CHF", "TRY", "SEK")
-
-val CHOSEN_CURRENCY_KEY = "chosen currency"
 
 val usd = FiatCurrency(
     nameEn = "Доллар США",

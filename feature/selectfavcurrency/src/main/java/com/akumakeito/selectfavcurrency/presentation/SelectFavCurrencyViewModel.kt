@@ -4,13 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.navigation.SelectFavoriteCurrencyScreenRoute
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.convert.presentation.search.SearchState
 import com.akumakeito.convert.presentation.search.SearchingInteractor
-import com.akumakeito.core.appsettings.AppSettingsRepository
-import com.akumakeito.selectfavcurrency.domain.UpdateFavoriteCurrencyUseCase
+import com.akumakeito.selectfavcurrency.domain.SaveFavoriteCurrencyListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,9 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SelectFavCurrencyViewModel @Inject constructor(
     private val repository: CurrencyRepository,
-    private val appSettingsRepository: AppSettingsRepository,
     private val searchingInteractor: SearchingInteractor,
-    private val updateFavoriteCurrencyUseCase: UpdateFavoriteCurrencyUseCase,
+    private val saveFavoriteCurrencyListUseCase: SaveFavoriteCurrencyListUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -74,7 +72,6 @@ class SelectFavCurrencyViewModel @Inject constructor(
     }
 
     fun onDoneClick() = viewModelScope.launch {
-        appSettingsRepository.setFirstStart(false)
-        updateFavoriteCurrencyUseCase()
+        saveFavoriteCurrencyListUseCase()
     }
 }

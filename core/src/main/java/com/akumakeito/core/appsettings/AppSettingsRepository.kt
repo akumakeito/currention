@@ -54,7 +54,7 @@ class AppSettingsRepository @Inject constructor(
 
     suspend fun getLastSelectedBaseCurrency(): String {
         return dataStore.data.map { preferences ->
-            preferences[stringPreferencesKey(LAST_SELECTED_BASE_CURRENCY)] ?: "USD"
+            preferences[stringPreferencesKey(LAST_SELECTED_BASE_CURRENCY)] ?: ""
         }.first()
     }
 

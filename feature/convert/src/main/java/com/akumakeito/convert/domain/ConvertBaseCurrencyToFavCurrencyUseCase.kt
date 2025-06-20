@@ -1,6 +1,6 @@
 package com.akumakeito.convert.domain
 
-import com.akumakeito.commonmodels.domain.FiatCurrency
+import com.akumakeito.core.models.domain.FiatCurrency
 import java.io.IOException
 import javax.inject.Inject
 

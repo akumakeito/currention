@@ -15,11 +15,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.akumakeito.commonmodels.domain.FiatCurrency
 import com.akumakeito.commonres.R
 import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.items.CurrencyFlagAmountShortCode
 import com.akumakeito.commonui.presentation.items.CurrencyRate
+import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.rates.domain.PairCurrency
 
 

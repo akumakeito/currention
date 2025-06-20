@@ -63,7 +63,6 @@ android {
 dependencies {
     implementation(project(":commonres"))
     implementation(project(":commonui"))
-    implementation(project(":commonmodels"))
     implementation(project(":db"))
     implementation(project(":core"))
 
