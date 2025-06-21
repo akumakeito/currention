@@ -1,11 +1,15 @@
 package ru.akumakeito.currention.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.core.appsettings.AppSettingsRepository
+import com.akumakeito.core.models.ErrorType
 import com.akumakeito.core.network.NetworkMonitor
+import com.akumakeito.core.util.getErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +22,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
@@ -44,7 +48,11 @@ class MainViewModel @Inject constructor(
         when {
             downloadResult.isSuccess && isFirstStart -> LaunchState.OnBoarding
             downloadResult.isSuccess -> LaunchState.Main
-            else -> LaunchState.Error
+            else -> {
+                val error = getErrorType(downloadResult.exceptionOrNull())
+
+                LaunchState.Error(error)
+            }
         }
     }
         .stateIn(
@@ -73,10 +81,11 @@ class MainViewModel @Inject constructor(
         SharingStarted.Eagerly,
     )
 
+
     private fun observeNetwork() {
         viewModelScope.launch {
             networkMonitor.isConnected.collect { connected ->
-                if (connected && launchState.value == LaunchState.Error) {
+                if (connected && launchState.value is LaunchState.Error) {
                     retryTrigger.emit(Unit)
                 }
             }

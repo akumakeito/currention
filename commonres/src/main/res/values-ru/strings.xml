@@ -188,5 +188,9 @@
     <string name="change_language">Сменить язык</string>
     <string name="app_info">О приложении</string>
     <string name="save">Сохранить</string>
-    <string name="error">Что-то пошло не так.\nПожалуйста, проверьте соединение с интернетом\nили попробуйте снова позже</string>
+    <string name="error_network">Пожалуйста, проверьте соединение с интернетом\nили попробуйте позже</string>
+    <string name="error_server">Сервер не отвечает\nПожалуйста, попробуйте позже</string>
+    <string name="error_unknown">Что-то пошло не так.\nПожалуйста, попробуйте позже</string>
+    <string name="last_update">Послденее обновление: %1$s</string>
+
 </resources>

@@ -57,6 +57,11 @@ class AppSettingsRepository @Inject constructor(
             preferences[stringPreferencesKey(LAST_SELECTED_BASE_CURRENCY)] ?: ""
         }.first()
     }
+    fun getLastSelectedBaseCurrencyFlow(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[stringPreferencesKey(LAST_SELECTED_BASE_CURRENCY)] ?: ""
+        }
+    }
 
     suspend fun setDarkTheme(value: Boolean) {
         dataStore.edit { preferences ->

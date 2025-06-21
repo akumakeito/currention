@@ -9,6 +9,7 @@ import com.akumakeito.convert.data.network.CurrencyApi
 import com.akumakeito.convert.data.network.dto.ConvertFiatServerResponse
 import com.akumakeito.convert.domain.ConvertRepository
 import com.akumakeito.core.appsettings.AppSettingsRepository
+import com.akumakeito.core.util.log
 import com.akumakeito.db.dao.CurrencyDao
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
@@ -17,7 +18,9 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.todayIn
 import java.io.IOException
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 class ConvertRepositoryImpl(
@@ -26,8 +29,7 @@ class ConvertRepositoryImpl(
     private val currencyDao: CurrencyDao,
 ) : ConvertRepository {
 
-    private val updatePeriod = 1.hours.toLong(DurationUnit.MILLISECONDS)
-
+    private val updatePeriod = 1.minutes.toLong(DurationUnit.MILLISECONDS)
 
     override suspend fun convert(
         currencyFrom: FiatCurrency,
@@ -118,10 +120,11 @@ class ConvertRepositoryImpl(
     ): Result<Map<String, Double>> {
         return try {
             val currentTime = time ?: Clock.System.now().toEpochMilliseconds()
+            log("currentTime: $currentTime")
             val symbolsString = getFavoritesShortCodesString()
-
+            log("symbolsString: $symbolsString")
             val result = currencyApi.getLatest(base.shortCode, symbolsString.toString()).rates
-            Log.d("PairCurrencyViewModel", "updateRates: $result")
+            log("updateRates: $result")
             currencyDao.updateCurrencyRates(base.shortCode, result.toString())
 
             appSettingsRepository.setLastRatesUpdate(base.shortCode, currentTime)

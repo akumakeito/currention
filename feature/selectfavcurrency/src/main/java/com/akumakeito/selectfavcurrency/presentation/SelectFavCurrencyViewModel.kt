@@ -9,6 +9,7 @@ import com.akumakeito.commonui.presentation.navigation.SelectFavoriteCurrencyScr
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.convert.presentation.search.SearchState
 import com.akumakeito.convert.presentation.search.SearchingInteractor
+import com.akumakeito.core.util.log
 import com.akumakeito.selectfavcurrency.domain.SaveFavoriteCurrencyListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,7 +72,8 @@ class SelectFavCurrencyViewModel @Inject constructor(
         }
     }
 
-    fun onDoneClick() = viewModelScope.launch {
-        saveFavoriteCurrencyListUseCase()
+    fun onDoneClick() {
+        log("onDoneClick")
+        saveFavoriteCurrencyListUseCase.runAsync()
     }
 }

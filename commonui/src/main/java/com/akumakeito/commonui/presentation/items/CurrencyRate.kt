@@ -6,10 +6,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.akumakeito.core.util.log
 
 @Composable
 fun CurrencyRate(rate: Float, modifier: Modifier = Modifier) {
-    Log.d("CurrencyRate", "rate: $rate")
+    log("rate: $rate")
     when {
         rate > 0 -> Text(
             modifier = modifier,

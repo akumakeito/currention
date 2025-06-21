@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.items.CurrencyFlagAmountShortCode
 import com.akumakeito.commonui.presentation.items.CurrencyRateInConverter
+import com.akumakeito.core.util.log
 
 @Composable
 fun ConvertingCurrencyRow(
@@ -37,7 +38,7 @@ fun ConvertingCurrencyRow(
 
     LaunchedEffect(key1 = amount) {
         amountState = amount
-        Log.d("CurrencyConverterScreen", "amountState: ${amountState}")
+        log("amountState: ${amountState}")
     }
 
 

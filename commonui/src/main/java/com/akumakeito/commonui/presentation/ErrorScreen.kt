@@ -17,10 +17,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.akumakeito.commonres.R
+import com.akumakeito.core.models.ErrorType
+import com.akumakeito.core.util.log
 
 
 @Composable
-fun ErrorScreen() {
+fun ErrorScreen(
+    errorType: ErrorType
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -29,6 +33,7 @@ fun ErrorScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        log("error type $errorType")
         Icon(
             painter = painterResource(R.drawable.ic_error),
             contentDescription = "error",
@@ -39,7 +44,7 @@ fun ErrorScreen() {
         )
 
         Text(
-            text = stringResource(R.string.error),
+            text = stringResource(errorType.message),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.error,
             modifier = Modifier.fillMaxWidth(),

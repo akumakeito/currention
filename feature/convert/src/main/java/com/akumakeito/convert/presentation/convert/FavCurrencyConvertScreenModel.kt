@@ -10,5 +10,6 @@ data class FavCurrencyConvertScreenModel(
     val convertedToFavorites: List<FiatCurrency>,
     val isButtonEnable: Boolean = false,
     val isLoading: Boolean = true,
-    val isError: ErrorType? = null
+    val error: ErrorType? = null,
+    val lastUpdate: String = "",
 )

@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.commonui.presentation.Dimens
 import com.akumakeito.commonui.presentation.items.FlagItem
@@ -38,7 +40,11 @@ fun FlagShortCodeAmount(
             contentAlignment = Alignment.CenterEnd
         ) {
             if (isLoading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.size(Dimens.IconSizeSmall),
+                    strokeWidth = 1.dp,
+                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
+                )
             } else {
                 Text(
                     text = currency.currentRate?.format(2) ?: "0.0",

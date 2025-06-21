@@ -1,8 +1,10 @@
 package ru.akumakeito.currention.presentation
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.toRoute
 import com.akumakeito.commonui.presentation.ErrorScreen
 import com.akumakeito.commonui.presentation.LaunchState
 import com.akumakeito.commonui.presentation.StartingScreen
@@ -43,6 +46,7 @@ import com.akumakeito.commonui.presentation.navigation.SettingsScreenRoute
 import com.akumakeito.commonui.presentation.navigation.StartingScreenRoute
 import com.akumakeito.commonui.presentation.navigation.rememberNavigationState
 import com.akumakeito.convert.presentation.convert.CurrencyConverterScreen
+import com.akumakeito.core.models.ErrorType
 import com.akumakeito.parameters.presentation.AboutAppScreen
 import dagger.hilt.android.AndroidEntryPoint
 import ru.akumakeito.currention.ui.screens.PairsScreen
@@ -53,6 +57,7 @@ import ru.akumakeito.currention.ui.theme.CurrentionTheme
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +80,7 @@ class MainActivity : ComponentActivity() {
                 LaunchState.Main -> PairsScreenRoute
                 LaunchState.OnBoarding -> SelectFavoriteCurrencyScreenRoute(fromScreen = Screen.STARTING)
                 LaunchState.Starting -> StartingScreenRoute
-                LaunchState.Error -> ErrorScreenRoute
+                is LaunchState.Error -> ErrorScreenRoute((launchState as LaunchState.Error).errorType)
             }
 
             val showBarScreens = listOf(
@@ -176,7 +181,8 @@ class MainActivity : ComponentActivity() {
                                 StartingScreen()
                             },
                             errorScreenContent = {
-                                ErrorScreen()
+                                val route = navBackStackEntry?.toRoute<ErrorScreenRoute>()
+                                ErrorScreen(route?.errorType ?: ErrorType.UNKNOWN)
                             },
                             aboutAppContent = {
                                 AboutAppScreen()

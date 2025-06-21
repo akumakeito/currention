@@ -189,5 +189,9 @@
     <string name="change_language">Change language</string>
     <string name="app_info">About the app</string>
     <string name="save">Save</string>
-    <string name="error">Something went wrong.\nPlease check your Internet connection\nor try again later</string>
+    <string name="error_network">Please check your Internet connection</string>
+    <string name="error_server">Server doesn\'t respond\nPlease try again later</string>
+    <string name="error_unknown">Something went wrong.\nPlease try again later</string>
+    <string name="last_update">Last update: %1$s</string>
+
 </resources>

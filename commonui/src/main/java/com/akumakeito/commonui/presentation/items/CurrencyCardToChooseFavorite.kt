@@ -33,7 +33,6 @@ fun CurrencyCardToChooseFavorite(
     val context = LocalContext.current
     val stringId = "cur${currency.shortCode.lowercase()}"
     val currencyNameId = context.resources.getIdentifier(stringId, "string", context.packageName)
-    Log.d("CurrencyCardToChooseFavorite", "CurrencyCardToChooseFavorite: $currencyNameId")
     Card(
         modifier = modifier
             .fillMaxWidth()

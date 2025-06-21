@@ -7,19 +7,24 @@ import androidx.lifecycle.viewModelScope
 import com.akumakeito.convert.domain.ConvertBaseCurrencyToFavCurrencyUseCase
 import com.akumakeito.convert.domain.CurrencyRepository
 import com.akumakeito.core.appsettings.AppSettingsRepository
-import com.akumakeito.core.models.ErrorType
 import com.akumakeito.core.models.domain.FiatCurrency
 import com.akumakeito.core.models.usd
 import com.akumakeito.core.util.getErrorType
+import com.akumakeito.core.util.log
+import com.akumakeito.core.util.toDateTimeString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class FavCurrencyConverterViewModel @Inject constructor(
     private val convertUseCase: ConvertBaseCurrencyToFavCurrencyUseCase,
@@ -37,30 +42,33 @@ class FavCurrencyConverterViewModel @Inject constructor(
     )
 
     val state = _state.asStateFlow()
+    val amount = MutableStateFlow("0.0")
 
     init {
-        viewModelScope.launch {
-            val lastSelectedBaseCurrencyShortCode =
-                appSettingsRepository.getLastSelectedBaseCurrency()
 
-            currencyRepository.getFavoriteCurrencyListFlow().onEach { favList ->
+        appSettingsRepository.getLastSelectedBaseCurrencyFlow()
+            .flatMapLatest { base ->
+                combine(
+                    currencyRepository.getFavoriteCurrencyListFlow(),
+                    appSettingsRepository.getLastRatesUpdate(base),
+                    amount,
+                ) { favList, lastUpdate, amount ->
+                    ConvertInput(favList, base, lastUpdate, amount)
+                }
+            }
+            .onEach { input ->
+                val newList = input.favList.filterNot { it.shortCode == input.base }
+                log("input ONEACH first: ${input}")
                 _state.update { model ->
                     model.copy(
-                        from = favList.find { it.shortCode == lastSelectedBaseCurrencyShortCode }
-                            ?: favList.first(),
-                        favCurrency = favList,
-                        isLoading = false
-                    )
-                }
-            }.launchIn(viewModelScope)
-        }
-        _state
-            .onEach { model ->
-                val newList = model.favCurrency.filterNot { it == model.from }
-                _state.update {
-                    it.copy(
+                        from = input.favList.find { it.shortCode == input.base }
+                            ?: input.favList.first(),
+                        favCurrency = input.favList,
+                        isLoading = false,
+                        lastUpdate = input.lastUpdate.toDateTimeString(),
                         convertedToFavorites = newList,
-                        isButtonEnable = it.amount != "0.0"
+                        isButtonEnable = input.amount != "0.0",
+                        amount = input.amount
                     )
                 }
             }.launchIn(viewModelScope)
@@ -95,7 +103,7 @@ class FavCurrencyConverterViewModel @Inject constructor(
                 else -> {
                     val errorType = getErrorType(result.exceptionOrNull())
                     it.copy(
-                        isError = errorType,
+                        error = errorType,
                         isLoading = false
                     )
                 }
@@ -104,26 +112,26 @@ class FavCurrencyConverterViewModel @Inject constructor(
     }
 
     fun onBackspaceClick() {
-        _state.update {
-            val newAmount = it.amount.dropLast(1)
-            it.copy(
-                amount = if (newAmount.isEmpty()) "0.0" else newAmount
-            )
+        amount.update {
+            val newAmount = it.dropLast(1)
+            if (newAmount.isEmpty()) "0.0" else newAmount
         }
     }
 
     fun onAmountChanged(value: String) {
-        _state.update {
-            it.copy(
-                amount = if (it.amount == "0.0") value else it.amount + value
-            )
+        amount.update {
+            if (it == "0.0") value else it + value
         }
     }
 
     fun onClearClick() {
+        amount.value = "0.0"
+    }
+
+    fun onCloseError() {
         _state.update {
             it.copy(
-                amount = "0.0"
+                error = null
             )
         }
     }

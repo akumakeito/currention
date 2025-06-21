@@ -1,5 +1,6 @@
 package com.akumakeito.commonui.presentation.navigation
 
+import com.akumakeito.core.models.ErrorType
 import kotlinx.serialization.Serializable
 
 interface ScreenRoute
@@ -11,7 +12,7 @@ data class SelectFavoriteCurrencyScreenRoute(val fromScreen : Screen = Screen.SE
 data object StartingScreenRoute : ScreenRoute
 
 @Serializable
-data object ErrorScreenRoute : ScreenRoute
+data class ErrorScreenRoute(val errorType : ErrorType = ErrorType.UNKNOWN) : ScreenRoute
 
 @Serializable
 data object CurrencyConverterScreenRoute : ScreenRoute
